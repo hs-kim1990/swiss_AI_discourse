@@ -15,7 +15,3 @@ ENV/
 
 # Environment files
 .env
-
-
-# ignore data
-data/
