@@ -1,0 +1,21 @@
+# Ignore data folder (datasets, large files)
+/data/
+data/
+
+# Python-related
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment files
+.env
+
+
+# ignore data
+data/

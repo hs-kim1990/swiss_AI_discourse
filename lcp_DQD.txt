@@ -1,0 +1,51 @@
+https://catchphrase.linguistik.uzh.ch/query/1/Swissdox
+https://swissdoxviz.linguistik.uzh.ch/query
+
+
+# Search for AI related form & get extra information -> extract from the analysis
+    Article a
+
+    Segment@a s  
+
+    Token@s t1
+        OR
+            form = "AI"
+            form = "IA"
+            form = "GenAI"
+            form = "LLM"
+            form = "Chatbot"
+
+    kwic => plain
+        context
+            s
+        entities
+            t1
+
+    byYear => analysis
+        attributes
+            a.head
+            a.subhead
+            a.pubdate
+            a.source
+            a.articleURL
+        functions
+            frequency
+
+
+# 
+
+    Article a
+
+    Segment@a s
+
+    Token@s t
+        form = "KI"
+
+    EXISTS
+        NamedEntity@a ne
+
+    kWIC => plain
+        context
+            s
+        entities
+            t
