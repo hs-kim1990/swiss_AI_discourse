@@ -17,6 +17,7 @@ from sentence_transformers import SentenceTransformer
 from bertopic import BERTopic
 import yake
 from collections import Counter
+import json
 
 # -------------------------
 # Config (tune these)
@@ -144,6 +145,7 @@ def extract_subtopics_bertopic(texts, embed_model, min_cluster_size=BERTOPIC_MIN
         s_model = SentenceTransformer(embed_model)
     else:
         s_model = embed_model
+
     embeddings = s_model.encode(texts, show_progress_bar=True, convert_to_numpy=True)
 
     topic_model = BERTopic(embedding_model=None,                   # we pass embeddings directly
@@ -164,36 +166,65 @@ def extract_yake(texts, top=N_KEYPHRASES, lang='de'):
         phrases.append([p for p,s in k])
     return phrases
 
+# remove certain keywords
+def remove_keywords(texts, banned_keywords):
+    cleaned = []
+    for t in texts:
+        new_t = t
+        for kw in banned_keywords:
+            new_t = new_t.replace(kw, "")
+        cleaned.append(new_t)
+    return cleaned
+
 # -------------------------
 # Main
 # -------------------------
 def main(args):
+
+    args = parser.parse_args()
+    banned_words = json.loads(args.banned)
+    # banned_words = args.banned
+    print(f"banned words: {banned_words}")
+
     print("Loading data:", args.input)
-    df = load_data(args.input)
+    # df = load_data(args.input)
+    df = pd.read_csv(args.input, on_bad_lines='skip')
     print(f"Loaded {len(df)} documents.")
 
-    print("Initializing spaCy (German) and doing light preprocessing...")
-    nlp = init_spacy()
-    combined = (df['title'].astype(str) + ". " + df['content'].astype(str)).tolist()
-    cleaned = simple_preprocess(combined, nlp=nlp)
-    # assign cleaned to a new column 'article_cleaned'
-    df['article_cleaned'] = cleaned
+    if not (args.cleaned):
+      print("Initializing spaCy (German) and doing light preprocessing...")
+      nlp = init_spacy()
+      # combine head/subhead/content_parsed if nan in head/subhead/content_parsed, convert to empty string
+      combined = (df['head'].astype(str) + ". " + df['subhead'].astype(str) + ". " + df['content_parsed'].astype(str)).tolist()
+      cleaned = simple_preprocess(combined, nlp=nlp)
+
+      # remove manual keywords from cleaned texts to avoid biasing topic modeling
+      cleaned = remove_keywords(cleaned, banned_words)
+
+      # assign cleaned to a new column 'article_cleaned'
+      df['article_cleaned'] = cleaned
+    else:
+      cleaned = df['article_cleaned'].tolist()
+      print (f"banned words: {banned_words}")
+      cleaned = remove_keywords(cleaned, banned_words)
+
+      df['article_cleaned'] = cleaned
 
     print("Filtering education-related documents (keywords + semantic similarity)...")
-    df2, doc_embeds, s_model = filter_education(df, embed_model_name=args.embed_model,
-                                               keywords=args.keywords, sem_sim_threshold=args.sem_sim_threshold)
+    # df2, doc_embeds, s_model = filter_education(df, embed_model_name=args.embed_model,
+    #                                            keywords=args.keywords, sem_sim_threshold=args.sem_sim_threshold)
 
-    edu_df = df2[df2['edu_mask']].copy().reset_index(drop=True)
+    # edu_df = df2[df2['edu_mask']].copy().reset_index(drop=True)
     # raw texts (keep for YAKE / output) and cleaned texts (for topic modeling)
-    edu_raw_texts = (edu_df['title'].astype(str) + ". " + edu_df['content'].astype(str)).tolist()
-    edu_cleaned_texts = edu_df['article_cleaned'].astype(str).tolist()
-    print(f"Education-related documents found: {len(edu_df)} (out of {len(df)})")
+    # edu_raw_texts = (edu_df['title'].astype(str) + ". " + edu_df['content'].astype(str)).tolist()
+    edu_cleaned_texts = df['article_cleaned'].astype(str).tolist()
+    # print(f"Education-related documents found: {len(edu_df)} (out of {len(df)})")
 
-    if len(edu_df) < args.min_edu_docs:
-        print(f"Not enough education documents ({len(edu_df)}). Lower threshold or add more data.")
-        # still save filtered docs so you can inspect
-        edu_df.to_csv(args.output, index=False)
-        return
+    # if len(edu_df) < args.min_edu_docs:
+    #     print(f"Not enough education documents ({len(edu_df)}). Lower threshold or add more data.")
+    #     # still save filtered docs so you can inspect
+    #     edu_df.to_csv(args.output, index=False)
+    #     return
 
     # Use cleaned texts (lemmatized, stopwords/punct/numbers removed) for topic extraction.
     print("Running BERTopic to extract subtopics (using cleaned texts)...")
@@ -214,6 +245,8 @@ def main(args):
         topic_terms[t] = [w for w, _ in topic_model.get_topic(t)]
 
     # attach results to edu_df
+    edu_df = df[['head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned']].copy()
+    edu_raw_texts = cleaned
     edu_df['subtopic'] = topics
     edu_df['subtopic_label'] = edu_df['subtopic'].apply(lambda t: topic_model.get_topic(t) if t >=0 else [])
     edu_df['subtopic_name'] = edu_df['subtopic'].apply(lambda t: topic_model.get_topic_info().loc[topic_model.get_topic_info().Topic==t,'Name'].values[0] if t in topic_model.get_topic_info().Topic.values else "outlier")
@@ -224,7 +257,7 @@ def main(args):
     edu_df['yake_phrases'] = ["; ".join(k) for k in yake_phrases]
 
     # Save output
-    outcols = ['title','content','edu_keyword_match','edu_sem_sim','subtopic','subtopic_name','yake_phrases']
+    outcols = ['head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned','subtopic','subtopic_name','yake_phrases']
     edu_df.to_csv(args.output, index=False, columns=[c for c in outcols if c in edu_df.columns])
     print(f"\nSaved education subtopic assignments to {args.output}")
 
@@ -238,7 +271,7 @@ def main(args):
         print(f"\nSubtopic {topic_id} (n={len(indices)}) top words:", topic_terms.get(topic_id, [])[:10])
         # print up to 3 representative titles
         for i in indices[:3]:
-            print(" -", edu_df.loc[i,'title'][:180])
+            print(" -", edu_df.loc[i,'head'][:180])
         # show common YAKE phrases across topic docs
         phrases = []
         for i in indices:
@@ -256,5 +289,7 @@ if __name__ == "__main__":
     parser.add_argument("--min_cluster_size", type=int, default=BERTOPIC_MIN_CLUSTER_SIZE)
     parser.add_argument("--keywords", nargs='*', default=EDU_KEYWORDS)
     parser.add_argument("--n_keyphrases", type=int, default=N_KEYPHRASES)
+    parser.add_argument("--cleaned", type=bool, default=False)
+    parser.add_argument("--banned", type=str, default='[]')
     args = parser.parse_args()
     main(args)
