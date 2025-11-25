@@ -13,11 +13,13 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import spacy
+import re
 from sentence_transformers import SentenceTransformer
 from bertopic import BERTopic
 import yake
 from collections import Counter
 import json
+import torch
 
 # -------------------------
 # Config (tune these)
@@ -38,25 +40,14 @@ N_KEYPHRASES = 6          # YAKE phrases per doc for extra labeling help
 # -------------------------
 # Utilities
 # -------------------------
-def load_data(path):
-    df = pd.read_csv(path)
-    if 'content' not in df.columns:
-        for c in ['text','article','body', 'main_text']:
-            if c in df.columns:
-                df = df.rename(columns={c:'content'})
-                break
-    if 'content' not in df.columns:
-        raise ValueError("Input CSV must contain a 'content' column (or rename yours).")
-    if 'title' not in df.columns:
-        df['title'] = ""
-    df = df[['title','content']].fillna('')
-    return df
 
 def init_spacy():
+    # Default: load spaCy German model on CPU. If spaCy was configured for GPU
+    # via `spacy.require_gpu()` before calling this, the model will be loaded on GPU.
     try:
-        nlp = spacy.load("de_core_news_sm", disable=["parser","ner"])
+        nlp = spacy.load("de_core_news_lg", disable=["parser","ner"])
     except Exception as e:
-        raise RuntimeError("Missing spacy German model. Run: python -m spacy download de_core_news_sm") from e
+        raise RuntimeError("Missing spacy German model. Run: python -m spacy download de_core_news_lg") from e
     return nlp
 
 def simple_preprocess(texts, nlp=None):
@@ -81,54 +72,71 @@ def simple_preprocess(texts, nlp=None):
         cleaned.append(" ".join(toks))
     return cleaned
 
-# -------------------------
-# Education filtering
-# -------------------------
-def filter_education(df, embed_model_name=EMBED_MODEL,
-                     keywords=EDU_KEYWORDS, sem_sim_threshold=SEM_SIM_THRESHOLD):
-    texts = (df['article_cleaned'].astype(str)).tolist()
+def filter_out_region_ai(articles, nlp=None):
+    '''
+    Filter out regional "AI" articles (e.g., Kanton AI) from a list of texts.
+    '''
 
-    # 1) quick keyword match (case-insensitive)
-    kw_mask = []
-    lowered = [t.lower() for t in texts]
-    for t in lowered:
-        matched = any(kw in t for kw in keywords)
-        kw_mask.append(matched)
-    kw_mask = np.array(kw_mask)
+    filtered = []
 
-    # 2) semantic similarity: compute embedding for each doc and for seed "education" vector
-    #    This catches documents that discuss education without using exact keywords.
-    model = SentenceTransformer(embed_model_name)
-    doc_embeds = model.encode(texts, show_progress_bar=True, convert_to_numpy=True)
-    # create a small set of German seed phrases representing "education"
-    seed_phrases = [
-        "Bildung", "Bildungspolitik", "Schulsystem", "Lehrerin", "Lehrer", "Schule", "Ausbildung", "Universität"
+    if nlp is None:
+        nlp = init_spacy()
+
+    for doc_text in articles:
+        text = doc_text.strip()
+        # heuristic: if 'AI' token not present, likely not regional AI
+        if not re.search(r'\bAI\b', text):
+            filtered.append(text)
+            continue
+
+        # 1) spaCy NER for 'AI' labeled as location
+        sp = nlp(text)
+        is_region_by_ner = False
+        for ent in sp.ents:
+            # AI as GPE/LOC/ORG/MISC
+            if ent.text.strip().upper() == "AI" and ent.label_ in ("LOC", "GPE", "ORG", "MISC"):
+                is_region_by_ner = True
+                break
+            # entities like Appenzell labeled as LOC/GPE
+            if ent.label_ in ("LOC", "GPE") and re.search(r'Appenzell|Innerrhoden', ent.text, flags=re.IGNORECASE):
+                is_region_by_ner = True
+                break
+
+        if is_region_by_ner:
+            continue
+
+        # 2) Rule-based context check: 'Kanton AI', 'in AI', 'aus AI' etc.
+        # example: "im Kanton AI", "aus AI", "in AI (Appenzell Innerrhoden)" etc.
+        region_terms = [
+        r'\bKanton\b', r'\bKanton AI\b', r'\bAppenzell\b', r'\bAppenzell Innerrhoden\b',
+        r'\bBezirk\b', r'\bGemeinde\b', r'\bKreis\b', r'\bStadt\b', r'\bKantonshauptort\b'
     ]
-    seed_embeds = model.encode(seed_phrases, convert_to_numpy=True)
-    seed_vec = seed_embeds.mean(axis=0)  # average seed embedding
-    # cosine similarity function
-    def cos_sim(a,b):
-        a_norm = a / np.linalg.norm(a, axis=-1, keepdims=True)
-        b_norm = b / np.linalg.norm(b, axis=-1, keepdims=True)
-        return np.dot(a_norm, b_norm)
+        region_pattern = re.compile("|".join(region_terms), flags=re.IGNORECASE)
+        if region_pattern.search(text) or re.search(r'\b(in|im|aus|aus dem|aus der|vom|von)\s+AI\b', text, flags=re.IGNORECASE):
+            continue
 
-    sims = []
-    # compute per-document cosine similarity to seed_vec
-    seed_vec_norm = seed_vec / np.linalg.norm(seed_vec)
-    for de in doc_embeds:
-        sims.append(float(np.dot(de / np.linalg.norm(de), seed_vec_norm)))
-    sims = np.array(sims)
+        # 3) If AI keyword exists ('künstliche Intelligenz', 'KI' typical AI expressions) include
+        if re.search(r'künstliche Intelligenz|künstliche-intelligenz|KI\b|artificial intelligence|AI-Systeme|AI-System', text, flags=re.IGNORECASE):
+            filtered.append(text)
+            continue
 
-    # Mask: either keyword matched OR sem sim above threshold
-    edu_mask = (kw_mask) | (sims >= sem_sim_threshold)
+        # 4) Otherwise: if ambiguous, judge by document length and words around 'AI'
+        idxs = [m.start() for m in re.finditer(r'\bAI\b', text)]
+        region_flag = False
+        for i in idxs:
+            window = text[max(0, i-50): i+50]
+            if re.search(r'Kanton|Gemeinde|Bezirk|Stadt|Kreis|Appenzell|Innerrhoden', window, flags=re.IGNORECASE):
+                region_flag = True
+                break
+            if re.search(r'künstliche|künstliche Intelligenz|KI|Maschine|Algorithmen|ML|Deep Learning|ChatGPT|Large Language Model|LLM|Maschinelles Lernen|Machine Learning', window, flags=re.IGNORECASE):
+                region_flag = False
+                break
+        if region_flag:
+            continue
 
-    # Provide scores for sorting and debugging
-    df2 = df.copy()
-    df2['doc_text'] = texts
-    df2['edu_keyword_match'] = kw_mask
-    df2['edu_sem_sim'] = sims
-    df2['edu_mask'] = edu_mask
-    return df2, doc_embeds, model
+        filtered.append(text)
+
+    return filtered
 
 # -------------------------
 # Topic extraction (BERTopic)
@@ -141,17 +149,34 @@ def extract_subtopics_bertopic(texts, embed_model, min_cluster_size=BERTOPIC_MIN
     """
     # If embed_model is name, BERTopic will handle it; we prefer to pass embeddings to avoid double encode.
     # For simplicity encode here and pass to BERTopic.
+    # prefer to accept a device string for GPU usage
+    # embed_model may be a model name or already an instance
     if isinstance(embed_model, str):
-        s_model = SentenceTransformer(embed_model)
+        # use global torch device if available
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        s_model = SentenceTransformer(embed_model, device=device)
     else:
         s_model = embed_model
 
     embeddings = s_model.encode(texts, show_progress_bar=True, convert_to_numpy=True)
+    # Try to use GPU-accelerated UMAP from cuML (if available). Fall back to CPU UMAP.
+    umap_model = None
+    try:
+        from cuml.manifold import UMAP as cuUMAP
+        umap_model = cuUMAP(n_components=5)
+        print("Using cuML UMAP (GPU) for dimensionality reduction")
+    except Exception:
+        try:
+            from umap import UMAP
+            umap_model = UMAP(n_components=5, random_state=42)
+        except Exception:
+            umap_model = None
 
-    topic_model = BERTopic(embedding_model=None,                   # we pass embeddings directly
-                           calculate_probabilities=False,
-                           verbose=False,
-                           min_topic_size=min_cluster_size)
+    bm_kwargs = dict(embedding_model=None, calculate_probabilities=False, verbose=False, min_topic_size=min_cluster_size)
+    if umap_model is not None:
+        bm_kwargs['umap_model'] = umap_model
+
+    topic_model = BERTopic(**bm_kwargs)
     topics, probs = topic_model.fit_transform(texts, embeddings)
     return topic_model, topics, probs
 
@@ -180,55 +205,67 @@ def remove_keywords(texts, banned_keywords):
 # Main
 # -------------------------
 def main(args):
-
-    args = parser.parse_args()
+    # +) if banned words provided, load them
     banned_words = json.loads(args.banned)
-    # banned_words = args.banned
     print(f"banned words: {banned_words}")
 
+    # 1) Load data
     print("Loading data:", args.input)
-    # df = load_data(args.input)
-    df = pd.read_csv(args.input, on_bad_lines='skip')
+    if args.input.endswith('.tsv'):
+        df = pd.read_csv(args.input, sep='\t', on_bad_lines='skip')
+    else: 
+        df = pd.read_csv(args.input, on_bad_lines='skip')
     print(f"Loaded {len(df)} documents.")
 
+    # 2-1) Preprocess texts (if not already cleaned)
+    # determine device: prefer explicit CLI `--device`, else auto-detect
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print(f"Selected device: {device}")
+
     if not (args.cleaned):
-      print("Initializing spaCy (German) and doing light preprocessing...")
-      nlp = init_spacy()
-      # combine head/subhead/content_parsed if nan in head/subhead/content_parsed, convert to empty string
-      combined = (df['head'].astype(str) + ". " + df['subhead'].astype(str) + ". " + df['content_parsed'].astype(str)).tolist()
-      cleaned = simple_preprocess(combined, nlp=nlp)
+        print("Initializing spaCy (German) and doing light preprocessing...")
+        # if GPU requested, try to enable spaCy GPU
+        if device == 'cuda':
+            try:
+                spacy.require_gpu()
+                print("spaCy GPU enabled")
+            except Exception as e:
+                print("spaCy GPU requested but enable failed:", e)
+                print("Falling back to CPU for spaCy")
+        nlp = init_spacy()
 
-      # remove manual keywords from cleaned texts to avoid biasing topic modeling
-      cleaned = remove_keywords(cleaned, banned_words)
+        # parse html content if needed
+        if 'content_parsed' not in df.columns:
+            from bs4 import BeautifulSoup
+            def parse_html(text):
+                if pd.isna(text):
+                    return ""
+                return BeautifulSoup(text, 'html.parser').get_text(separator=' ')
+            df['content_parsed'] = df['content'].apply(parse_html)
 
-      # assign cleaned to a new column 'article_cleaned'
-      df['article_cleaned'] = cleaned
+        # combine head/subhead/content_parsed if nan in head/subhead/content_parsed, convert to empty string      
+        combined = (df['head'].astype(str) + ". " + df['subhead'].astype(str) + ". " + df['content_parsed'].astype(str)).tolist()
+        AI_filtered = filter_out_region_ai(combined, nlp=nlp)
+        cleaned = simple_preprocess(AI_filtered, nlp=nlp)
+
+    # 2-2) If already cleaned, just load cleaned
     else:
-      cleaned = df['article_cleaned'].tolist()
-      print (f"banned words: {banned_words}")
-      cleaned = remove_keywords(cleaned, banned_words)
-
-      df['article_cleaned'] = cleaned
-
-    print("Filtering education-related documents (keywords + semantic similarity)...")
-    # df2, doc_embeds, s_model = filter_education(df, embed_model_name=args.embed_model,
-    #                                            keywords=args.keywords, sem_sim_threshold=args.sem_sim_threshold)
-
-    # edu_df = df2[df2['edu_mask']].copy().reset_index(drop=True)
-    # raw texts (keep for YAKE / output) and cleaned texts (for topic modeling)
-    # edu_raw_texts = (edu_df['title'].astype(str) + ". " + edu_df['content'].astype(str)).tolist()
-    edu_cleaned_texts = df['article_cleaned'].astype(str).tolist()
-    # print(f"Education-related documents found: {len(edu_df)} (out of {len(df)})")
-
-    # if len(edu_df) < args.min_edu_docs:
-    #     print(f"Not enough education documents ({len(edu_df)}). Lower threshold or add more data.")
-    #     # still save filtered docs so you can inspect
-    #     edu_df.to_csv(args.output, index=False)
-    #     return
-
+        cleaned = df['article_cleaned'].tolist()
+    
+    cleaned = remove_keywords(cleaned, banned_words)
+    df['article_cleaned'] = cleaned
+    
     # Use cleaned texts (lemmatized, stopwords/punct/numbers removed) for topic extraction.
+    print(f"Device for embeddings: {device}")
     print("Running BERTopic to extract subtopics (using cleaned texts)...")
-    topic_model, topics, probs = extract_subtopics_bertopic(edu_cleaned_texts, embed_model=args.embed_model,
+    # instantiate sentence-transformers model on selected device to ensure GPU usage
+    try:
+        s_model = SentenceTransformer(args.embed_model, device=device)
+    except Exception:
+        # fallback: let extract_subtopics handle instantiation
+        s_model = args.embed_model
+
+    topic_model, topics, probs = extract_subtopics_bertopic(cleaned, embed_model=s_model,
                                                            min_cluster_size=args.min_cluster_size)
 
     # get topic info
@@ -245,7 +282,7 @@ def main(args):
         topic_terms[t] = [w for w, _ in topic_model.get_topic(t)]
 
     # attach results to edu_df
-    edu_df = df[['head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned']].copy()
+    edu_df = df[['id', 'head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned']].copy()
     edu_raw_texts = cleaned
     edu_df['subtopic'] = topics
     edu_df['subtopic_label'] = edu_df['subtopic'].apply(lambda t: topic_model.get_topic(t) if t >=0 else [])
@@ -257,27 +294,9 @@ def main(args):
     edu_df['yake_phrases'] = ["; ".join(k) for k in yake_phrases]
 
     # Save output
-    outcols = ['head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned','subtopic','subtopic_name','yake_phrases']
+    outcols = ['id', 'head', 'subhead', 'pubtime', 'medium_name', 'article_cleaned','subtopic', 'subtopic_name','yake_phrases']
     edu_df.to_csv(args.output, index=False, columns=[c for c in outcols if c in edu_df.columns])
     print(f"\nSaved education subtopic assignments to {args.output}")
-
-    # Print short summary (top N docs per topic)
-    print("\nRepresentative titles per subtopic:")
-    for topic_id in sorted(set(topics)):
-        if topic_id == -1:
-            continue
-        mask = [t==topic_id for t in topics]
-        indices = np.where(mask)[0]
-        print(f"\nSubtopic {topic_id} (n={len(indices)}) top words:", topic_terms.get(topic_id, [])[:10])
-        # print up to 3 representative titles
-        for i in indices[:3]:
-            print(" -", edu_df.loc[i,'head'][:180])
-        # show common YAKE phrases across topic docs
-        phrases = []
-        for i in indices:
-            phrases.extend(yake_phrases[i])
-        most_common = Counter(phrases).most_common(5)
-        print("  common phrases:", [p for p,c in most_common])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

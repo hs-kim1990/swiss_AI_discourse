@@ -1,0 +1,5 @@
+python topic_extraction/extract_topic.py \
+--input data/education_subtopics.csv \
+--output data/tmp/education_subtopics2.csv \
+--cleaned True \
+--banned "['ki', 'schweizer']"
