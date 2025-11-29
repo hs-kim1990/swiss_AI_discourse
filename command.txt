@@ -2,4 +2,24 @@ python topic_extraction/extract_topic.py \
 --input data/education_subtopics.csv \
 --output data/tmp/education_subtopics2.csv \
 --cleaned True \
---banned "['ki', 'schweizer']"
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent"]'
+
+python topic_extraction/extract_topic.py \
+--input data/de_edu_filtered.csv \
+--output data/tmp/de_edu_0.csv \
+--cleaned True \
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million", ]'
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python topic_extraction/extract_topic.py \
+--input data/de_edu_filtered.tsv \
+--output data/tmp/de_edu_0.csv
+
+python topic_extraction/pivot.py \
+    --input data/tmp/de_edu_0.csv
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python topic_extraction/extract_topic.py \
+--input  data/tmp/de_edu_0.csv \
+--output data/tmp/de_edu_2.csv \
+--cleaned True \
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million"]' \
+--reduce_to 50
