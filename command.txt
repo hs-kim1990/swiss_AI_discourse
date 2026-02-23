@@ -18,8 +18,46 @@ python topic_extraction/pivot.py \
     --input data/tmp/de_edu_0.csv
 
 CUDA_VISIBLE_DEVICES=0,1,2,3 python topic_extraction/extract_topic.py \
---input  data/tmp/de_edu_0.csv \
---output data/tmp/de_edu_2.csv \
+--input  data/tmp/de_edu_3.csv \
+--output data/tmp/de_edu_4.csv \
 --cleaned True \
---banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million"]' \
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million",
+            "november", "umsatz", "Mitteilung", "unternehmen", "mitteilen",  "quartal", "dienstag", "00", "schweiz",
+            "donnstag", "stark","st", "mensch", "künstl", "telligenz"]' \
 --reduce_to 50
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python topic_extraction/extract_topic_bert.py \
+--input data/de_edu_for_topic.csv \
+--output data/tmp/de_edu_topic_50.csv \
+--cleaned True \
+--reduce_to 50 \
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million",
+            "uhr", "menschen", "schweiz", "jahr", "leute", "mehr", "millionen", "künstliche", "sei", "dienstag",
+            "intelligenz", "sagt", "milliarden", "november", "wurde", "juni", "gibt", "jahren", "immer", "schon", "heute",
+            "ja", "viele", "donnerstag", "mio", "fr", "daten", "unternehmen", "geht", "bild", "seit", "neue", "beispiel",
+            "müssen", "gut", "beim", "etwa", "welt", "digitale", "einfach", "the", "bereits", "dabei", "zwei", "ab",
+            "ganz", "natürlich", "zeit", "macht", "mal", "leben", "sagen", "eigentlich", "nan", "st", "jahre", "kommt",
+            "eben", "wirklich", "bisschen", "dafür", "rund", "neuen", "genau", "heisst", "ersten", "gerade", "wichtig",
+            "guten", "juli", "abend", "stadt", "kanton", "laut", "oktober", "montag", "wer", "frage", "galler", "schülerinnen",
+            "pd", "zürich", "gallen", "weniger", "vielleicht", "ende", "ende", "gemäss", "darum", "männern", "frauen",
+            "mittwoch", "freitag", "wurden", "seien", "us", "wäre", "kommen", "sehen", "sowie", "wissen", "grossen", "dezember",
+            "samstag", "drei", "letzten", "statt", "zukunft", "steht", "grosse", "gehen", "oft", "davon", "ähm" ]'
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python topic_extraction/extract_topic_bert.py \
+--input data/de_edu_for_topic.csv \
+--output data/tmp/de_edu_50.csv \
+--cleaned True \
+--reduce_to 50 \
+--banned '["ki", "schweizer", "milliarde", "aktuellst", "zahl", "fallzahle", "prozent", "franken", "bag", "million",
+            "uhr", "menschen", "schweiz", "jahr", "leute", "mehr", "millionen", "künstliche", "sei", "dienstag",
+            "intelligenz", "sagt", "milliarden", "november", "wurde", "juni", "gibt", "jahren", "immer", "schon", "heute",
+            "ja", "viele", "donnerstag", "mio", "fr", "daten", "unternehmen", "geht", "bild", "seit", "neue", "beispiel",
+            "müssen", "gut", "beim", "etwa", "welt", "digitale", "einfach", "the", "bereits", "dabei", "zwei", "ab",
+            "ganz", "natürlich", "zeit", "macht", "mal", "leben", "sagen", "eigentlich", "nan", "st", "jahre", "kommt",
+            "eben", "wirklich", "bisschen", "dafür", "rund", "neuen", "genau", "heisst", "ersten", "gerade", "wichtig",
+            "guten", "juli", "abend", "stadt", "kanton", "laut", "oktober", "montag", "wer", "frage", "galler", "schülerinnen",
+            "pd", "zürich", "gallen", "weniger", "vielleicht", "ende", "ende", "gemäss", "darum", "männern", "frauen",
+            "mittwoch", "freitag", "wurden", "seien", "us", "wäre", "kommen", "sehen", "sowie", "wissen", "grossen", "dezember",
+            "samstag", "drei", "letzten", "statt", "zukunft", "steht", "grosse", "gehen", "oft", "davon", "ähm", "chat",
+            "mitteilung", "zeigt", "thema", "gegenüber", "dank", "tun", "sieht", "besser", "oft", "wil", "open", "gemacht",
+            "sollen", "dollar", "umsatz", "wegen", "www", "geld", "erst", "zudem", "usa", "lassen", "gar", "fragen", "arbeiten" ]'

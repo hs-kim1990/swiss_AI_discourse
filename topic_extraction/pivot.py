@@ -14,8 +14,12 @@ def pivot_topics(df_path: str) -> pd.DataFrame:
     Returns:
     pd.DataFrame: A pivoted DataFrame with topics as columns.
     """
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.width', None)
+    pd.set_option('display.max_colwidth', None)
+
     df = pd.read_csv(df_path)
-    pivoted_df = df.pivot_table(index='subtopic_name', values='subtopic', aggfunc='count')
+    pivoted_df = df.pivot_table(index='subtopic_label', values='subtopic', aggfunc='count')
     # sort descending by count
     pivoted_df = pivoted_df.sort_values(by='subtopic', ascending=False)
     print(pivoted_df)
