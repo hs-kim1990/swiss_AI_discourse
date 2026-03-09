@@ -2,6 +2,7 @@
 LLM-based document classifier using vLLM server
 """
 import logging
+from statistics import mode
 import requests
 from typing import List, Dict, Any, Optional
 import json
@@ -89,8 +90,21 @@ class LLMClassifier:
                 Provide a concise summary in english."""
             
             return prompt
+        
+        if usage == "verification":
+            prompt = f"""Verify the document is an article referring to the topic "Immigrants in Switzerland" and that the classification is correct.:
+
+                - Based on the content of the document, confirm if the classification is correct.
+                - Respond with "yes" if the classification is appropriate, or "no" if it is not.
+
+                Document:
+                {document_text}
+
+                Is the classification correct? Respond with ONLY "yes" or "no"."""
+            
+            return prompt
     
-    def classify_with_chat(self, document_text: str) -> Optional[Dict[str, Any]]:
+    def classify_with_chat(self, document_text: str, mode: str) -> Optional[Dict[str, Any]]:
         """
         Classify document using chat completions API
         
@@ -100,73 +114,112 @@ class LLMClassifier:
         Returns:
             Classification result with category and confidence
         """
-        classification_prompt = self.build_prompt(document_text, usage = "classification")
-        
-        classification_payload = {
-            "model": self.config.model_name,
-            "messages": [
-                {"role": "system", "content": self.config.system_prompt},
-                {"role": "user", "content": classification_prompt}
-            ],
-            "temperature": self.config.temperature,
-            "max_tokens": self.config.max_tokens,
-            "top_p": self.config.top_p
-        }
+        result = {"model": self.config.model_name,
+            "timestamp": datetime.now().isoformat()}
 
-        summarization_prompt = self.build_prompt(document_text, usage = "summary")
-        summarization_payload = {
-            "model": self.config.model_name,
-            "messages": [
-                {"role": "system", "content": self.config.system_prompt},
-                {"role": "user", "content": summarization_prompt}
-            ],
-            "temperature": self.config.temperature,
-            "max_tokens": self.config.max_tokens,
-            "top_p": self.config.top_p
-        }
-        
-        try:
-            classification_response = requests.post(
-                self.chat_completions_url,
-                headers=self.headers,
-                json=classification_payload,
-                timeout=60
-            )
-            classification_response.raise_for_status()
-            result = classification_response.json()
+        if mode == "all" or mode == "classify":
+            classification_prompt = self.build_prompt(document_text, usage = "classification")
             
-            predicted_category = result["choices"][0]["message"]["content"].strip()
-            
-            # Validate category
-            if predicted_category not in self.config.categories:
-                logger.warning(f"Model returned invalid category: {predicted_category}")
-                # Try to match partial category
-                predicted_category = self._match_category(predicted_category)
-            
-            summarization_response = requests.post(
-                self.chat_completions_url,
-                headers=self.headers,
-                json=summarization_payload,
-                timeout=60
-            )
-            summarization_response.raise_for_status()
-            summary_result = summarization_response.json()
-            summary_text = summary_result["choices"][0]["message"]["content"].strip()
-
-            return {
-                "category": predicted_category,
-                "raw_response": result["choices"][0]["message"]["content"],
-                "summary": summary_text,
+            classification_payload = {
                 "model": self.config.model_name,
-                "timestamp": datetime.now().isoformat()
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": classification_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
             }
+
+            try:
+                classification_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=classification_payload,
+                    timeout=60
+                )
+                classification_response.raise_for_status()
+                result = classification_response.json()
             
-        except requests.exceptions.RequestException as e:
-            logger.error(f"API request failed: {e}")
-            return None
-        except (KeyError, json.JSONDecodeError) as e:
-            logger.error(f"Failed to parse API response: {e}")
-            return None
+                predicted_category = result["choices"][0]["message"]["content"].strip()
+
+                result["category"] = predicted_category
+                result["raw_response"] = result["choices"][0]["message"]["content"]
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+
+
+        if mode == "all" or mode == "summarize":
+            summarization_prompt = self.build_prompt(document_text, usage = "summary")
+            summarization_payload = {
+                "model": self.config.model_name,
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": summarization_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
+            }
+
+            try:
+                summarization_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=summarization_payload,
+                    timeout=60
+                )
+                summarization_response.raise_for_status()
+                summary_result = summarization_response.json()
+                summary_text = summary_result["choices"][0]["message"]["content"].strip()
+
+                result["summary"] = summary_text
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+
+        if mode == "all" or mode == "verify":
+            verification_prompt = self.build_prompt(document_text, usage = "verification")
+            verification_payload = {
+                "model": self.config.model_name,
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": verification_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
+            }
+            try:
+                verification_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=verification_payload,
+                    timeout=60
+                )
+                verification_response.raise_for_status()
+                verification_result = verification_response.json()
+                verification_text = verification_result["choices"][0]["message"]["content"].strip()
+
+                result["verification"] = verification_text
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+
+        return result
     
     def classify_with_completions(self, document_text: str) -> Optional[Dict[str, Any]]:
         """
@@ -235,7 +288,8 @@ class LLMClassifier:
                 return category
         return "unknown"
     
-    def classify_document(self, document: Dict[str, Any], text_fields: List[str] = None, use_chat: bool = True) -> Dict[str, Any]:
+    # select mode from ["all", "classify", "summarize", "verify"] to determine which classification method to use
+    def classify_document(self, document: Dict[str, Any], text_fields: List[str] = None, mode: str = "all") -> Dict[str, Any]:
         """
         Classify a single document (CSV row)
         
@@ -250,10 +304,8 @@ class LLMClassifier:
         loader = DocumentLoader(self.config.input_csv_file)
         document_text = loader.extract_text_content(document, text_fields)
         
-        if use_chat:
-            classification = self.classify_with_chat(document_text)
-        else:
-            classification = self.classify_with_completions(document_text)
+        classification = self.classify_with_chat(document_text, mode=mode)
+
         
         # Build result with CSV row metadata
         result = {
@@ -264,10 +316,20 @@ class LLMClassifier:
             "medium_code": document.get("medium_code"),
             "language": document.get("language"),
             "head": document.get("head"),
-            "classification": classification.get("category") if classification else None,
-            "raw_response": classification.get("raw_response") if classification else None,
-            "summary": classification.get("summary") if classification else None,
         }
+
+        if mode == 'all':
+            # append to result the classification and summary results
+            result["classification"] = classification.get("category") if classification else None
+            result["raw_response"] = classification.get("raw_response") if classification else None
+            result["summary"] = classification.get("summary") if classification else None
+        elif mode == 'classify':
+            result["classification"] = classification.get("category") if classification else None
+            result["raw_response"] = classification.get("raw_response") if classification else None
+        elif mode == 'summarize':
+            result["summary"] = classification.get("summary") if classification else None
+        elif mode == 'verify':
+            result["verification"] = classification.get("verification") if classification else None
         
         return result
     
@@ -324,19 +386,24 @@ class LLMClassifier:
         total = len(results)
         category_counts = {}
         successful = 0
+        correct_article = 0
         
         for result in results:
             if result["classification"] is not None:
                 successful += 1
                 category = result["classification"]
                 category_counts[category] = category_counts.get(category, 0) + 1
+            if result["verification"] is not None and result["verification"].lower() == "yes":
+                correct_article += 1
         
         summary = {
             "total_documents": total,
             "successfully_classified": successful,
             "failed": total - successful,
             "category_distribution": category_counts,
-            "success_rate": successful / total if total > 0 else 0
+            "success_rate": successful / total if total > 0 else 0,
+            "verified_articles": correct_article,
+            "verification_rate": correct_article / successful if successful > 0 else 0
         }
         
         return summary
