@@ -1,7 +1,7 @@
 """
 Example usage of the LLM classification framework
 """
-from llm_module import Config, DocumentLoader, LLMClassifier, ClassificationPipeline
+from llm_module import Config, DocumentLoader, LLMClassifier
 
 
 def example_basic_usage():
@@ -11,7 +11,7 @@ def example_basic_usage():
     config = Config(
         vllm_base_url="http://localhost:8000",
         model_name="meta-llama/Llama-2-7b-chat-hf",
-        input_folder="./documents",
+        input_csv_file="./data/swiss_ai_discourse_articles_de.csv",
         output_folder="./results",
         categories=["positive", "negative", "neutral"],
         temperature=0.1,
@@ -23,7 +23,7 @@ def example_basic_usage():
     
     # Run classification
     results = pipeline.run(
-        text_fields=["title", "content"],  # Specify which fields to use
+        text_fields=["head", "content"],  # Use CSV column names
         use_chat=True,
         save_results=True
     )
@@ -54,14 +54,14 @@ def example_custom_classification():
     config = Config(
         vllm_base_url="http://localhost:8000",
         model_name="meta-llama/Llama-2-7b-chat-hf",
-        input_folder="./documents",
+        input_csv_file="./data/politics/cleaned_trial_data.csv",
         output_folder="./results",
         categories=["technology", "health", "business", "sports", "politics"],
         system_prompt="You are an expert document classifier specializing in news articles."
     )
     
     # Initialize components separately
-    loader = DocumentLoader(config.input_folder)
+    loader = DocumentLoader(config.input_csv_file)
     classifier = LLMClassifier(config)
     
     # Test connection
@@ -69,20 +69,21 @@ def example_custom_classification():
         print("Failed to connect to vLLM server")
         return
     
-    # Load documents
+    # Load documents (CSV rows)
     documents = loader.load_all_documents()
     
     # Classify with custom processing
     results = []
     for doc in documents:
         # Extract specific fields
-        text = loader.extract_text_content(doc, text_fields=["headline", "body"])
+        text = loader.extract_text_content(doc, text_fields=["head", "content"])
         
         # Classify
-        result = classifier.classify_document(doc, text_fields=["headline", "body"])
+        result = classifier.classify_document(doc, text_fields=["head", "content"])
         results.append(result)
         
-        print(f"Classified {doc['file_name']}: {result['classification']['category']}")
+        doc_id = doc.get('id', 'unknown')
+        print(f"Classified row {doc['row_index']} (ID: {doc_id}): {result['classification']['category']}")
     
     # Save results
     classifier.save_results(results)
@@ -93,21 +94,22 @@ def example_custom_classification():
 
 
 def example_single_document():
-    """Example classifying a single document"""
+    """Example classifying a single row from CSV"""
     
     config = Config(
         vllm_base_url="http://localhost:8000",
         model_name="meta-llama/Llama-2-7b-chat-hf",
-        input_folder="./documents",
+        input_csv_file="./data/swiss_ai_discourse_articles_de.csv",
         categories=["urgent", "normal", "low_priority"]
     )
     
     pipeline = ClassificationPipeline(config)
     
-    # Classify single document
+    # Classify single row from CSV
     result = pipeline.run_single_document(
-        document_path="./documents/sample.json",
-        text_fields=["subject", "message"]
+        document_path="./data/swiss_ai_discourse_articles_de.csv",
+        row_index=0,  # First row
+        text_fields=["head", "content"]
     )
     
     print(f"Category: {result['classification']['category']}")

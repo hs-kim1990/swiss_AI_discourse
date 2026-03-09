@@ -26,7 +26,7 @@ class ClassificationPipeline:
             config: Configuration object
         """
         self.config = config
-        self.loader = DocumentLoader(config.input_folder)
+        self.loader = DocumentLoader(config.input_csv_file)
         self.classifier = LLMClassifier(config)
     
     def run(self, text_fields: Optional[List[str]] = None, use_chat: bool = True, save_results: bool = True) -> Dict[str, Any]:
@@ -48,7 +48,7 @@ class ClassificationPipeline:
             raise ConnectionError("Cannot connect to vLLM server")
         
         # Load documents
-        logger.info(f"Loading documents from {self.config.input_folder}")
+        logger.info(f"Loading documents from {self.config.input_csv_file}")
         all_results = []
         
         # Process in batches
@@ -71,20 +71,32 @@ class ClassificationPipeline:
             "results": all_results
         }
     
-    def run_single_document(self, document_path: str, text_fields: Optional[List[str]] = None) -> Dict[str, Any]:
+    def run_single_document(self, document_path: str, row_index: int = 0, text_fields: Optional[List[str]] = None) -> Dict[str, Any]:
         """
-        Classify a single document
+        Classify a single row from a CSV document
         
         Args:
-            document_path: Path to document
+            document_path: Path to CSV file
+            row_index: Index of the row to classify (default: 0)
             text_fields: Fields to extract
             
         Returns:
             Classification result
         """
-        doc = self.loader.load_document(Path(document_path))
-        if doc is None:
+        # Create a temporary loader for this specific file
+        temp_loader = DocumentLoader(document_path)
+        df = temp_loader.load_document()
+        if df is None:
             raise ValueError(f"Failed to load document: {document_path}")
+        
+        if row_index >= len(df):
+            raise ValueError(f"Row index {row_index} out of bounds for document with {len(df)} rows")
+        
+        # Convert row to dictionary
+        row = df.iloc[row_index]
+        doc = row.to_dict()
+        doc['source_file'] = Path(document_path).name
+        doc['row_index'] = row_index
         
         result = self.classifier.classify_document(doc, text_fields)
         return result

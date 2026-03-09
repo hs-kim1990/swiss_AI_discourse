@@ -13,6 +13,12 @@ A Python framework for classifying JSON documents using local LLM models via vLL
 
 ## Installation
 
+0. Setup
+Set up a Python environment (recommended: Python 3.12):
+```
+conda create -n llm_env python=3.12
+```
+
 1. Install the required dependencies:
 ```bash
 pip install -r requirements.txt

@@ -51,7 +51,7 @@ class LLMClassifier:
             logger.error(f"Failed to connect to vLLM server: {e}")
             return False
     
-    def build_prompt(self, document_text: str) -> str:
+    def build_prompt(self, document_text: str, usage: str = "classification") -> str:
         """
         Build classification prompt
         
@@ -63,14 +63,32 @@ class LLMClassifier:
         """
         categories_str = ", ".join(self.config.categories)
         
-        prompt = f"""Classify the following document into ONE of these categories: {categories_str}
+        if usage == "classification":
+            prompt = f"""Classify the following document into ONE of these categories: {categories_str}
+                - Respond with ONLY the category name, no explanations or additional text.
+                - If the document does not fit any category, respond with "unknown".
 
-Document:
-{document_text}
+                Document:
+                {document_text}
 
-Respond with ONLY the category name, nothing else."""
+                Respond with ONLY the category name, nothing else."""
+            
+            return prompt
         
-        return prompt
+        if usage == "summary":
+            prompt = f"""Summarize the following document in one sentence:
+
+                - Give a concise summary of the main topic and key points.
+                - Do NOT include any classification or category information, just a neutral summary.
+                - Focus on the content of the document, not on metadata or publication details.
+                - Summarize in english, regardless of the document language.
+
+                Document:
+                {document_text}
+
+                Provide a concise summary in english."""
+            
+            return prompt
     
     def classify_with_chat(self, document_text: str) -> Optional[Dict[str, Any]]:
         """
@@ -82,13 +100,25 @@ Respond with ONLY the category name, nothing else."""
         Returns:
             Classification result with category and confidence
         """
-        prompt = self.build_prompt(document_text)
+        classification_prompt = self.build_prompt(document_text, usage = "classification")
         
-        payload = {
+        classification_payload = {
             "model": self.config.model_name,
             "messages": [
                 {"role": "system", "content": self.config.system_prompt},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": classification_prompt}
+            ],
+            "temperature": self.config.temperature,
+            "max_tokens": self.config.max_tokens,
+            "top_p": self.config.top_p
+        }
+
+        summarization_prompt = self.build_prompt(document_text, usage = "summary")
+        summarization_payload = {
+            "model": self.config.model_name,
+            "messages": [
+                {"role": "system", "content": self.config.system_prompt},
+                {"role": "user", "content": summarization_prompt}
             ],
             "temperature": self.config.temperature,
             "max_tokens": self.config.max_tokens,
@@ -96,14 +126,14 @@ Respond with ONLY the category name, nothing else."""
         }
         
         try:
-            response = requests.post(
+            classification_response = requests.post(
                 self.chat_completions_url,
                 headers=self.headers,
-                json=payload,
+                json=classification_payload,
                 timeout=60
             )
-            response.raise_for_status()
-            result = response.json()
+            classification_response.raise_for_status()
+            result = classification_response.json()
             
             predicted_category = result["choices"][0]["message"]["content"].strip()
             
@@ -113,9 +143,20 @@ Respond with ONLY the category name, nothing else."""
                 # Try to match partial category
                 predicted_category = self._match_category(predicted_category)
             
+            summarization_response = requests.post(
+                self.chat_completions_url,
+                headers=self.headers,
+                json=summarization_payload,
+                timeout=60
+            )
+            summarization_response.raise_for_status()
+            summary_result = summarization_response.json()
+            summary_text = summary_result["choices"][0]["message"]["content"].strip()
+
             return {
                 "category": predicted_category,
                 "raw_response": result["choices"][0]["message"]["content"],
+                "summary": summary_text,
                 "model": self.config.model_name,
                 "timestamp": datetime.now().isoformat()
             }
@@ -196,17 +237,17 @@ Respond with ONLY the category name, nothing else."""
     
     def classify_document(self, document: Dict[str, Any], text_fields: List[str] = None, use_chat: bool = True) -> Dict[str, Any]:
         """
-        Classify a single document
+        Classify a single document (CSV row)
         
         Args:
-            document: Document dictionary from DocumentLoader
+            document: Row dictionary from DocumentLoader (CSV row)
             text_fields: Fields to extract for classification
             use_chat: Use chat completions API (True) or completions API (False)
             
         Returns:
             Document with classification results
         """
-        loader = DocumentLoader(self.config.input_folder)
+        loader = DocumentLoader(self.config.input_csv_file)
         document_text = loader.extract_text_content(document, text_fields)
         
         if use_chat:
@@ -214,21 +255,28 @@ Respond with ONLY the category name, nothing else."""
         else:
             classification = self.classify_with_completions(document_text)
         
+        # Build result with CSV row metadata
         result = {
-            "file_name": document["file_name"],
-            "file_path": document["file_path"],
-            "classification": classification,
-            "original_content": document["content"]
+            "id": document.get("id"),
+            "source_file": document.get("source_file"),
+            "row_index": document.get("row_index"),
+            "pubtime": document.get("pubtime"),
+            "medium_code": document.get("medium_code"),
+            "language": document.get("language"),
+            "head": document.get("head"),
+            "classification": classification.get("category") if classification else None,
+            "raw_response": classification.get("raw_response") if classification else None,
+            "summary": classification.get("summary") if classification else None,
         }
         
         return result
     
     def classify_batch(self, documents: List[Dict[str, Any]], text_fields: List[str] = None, use_chat: bool = True) -> List[Dict[str, Any]]:
         """
-        Classify a batch of documents
+        Classify a batch of documents (CSV rows)
         
         Args:
-            documents: List of documents
+            documents: List of row dictionaries from CSV
             text_fields: Fields to extract for classification
             use_chat: Use chat completions API
             
@@ -237,7 +285,9 @@ Respond with ONLY the category name, nothing else."""
         """
         results = []
         for i, doc in enumerate(documents):
-            logger.info(f"Classifying document {i+1}/{len(documents)}: {doc['file_name']}")
+            doc_id = doc.get('id', f"row_{i}")
+            source = doc.get('source_file', 'unknown')
+            logger.info(f"Classifying document {i+1}/{len(documents)}: {source} - ID: {doc_id}")
             result = self.classify_document(doc, text_fields, use_chat)
             results.append(result)
         
@@ -256,7 +306,6 @@ Respond with ONLY the category name, nothing else."""
             output_folder.mkdir(parents=True, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             output_path = output_folder / f"classification_results_{timestamp}.json"
-        
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         
@@ -279,7 +328,7 @@ Respond with ONLY the category name, nothing else."""
         for result in results:
             if result["classification"] is not None:
                 successful += 1
-                category = result["classification"]["category"]
+                category = result["classification"]
                 category_counts[category] = category_counts.get(category, 0) + 1
         
         summary = {

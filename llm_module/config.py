@@ -22,7 +22,7 @@ class Config:
     top_p: float = 0.9
     
     # Document processing
-    input_folder: str = "./documents"
+    input_csv_file: str = "./documents/data.csv"
     output_folder: str = "./results"
     batch_size: int = 10
     
@@ -52,7 +52,7 @@ class Config:
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
             "top_p": self.top_p,
-            "input_folder": self.input_folder,
+            "input_csv_file": self.input_csv_file,
             "output_folder": self.output_folder,
             "batch_size": self.batch_size,
             "categories": self.categories,
