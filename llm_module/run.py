@@ -40,11 +40,12 @@ def main():
         text = loader.extract_text_content(doc, text_fields=["head", "content"])
         
         # Classify - use_chat=False to use completions API instead
-        result = classifier.classify_document(doc, text_fields=["head", "content"], use_chat=True)
+        result = classifier.classify_document(doc, text_fields=["head", "content"], mode="all")
         results.append(result)
         
         doc_id = doc.get('id', 'unknown')
-        # Handle None result from failed API calls
+        # Handle None result from faile
+        # d API calls
         if result['classification'] is not None:
             print(f"head: {doc.get('head')}")
             print(f"Classified row {doc['row_index']} (ID: {doc_id}): {result['classification']}")
