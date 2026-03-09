@@ -2,15 +2,19 @@
 
 
 
-## GPU Server usage
+## 1. GPU Server usage
 
-- upload (from local terminal)
+- Follow instructions on the guide sent via email for initial setup.
 
-```
-scp -r <Key Directory> "<local folder path>" <user name>@<server name>.cl.uzh.ch:/home/<user name>/<folder_name>
-```
+- Uploading files (input commands from local terminal)
 
-- synchronize (from local terminal)
+    ```
+    scp -r <Key Directory> "<local folder path>" <user name>@<server name>.cl.uzh.ch:/home/<user name>/<folder_name>
+    ```
+
+- Synchronizing files (input commands from local terminal)
+
+    - Recommend to use Linux terminal.
 
     - server to local
         ```
@@ -22,10 +26,58 @@ scp -r <Key Directory> "<local folder path>" <user name>@<server name>.cl.uzh.ch
         rsync -asv --ignore-existing -e "<Key Directory>" <local folder path> <user name>@<server name>.cl.uzh.ch:/home/<user name>/<folder name>
         ```
 
-## Project Structure
+- Running multiple sessions
+    - Create a new session
+    ```
+    tmux new -s <session name>
+    ```
+    - access existing session
+    ```
+    tmux attach -t <session name>
+    ```
+    - Return to the main session
+    ```
+    Ctrl + b, d
+    ```
+    - Closing session
+    ```
+    exit
+    ```
+
+## 2. Project Structure
 
 - data: raw data and processed data (down load from query results)
     - file names: de.tsv, fr.tsv, de_edu.tsv,...
 
 - topic_extraction: code for topic extraction
     
+## 3. LLM Module
+
+Repository for LLM classification and summarization module.
+
+1. Run a vllm server for initiating LLM
+
+    Create a new session for running the vllm server, and run the following command in the terminal. This will start a vllm server on port 8000.
+    
+    **Please close the entrypoint after use with `ctrl + c`! This occupies the port and resources until it is closed.**
+    ```
+    python -m vllm.entrypoints.openai.api_server \
+        --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+        --served-model-name llama \
+        --enable-lora \
+        --max-model-len 8192 \
+        --max-num-seqs 128 \
+        --trust-remote-code \
+        --port 8000 \
+        --distributed-executor-backend mp
+    ```
+
+2. Run a classification pipeline
+
+    Create a new session for running the classification pipeline, and run the following command in the terminal. This will run the classification pipeline using the vllm server on port 8000.
+    
+    ```
+    python -m llm_module.run
+    ```
+
+    Please tune prompts or command on your own for better performance. The current configuration is set to classify documents into 5 categories: "Asylum", "Integration", "Economy", "Politics", "Security". You can change the categories and system prompt in the `Config` object in `run.py`.
