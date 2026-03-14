@@ -2,6 +2,7 @@
 LLM-based document classifier using vLLM server
 """
 import logging
+import re
 from statistics import mode
 import requests
 from typing import List, Dict, Any, Optional
@@ -39,6 +40,9 @@ class LLMClassifier:
         }
         if config.api_key:
             self.headers["Authorization"] = f"Bearer {config.api_key}"
+        
+        self.correct_topics = 0
+        self.other_topics = {}
     
     def test_connection(self) -> bool:
         """Test connection to vLLM server"""
@@ -90,17 +94,40 @@ class LLMClassifier:
                 Provide a concise summary in english."""
             
             return prompt
-        
+
+        existing_topics_str = ", ".join(self.other_topics.keys())
+
         if usage == "verification":
-            prompt = f"""Verify the document is an article referring to the topic "Immigrants in Switzerland" and that the classification is correct.:
+            prompt = f"""
+                ### ROLE
+                You are a Swiss News Classifier. Your goal is to separate articles about **Swiss Immigration/Migration** from all other news.
 
-                - Based on the content of the document, confirm if the classification is correct.
-                - Respond with "yes" if the classification is appropriate, or "no" if it is not.
+                ### THE "YES" RULE (Swiss Immigration & Migration)
+                You MUST respond with exactly "yes" if the article covers any of the following in the context of Switzerland:
+                1. **Political Debates on Migration:** Statements by Swiss parties (SVP, Centre/Pfister, FDP, etc.) regarding population growth, the "10-million Switzerland" initiative, or limiting movement.
+                2. **Asylum & Refugees:** Status S, Ukrainian refugees, Dublin transfers, or solidarity mechanisms with the EU.
+                3. **Foreign Labor:** Cross-border workers (frontaliers), work permits, or labor shortages filled by foreigners.
+                4. **Integration:** Language laws, Swiss citizenship/naturalization, or social integration.
 
-                Document:
+                ### THE "NO" RULE (Non-Migration News)
+                Respond "no, [Label]" ONLY if the article is NOT about migration. 
+                **CRITICAL:** Do not use the word "Politics" as a label. It is too broad. Be specific (e.g., "Transportation", "Taxation", "Swiss Sports", "International Conflict").
+
+                ### SELECTION PRIORITY FOR "NO" LABELS:
+                1. Look at this list: [{existing_topics_str}]
+                2. If the topic fits one of those (and isn't "Politics"), use it.
+                3. Otherwise, create a new 1-3 word English label.
+
+                ### OUTPUT FORMAT:
+                - If Immigration/Migration: `yes`
+                - If NOT Immigration/Migration: `no, [Specific Label]`
+
+                ---
+                DOCUMENT FOR ANALYSIS:
                 {document_text}
 
-                Is the classification correct? Respond with ONLY "yes" or "no"."""
+                CLASSIFICATION (English):
+                """
             
             return prompt
     
@@ -211,6 +238,34 @@ class LLMClassifier:
                 verification_text = verification_result["choices"][0]["message"]["content"].strip()
 
                 result["verification"] = verification_text
+
+                if verification_text is not None:
+                    # Normalize formatting artifacts
+                    cleaned = verification_text.strip()
+                    cleaned = re.sub(r"\*\*", "", cleaned)  # remove markdown bold
+                    cleaned = cleaned.strip()
+
+                    lowered = cleaned.lower()
+
+                    if lowered == "yes":
+                        self.correct_topics += 1
+
+                    elif lowered.startswith("no"):
+                        topic_match = re.search(
+                            r"^\s*no\s*,?\s*\[?([^\]\n]+)\]?",
+                            cleaned,
+                            flags=re.IGNORECASE
+                        )
+
+                        if topic_match:
+                            topic = topic_match.group(1).strip()
+                        else:
+                            topic = "unknown"
+
+                        self.other_topics[topic] = self.other_topics.get(topic, 0) + 1
+
+                    else:
+                        pass
             
             except requests.exceptions.RequestException as e:
                 logger.error(f"API request failed: {e}")
@@ -322,6 +377,7 @@ class LLMClassifier:
             # append to result the classification and summary results
             result["classification"] = classification.get("category") if classification else None
             result["raw_response"] = classification.get("raw_response") if classification else None
+            result["verification"] = classification.get("verification") if classification else None
             result["summary"] = classification.get("summary") if classification else None
         elif mode == 'classify':
             result["classification"] = classification.get("category") if classification else None
@@ -386,24 +442,24 @@ class LLMClassifier:
         total = len(results)
         category_counts = {}
         successful = 0
-        correct_article = 0
         
         for result in results:
-            if result["classification"] is not None:
+            classification = result.get("classification")
+
+            if classification is not None:
                 successful += 1
-                category = result["classification"]
+                category = classification
                 category_counts[category] = category_counts.get(category, 0) + 1
-            if result["verification"] is not None and result["verification"].lower() == "yes":
-                correct_article += 1
         
         summary = {
             "total_documents": total,
             "successfully_classified": successful,
             "failed": total - successful,
-            "category_distribution": category_counts,
+            "category_distribution": category_counts,          
             "success_rate": successful / total if total > 0 else 0,
-            "verified_articles": correct_article,
-            "verification_rate": correct_article / successful if successful > 0 else 0
+            "verified_articles": self.correct_topics,
+            "verification_rate": self.correct_topics / successful if successful > 0 else 0,
+            "other_topics": self.other_topics
         }
         
         return summary
