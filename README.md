@@ -78,6 +78,14 @@ Repository for LLM classification and summarization module.
     
     ```
     python -m llm_module.run
+
+    python -m llm_module.run --url 8000 --model_name llama --input_file ./data/politics/cleaned_trial_data.csv --output_file run_8000.json --categories "Asylum,Integration,Economy,Politics,Security" --mode all
+    
+    python -m llm_module.run --categories "[\"Asylum\",\"Integration\",\"Economy\"]" --mode classify
+    
+    python -m llm_module.run --mode summarize --output_file summaries.json
+    
+    python -m llm_module.run --mode verify --output_file verify.json
     ```
 
     Please tune prompts or command on your own for better performance. The current configuration is set to classify documents into 5 categories: "Asylum", "Integration", "Economy", "Politics", "Security". You can change the categories and system prompt in the `Config` object in `run.py`.
