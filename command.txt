@@ -3,3 +3,11 @@ python topic_extraction/extract_topic.py \
 --output data/tmp/education_subtopics2.csv \
 --cleaned True \
 --banned "['ki', 'schweizer']"
+
+
+python -m llm_module.run\
+    --input_file ./data/politics/cleaned_yin_4k_0309.csv \
+    --output_file run_yin_4k_sample.json \
+    --categories "Asylum,Integration,Economy,Security" \
+    --mode all \
+    --sample 500
