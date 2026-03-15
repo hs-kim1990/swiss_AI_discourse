@@ -69,7 +69,7 @@ class LLMClassifier:
         categories_str = ", ".join(self.config.categories)
         
         if usage == "classification":
-            prompt = f"""Classify the following document into ONE of these categories: {categories_str}
+            old_prompt = f"""Classify the following document into ONE of these categories: {categories_str}
                 - Respond with ONLY the category name, no explanations or additional text.
                 - If the document does not fit any category, respond with "unknown".
 
@@ -77,7 +77,23 @@ class LLMClassifier:
                 {document_text}
 
                 Respond with ONLY the category name, nothing else."""
-            
+        
+            prompt = f"""### Task
+                Classify the following article about Swiss Migration into exactly ONE specific topic.
+
+                ### Rules
+                1. **Prefer Existing Topics**: Choose from the [LIST] below if applicable.
+                2. **Create New if Necessary**: If none fit, create a new, specific topic (max 3 words).
+                3. **Be Specific**: Avoid broad terms like "Politics," "Migration," or "Switzerland." 
+                4. **Output**: Return ONLY the topic name. No preamble, no quotes, no "The topic is:".
+
+                ### [LIST] of Existing Topics: {categories_str}
+
+                ### Article Text
+                {document_text}
+
+                ### Classification:"""
+
             return prompt
         
         if usage == "summary":
@@ -92,7 +108,7 @@ class LLMClassifier:
                 {document_text}
 
                 Provide a concise summary in english."""
-            
+                
             return prompt
 
         existing_topics_str = ", ".join(self.other_topics.keys())
@@ -144,75 +160,7 @@ class LLMClassifier:
         result = {"model": self.config.model_name,
             "timestamp": datetime.now().isoformat()}
 
-        if mode == "all" or mode == "classify":
-            classification_prompt = self.build_prompt(document_text, usage = "classification")
-            
-            classification_payload = {
-                "model": self.config.model_name,
-                "messages": [
-                    {"role": "system", "content": self.config.system_prompt},
-                    {"role": "user", "content": classification_prompt}
-                ],
-                "temperature": self.config.temperature,
-                "max_tokens": self.config.max_tokens,
-                "top_p": self.config.top_p
-            }
-
-            try:
-                classification_response = requests.post(
-                    self.chat_completions_url,
-                    headers=self.headers,
-                    json=classification_payload,
-                    timeout=60
-                )
-                classification_response.raise_for_status()
-                result = classification_response.json()
-            
-                predicted_category = result["choices"][0]["message"]["content"].strip()
-
-                result["category"] = predicted_category
-                result["raw_response"] = result["choices"][0]["message"]["content"]
-            
-            except requests.exceptions.RequestException as e:
-                logger.error(f"API request failed: {e}")
-                return None
-            except (KeyError, json.JSONDecodeError) as e:
-                logger.error(f"Failed to parse API response: {e}")
-                return None
-
-
-        if mode == "all" or mode == "summarize":
-            summarization_prompt = self.build_prompt(document_text, usage = "summary")
-            summarization_payload = {
-                "model": self.config.model_name,
-                "messages": [
-                    {"role": "system", "content": self.config.system_prompt},
-                    {"role": "user", "content": summarization_prompt}
-                ],
-                "temperature": self.config.temperature,
-                "max_tokens": self.config.max_tokens,
-                "top_p": self.config.top_p
-            }
-
-            try:
-                summarization_response = requests.post(
-                    self.chat_completions_url,
-                    headers=self.headers,
-                    json=summarization_payload,
-                    timeout=60
-                )
-                summarization_response.raise_for_status()
-                summary_result = summarization_response.json()
-                summary_text = summary_result["choices"][0]["message"]["content"].strip()
-
-                result["summary"] = summary_text
-            
-            except requests.exceptions.RequestException as e:
-                logger.error(f"API request failed: {e}")
-                return None
-            except (KeyError, json.JSONDecodeError) as e:
-                logger.error(f"Failed to parse API response: {e}")
-                return None
+        verification_is_yes = None
 
         if mode == "all" or mode == "verify":
             verification_prompt = self.build_prompt(document_text, usage = "verification")
@@ -240,14 +188,14 @@ class LLMClassifier:
                 result["verification"] = verification_text
 
                 if verification_text is not None:
-                    # Normalize formatting artifacts
                     cleaned = verification_text.strip()
-                    cleaned = re.sub(r"\*\*", "", cleaned)  # remove markdown bold
+                    cleaned = re.sub(r"\*\*", "", cleaned)
                     cleaned = cleaned.strip()
 
                     lowered = cleaned.lower()
+                    verification_is_yes = lowered == "yes"
 
-                    if lowered == "yes":
+                    if verification_is_yes:
                         self.correct_topics += 1
 
                     elif lowered.startswith("no"):
@@ -266,6 +214,84 @@ class LLMClassifier:
 
                     else:
                         pass
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+
+        should_classify = mode == "classify" or (mode == "all" and verification_is_yes is True)
+
+        if should_classify:
+            classification_prompt = self.build_prompt(document_text, usage = "classification")
+            
+            classification_payload = {
+                "model": self.config.model_name,
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": classification_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
+            }
+
+            try:
+                classification_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=classification_payload,
+                    timeout=60
+                )
+                classification_response.raise_for_status()
+                result = classification_response.json()
+            
+                predicted_category = result["choices"][0]["message"]["content"].strip()
+
+                result["category"] = predicted_category
+                if predicted_category not in self.config.categories:
+                    self.config.categories.append(predicted_category)
+                result["raw_response"] = result["choices"][0]["message"]["content"]
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+
+        elif mode == "all":
+            result["category"] = "NOT TOPIC"
+            result["raw_response"] = "NOT TOPIC"
+
+
+        if mode == "all" or mode == "summarize":
+            summarization_prompt = self.build_prompt(document_text, usage = "summary")
+            summarization_payload = {
+                "model": self.config.model_name,
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": summarization_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
+            }
+
+            try:
+                summarization_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=summarization_payload,
+                    timeout=60
+                )
+                summarization_response.raise_for_status()
+                summary_result = summarization_response.json()
+                summary_text = summary_result["choices"][0]["message"]["content"].strip()
+
+                result["summary"] = summary_text
             
             except requests.exceptions.RequestException as e:
                 logger.error(f"API request failed: {e}")

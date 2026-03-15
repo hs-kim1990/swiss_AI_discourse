@@ -10,7 +10,7 @@ from pathlib import Path
 from llm_module import Config, DocumentLoader, LLMClassifier
 
 
-DEFAULT_CATEGORIES = ["Asylum", "Integration", "Economy", "Politics", "Security"]
+DEFAULT_CATEGORIES = ["Labor Market Integration", "Asylum & Protection", "Social Cohesion"]
 
 
 def parse_categories(categories_input: str):
