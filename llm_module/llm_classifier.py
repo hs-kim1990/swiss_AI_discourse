@@ -3,7 +3,6 @@ LLM-based document classifier using vLLM server
 """
 import logging
 import re
-from statistics import mode
 import requests
 from typing import List, Dict, Any, Optional
 import json
@@ -109,6 +108,20 @@ class LLMClassifier:
 
                 Provide a concise summary in english."""
                 
+            return prompt
+
+        if usage == "sentiment":
+            prompt = f"""Analyze the overall sentiment of the following news article.
+
+                - Return exactly one label: positive, negative, or neutral.
+                - Base the sentiment on the article's overall tone toward its main topic.
+                - Do not provide explanation or additional text.
+
+                Document:
+                {document_text}
+
+                Sentiment:"""
+
             return prompt
 
         existing_topics_str = ", ".join(self.other_topics.keys())
@@ -246,14 +259,14 @@ class LLMClassifier:
                     timeout=60
                 )
                 classification_response.raise_for_status()
-                result = classification_response.json()
-            
-                predicted_category = result["choices"][0]["message"]["content"].strip()
+                classification_result = classification_response.json()
+
+                predicted_category = classification_result["choices"][0]["message"]["content"].strip()
 
                 result["category"] = predicted_category
                 if predicted_category not in self.config.categories:
                     self.config.categories.append(predicted_category)
-                result["raw_response"] = result["choices"][0]["message"]["content"]
+                result["raw_response"] = classification_result["choices"][0]["message"]["content"]
             
             except requests.exceptions.RequestException as e:
                 logger.error(f"API request failed: {e}")
@@ -266,6 +279,42 @@ class LLMClassifier:
             result["category"] = "NOT TOPIC"
             result["raw_response"] = "NOT TOPIC"
 
+        should_sentiment = mode == "sentiment" or (mode == "all" and verification_is_yes is True)
+
+        if should_sentiment:
+            sentiment_prompt = self.build_prompt(document_text, usage = "sentiment")
+            sentiment_payload = {
+                "model": self.config.model_name,
+                "messages": [
+                    {"role": "system", "content": self.config.system_prompt},
+                    {"role": "user", "content": sentiment_prompt}
+                ],
+                "temperature": self.config.temperature,
+                "max_tokens": self.config.max_tokens,
+                "top_p": self.config.top_p
+            }
+
+            try:
+                sentiment_response = requests.post(
+                    self.chat_completions_url,
+                    headers=self.headers,
+                    json=sentiment_payload,
+                    timeout=60
+                )
+                sentiment_response.raise_for_status()
+                sentiment_result = sentiment_response.json()
+                sentiment_text = sentiment_result["choices"][0]["message"]["content"].strip()
+
+                result["sentiment"] = sentiment_text
+            
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API request failed: {e}")
+                return None
+            except (KeyError, json.JSONDecodeError) as e:
+                logger.error(f"Failed to parse API response: {e}")
+                return None
+        elif mode == "all":
+            result["sentiment"] = "NOT TOPIC"
 
         if mode == "all" or mode == "summarize":
             summarization_prompt = self.build_prompt(document_text, usage = "summary")
@@ -369,7 +418,7 @@ class LLMClassifier:
                 return category
         return "unknown"
     
-    # select mode from ["all", "classify", "summarize", "verify"] to determine which classification method to use
+    # select mode from ["all", "classify", "summarize", "verify", "sentiment"] to determine which analysis to run
     def classify_document(self, document: Dict[str, Any], text_fields: List[str] = None, mode: str = "all") -> Dict[str, Any]:
         """
         Classify a single document (CSV row)
@@ -404,6 +453,7 @@ class LLMClassifier:
             result["classification"] = classification.get("category") if classification else None
             result["raw_response"] = classification.get("raw_response") if classification else None
             result["verification"] = classification.get("verification") if classification else None
+            result["sentiment"] = classification.get("sentiment") if classification else None
             result["summary"] = classification.get("summary") if classification else None
         elif mode == 'classify':
             result["classification"] = classification.get("category") if classification else None
@@ -412,10 +462,12 @@ class LLMClassifier:
             result["summary"] = classification.get("summary") if classification else None
         elif mode == 'verify':
             result["verification"] = classification.get("verification") if classification else None
+        elif mode == 'sentiment':
+            result["sentiment"] = classification.get("sentiment") if classification else None
         
         return result
     
-    def classify_batch(self, documents: List[Dict[str, Any]], text_fields: List[str] = None, use_chat: bool = True) -> List[Dict[str, Any]]:
+    def classify_batch(self, documents: List[Dict[str, Any]], text_fields: List[str] = None, mode: str = "all") -> List[Dict[str, Any]]:
         """
         Classify a batch of documents (CSV rows)
         
@@ -432,7 +484,7 @@ class LLMClassifier:
             doc_id = doc.get('id', f"row_{i}")
             source = doc.get('source_file', 'unknown')
             logger.info(f"Classifying document {i+1}/{len(documents)}: {source} - ID: {doc_id}")
-            result = self.classify_document(doc, text_fields, use_chat)
+            result = self.classify_document(doc, text_fields, mode=mode)
             results.append(result)
         
         return results
@@ -467,15 +519,18 @@ class LLMClassifier:
         """
         total = len(results)
         category_counts = {}
+        sentiment_counts = {}
         successful = 0
         
         for result in results:
             classification = result.get("classification")
-
+            sentiment = result.get("sentiment")
             if classification is not None:
                 successful += 1
                 category = classification
                 category_counts[category] = category_counts.get(category, 0) + 1
+            if sentiment is not None:
+                sentiment_counts[sentiment] = sentiment_counts.get(sentiment, 0) + 1
         
         summary = {
             "total_documents": total,
@@ -485,7 +540,8 @@ class LLMClassifier:
             "success_rate": successful / total if total > 0 else 0,
             "verified_articles": self.correct_topics,
             "verification_rate": self.correct_topics / successful if successful > 0 else 0,
-            "other_topics": self.other_topics
+            "other_topics": self.other_topics,
+            "sentiment_distribution": sentiment_counts
         }
         
         return summary
