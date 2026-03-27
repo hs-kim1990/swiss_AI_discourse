@@ -29,7 +29,13 @@ class ClassificationPipeline:
         self.loader = DocumentLoader(config.input_csv_file)
         self.classifier = LLMClassifier(config)
     
-    def run(self, text_fields: Optional[List[str]] = None, use_chat: bool = True, save_results: bool = True) -> Dict[str, Any]:
+    def run(
+        self,
+        text_fields: Optional[List[str]] = None,
+        use_chat: bool = True,
+        save_results: bool = True,
+        mode: str = "all"
+    ) -> Dict[str, Any]:
         """
         Run complete classification pipeline
         
@@ -37,6 +43,7 @@ class ClassificationPipeline:
             text_fields: Document fields to use for classification
             use_chat: Use chat completions API
             save_results: Save results to file
+            mode: Processing mode passed to classifier.classify_document()
             
         Returns:
             Pipeline results with summary
@@ -54,7 +61,7 @@ class ClassificationPipeline:
         # Process in batches
         for batch_num, batch in enumerate(self.loader.load_documents_batch(self.config.batch_size), 1):
             logger.info(f"Processing batch {batch_num} ({len(batch)} documents)")
-            batch_results = self.classifier.classify_batch(batch, text_fields, use_chat)
+            batch_results = self.classifier.classify_batch(batch, text_fields, mode=mode)
             all_results.extend(batch_results)
         
         # Generate summary
@@ -71,7 +78,13 @@ class ClassificationPipeline:
             "results": all_results
         }
     
-    def run_single_document(self, document_path: str, row_index: int = 0, text_fields: Optional[List[str]] = None) -> Dict[str, Any]:
+    def run_single_document(
+        self,
+        document_path: str,
+        row_index: int = 0,
+        text_fields: Optional[List[str]] = None,
+        mode: str = "all"
+    ) -> Dict[str, Any]:
         """
         Classify a single row from a CSV document
         
@@ -79,6 +92,7 @@ class ClassificationPipeline:
             document_path: Path to CSV file
             row_index: Index of the row to classify (default: 0)
             text_fields: Fields to extract
+            mode: Processing mode passed to classifier.classify_document()
             
         Returns:
             Classification result
@@ -98,5 +112,5 @@ class ClassificationPipeline:
         doc['source_file'] = Path(document_path).name
         doc['row_index'] = row_index
         
-        result = self.classifier.classify_document(doc, text_fields)
+        result = self.classifier.classify_document(doc, text_fields, mode=mode)
         return result

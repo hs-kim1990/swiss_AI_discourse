@@ -78,7 +78,7 @@ def parse_args():
         "--mode",
         type=str,
         default="all",
-        choices=["all", "classify", "summarize", "verify"],
+        choices=["all", "classify", "summarize", "verify", "sentiment"],
         help="Processing mode passed to classifier.classify_document().",
     )
 
@@ -135,6 +135,7 @@ def main():
         classification = result.get("classification")
         summary_text = result.get("summary")
         verification = result.get("verification")
+        sentiment = result.get("sentiment")
 
         if result:
             print(f"========================== head: {doc.get('head')} ==========================")
@@ -144,6 +145,8 @@ def main():
                 print(f"Summarized row {doc['row_index']} (ID: {doc_id}): {summary_text}")
             if args.mode in ["all", "verify"] and verification is not None:
                 print(f"Verified row {doc['row_index']} (ID: {doc_id}): {verification}")
+            if args.mode in ["all", "sentiment"] and sentiment is not None:
+                print(f"Sentiment for row {doc['row_index']} (ID: {doc_id}): {sentiment}")
         else:
             print(f"Failed to process row {doc['row_index']} (ID: {doc_id})")
 
@@ -170,6 +173,7 @@ def main():
     print(f"Category distribution: {summary['category_distribution']}")
     print(f"Verification rate: {summary['verified_articles']}")
     print(f"Verification rate: {summary['verification_rate']:.2%}")
+    print(f"Sentiment distribution: {summary['sentiment_distribution']}")
     other_topics = summary.get("other_topics", {})
     top_other_topics = sorted(other_topics.items(), key=lambda item: item[1], reverse=True)[:10]
     print("Top 10 other topics (reverse sorted):")
