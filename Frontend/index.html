@@ -183,7 +183,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   <div class="masthead-inner">
     <div class="masthead-top">
       <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
-      <div class="masthead-meta">13,026 articles · 2022–2025 · German-language press</div>
+      <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
   </div>
@@ -206,25 +206,44 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   <div class="overview-header">
     <div class="page-eyebrow">Corpus overview</div>
     <h1 class="page-title">Swiss AI discourse in German-language media</h1>
-    <p class="page-subtitle">Articles mentioning AI, KI, LLM, GenAI, or Chatbot — filtered from the Swissdox corpus</p>
+    <p class="page-subtitle">Topic-classified articles across German, French and Italian Swiss media — filtered from the Swissdox corpus via LCP, 2023–2026</p>
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="label">Total articles</div><div class="value">13,026</div><div class="sub">German-language press</div></div>
-    <div class="stat-card"><div class="label">Outlets</div><div class="value">40+</div><div class="sub">Across 6 media types</div></div>
-    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">4,032 articles</div></div>
+    <div class="stat-card"><div class="label">Topic articles</div><div class="value">5,545</div><div class="sub">After NOT TOPIC filtering</div></div>
+    <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">2,403 topic articles</div></div>
     <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
   </div>
 
-  <div class="section-head">Articles per year — volume of AI discourse over time</div>
+  <!-- Per-language breakdown cards -->
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
+    <div class="stat-card" style="border-left:3px solid #b5122a;">
+      <div class="label" style="color:#b5122a;">Deutsch (DE)</div>
+      <div class="value">4,597</div>
+      <div class="sub">SRF · Tages-Anzeiger · NZZ · Blick · Zentralschweiz</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #1a5fa8;">
+      <div class="label" style="color:#1a5fa8;">Français (FR)</div>
+      <div class="value">—</div>
+      <div class="sub">File pending upload</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #1a8a3a;">
+      <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
+      <div class="value">948</div>
+      <div class="sub">RSI (Radiotelevisione svizzera italiana)</div>
+    </div>
+  </div>
+
+  <div class="section-head">Topic articles per year — DE + IT combined (2023–2026)</div>
   <div class="chart-wrap" style="height:220px; margin-bottom:32px;">
     <canvas id="yearChart" role="img" aria-label="Bar chart showing AI article volume by year, spiking from 2022 onwards">
       2023: 3025 articles. 2024: 4032 articles. 2025 (partial): 2113 articles.
     </canvas>
   </div>
 
-  <div class="section-head">Top outlets by article count</div>
-  <div class="chart-wrap" style="height:360px; margin-bottom:32px;">
+  <div class="section-head">Outlets by topic article count</div>
+  <div class="chart-wrap" style="height:260px; margin-bottom:32px;">
     <canvas id="sourceChart" role="img" aria-label="Horizontal bar chart of top 12 Swiss outlets by article count">
       Cash Online: 1069. NZZ Online: 913. NZZ: 744.
     </canvas>
@@ -249,7 +268,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     </div>
   </div>
 
-  <div class="section-head">Media type breakdown</div>
+  <div class="section-head">Articles by language</div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
     <div class="chart-wrap" style="height:240px;">
       <canvas id="typeChart" role="img" aria-label="Donut chart of articles by media type">
@@ -628,8 +647,8 @@ document.getElementById('searchInput').addEventListener('keydown', e => {
 });
 
 // ── Charts ────────────────────────────────────────────────────────
-const YEAR_LABELS = ['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025*'];
-const YEAR_DATA   = [174, 231, 343, 393, 348, 388, 516, 3025, 4032, 2113];
+const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
+const YEAR_DATA   = [542, 2403, 2223, 377];
 
 new Chart(document.getElementById('yearChart'), {
   type: 'bar',
@@ -637,7 +656,7 @@ new Chart(document.getElementById('yearChart'), {
     labels: YEAR_LABELS,
     datasets: [{
       data: YEAR_DATA,
-      backgroundColor: YEAR_DATA.map((_, i) => i >= 6 ? '#B5122A' : '#c8c6c0'),
+      backgroundColor: YEAR_DATA.map((_, i) => i === 1 ? '#B5122A' : '#c8c6c0'),
       borderWidth: 0,
       borderRadius: 2,
     }]
@@ -656,9 +675,9 @@ new Chart(document.getElementById('yearChart'), {
   }
 });
 
-const SRC_LABELS = ['Cash Online','NZZ Online','NZZ','Blick Online','SGT Online','Schweizer HZ','Zentralschweiz','St.Galler Tgbl.','Basler Ztg.','Finanz & Wirt.','SRF','Tages-Anzeiger'];
-const SRC_DATA   = [1069, 913, 744, 619, 560, 500, 475, 470, 418, 379, 366, 363];
-const SRC_COLORS = ['#B5122A','#4a4844','#7a6ab8','#c25b3a','#2a7a6a','#3a6a9a','#8a6a2a','#5a8a3a','#7a4a8a','#c09030','#c06030','#3a5a8a'];
+const SRC_LABELS = ['SRF', 'Tages-Anzeiger', 'RSI', 'NZZ', 'Blick', 'Zentralschweiz', 'Tages-Anzeiger Schweiz'];
+const SRC_DATA   = [1233, 951, 948, 788, 733, 728, 164];
+const SRC_COLORS = ['#c06030', '#3a5a8a', '#1a8a3a', '#7a6ab8', '#D45B5B', '#8a6a2a', '#5a7aaa'];
 
 new Chart(document.getElementById('sourceChart'), {
   type: 'bar',
@@ -686,9 +705,9 @@ new Chart(document.getElementById('sourceChart'), {
   }
 });
 
-const TYPE_LABELS = ['National', 'Wirtschaft', 'Regional', 'Boulevard', 'Rundfunk', 'Andere'];
-const TYPE_DATA   = [2820, 2726, 2498, 1238, 366, 3378];
-const TYPE_COLORS = ['#4a4844','#c09030','#5a8a3a','#c25b3a','#c06030','#8a8880'];
+const TYPE_LABELS = ['Deutsch (DE)', 'Italiano (IT)', 'Français (FR)'];
+const TYPE_DATA   = [4597, 948, 0];
+const TYPE_COLORS = ['#b5122a', '#1a8a3a', '#1a5fa8'];
 
 new Chart(document.getElementById('typeChart'), {
   type: 'doughnut',
