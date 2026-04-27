@@ -1,22 +1,37 @@
 from flask import Flask, send_from_directory, jsonify, request
-import pandas as pd
+import json
 import os
+from datetime import datetime, timezone
 
 app = Flask(__name__, static_folder='frontend')
 
-# ── Load data once at startup ──────────────────────────────────────────────
-DATA_PATH = os.path.join(os.path.dirname(__file__), 'data', 'swiss_ai_discourse_articles_de.csv')
+# ── File paths ─────────────────────────────────────────────────────────────
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
-df = pd.read_csv(DATA_PATH)
-df['pubdate'] = pd.to_datetime(df['pubdate'], errors='coerce')
-df = df.dropna(subset=['pubdate'])
-df['year'] = df['pubdate'].dt.year
+DATA_FILES = {
+    'de': 'run_swissdocx_0322_Germany_20260413_214420.json',
+    'fr': 'run_swissdocx_0322_French_20260413_192120.json',
+    'it': 'run_swissdocx_0322_Italian_20260413_183132.json',
+}
 
-# Source display name mapping (Swissdox codes → readable names)
+LANG_LABELS = {
+    'de': 'Deutsch',
+    'fr': 'Français',
+    'it': 'Italiano',
+}
+
+LANG_COLORS = {
+    'de': '#b5122a',
+    'fr': '#1a5fa8',
+    'it': '#1a8a3a',
+}
+
+# ── Source metadata ─────────────────────────────────────────────────────────
 SOURCE_NAMES = {
     'NZZ': 'NZZ', 'NZZM': 'NZZ am Sonntag', 'NZZO': 'NZZ Online',
     'TA': 'Tages-Anzeiger', 'TAM': 'Tages-Anzeiger', 'TASI': 'Tages-Anzeiger',
-    'SRF': 'SRF', 'SRFA': 'SRF', 'SRFV': 'SRF',
+    'SRF': 'SRF', 'SRFA': 'SRF', 'SRFV': 'SRF', 'RSI': 'RSI',
+    'RTS': 'RTS', 'RTR': 'RTR',
     'BLI': 'Blick', 'BLIO': 'Blick Online',
     'AZ': 'Aargauer Zeitung', 'AZO': 'Aargauer Zeitung Online',
     'BZ': 'Basler Zeitung', 'BAZ': 'Basler Zeitung',
@@ -24,166 +39,212 @@ SOURCE_NAMES = {
     'WOZ': 'WOZ', 'SF': 'Sonntagszeitung', 'SONT': 'Sonntagszeitung',
     'CASH': 'Cash', 'CASO': 'Cash Online',
     'FUW': 'Finanz und Wirtschaft', 'FUWO': 'Finanz und Wirtschaft Online',
-    'SGT': 'St. Galler Tagblatt', 'LUZ': 'Luzerner Zeitung',
-    'SHZ': 'Schweizer Handelszeitung',
-}
-
-SOURCE_TYPES = {
-    'NZZ': 'National', 'NZZM': 'National', 'NZZO': 'National',
-    'TA': 'National', 'TAM': 'National',
-    'SRF': 'Öffentl. Rundfunk', 'SRFA': 'Öffentl. Rundfunk', 'SRFV': 'Öffentl. Rundfunk',
-    'BLI': 'Boulevard', 'BLIO': 'Boulevard',
-    'AZ': 'Regional', 'AZO': 'Regional',
-    'BZ': 'Regional', 'BAZ': 'Regional',
-    'BEOL': 'Regional', 'BEOLO': 'Regional',
-    'SGT': 'Regional', 'LUZ': 'Regional', 'SHZ': 'Regional',
-    'WOZ': 'Unabhängig', 'FUW': 'Wirtschaft', 'FUWO': 'Wirtschaft',
-    'CASH': 'Wirtschaft', 'CASO': 'Wirtschaft',
+    'SGT': 'St. Galler Tagblatt', 'SGTO': 'St. Galler Tagblatt Online',
+    'LUZ': 'Luzerner Zeitung', 'SHZ': 'Schweizer Handelszeitung',
+    'SHZO': 'Schweizer Handelszeitung Online',
+    'ZWAO': 'Zentralschweiz Online', 'NNBS': 'Basler Zeitung',
+    'NNTA': 'Tages-Anzeiger',
+    'LT': 'Le Temps', 'LTO': 'Le Temps Online',
+    '24H': '24 Heures', '24HO': '24 Heures Online',
+    'TDG': 'Tribune de Genève', 'TDGO': 'Tribune de Genève Online',
+    'LE': "L'Express", 'LI': "L'Impartial",
+    'COR': 'Le Courrier', 'CORO': 'Le Courrier Online',
 }
 
 SOURCE_COLORS = {
-    'NZZ': '#C0B8E8', 'NZZM': '#C0B8E8', 'NZZO': '#C0B8E8',
-    'TA': '#7BA4D4',  'TAM': '#7BA4D4',
-    'SRF': '#E87070', 'SRFA': '#E87070', 'SRFV': '#E87070',
+    'NZZ': '#7a6ab8', 'NZZM': '#7a6ab8', 'NZZO': '#7a6ab8',
+    'TA': '#3a5a8a', 'TAM': '#3a5a8a', 'NNTA': '#3a5a8a',
+    'SRF': '#c06030', 'SRFA': '#c06030', 'SRFV': '#c06030',
+    'RSI': '#1a8a3a', 'RTS': '#1a5fa8',
     'BLI': '#D45B5B', 'BLIO': '#D45B5B',
-    'AZ': '#7BB4D4',  'AZO': '#7BB4D4',
-    'BZ': '#8BBCAA',  'BAZ': '#8BBCAA',
-    'WOZ': '#C4A882', 'SGT': '#A882C4',
-    'FUW': '#E8C060', 'FUWO': '#E8C060',
+    'CASO': '#B5122A', 'CASH': '#B5122A',
+    'NZZO': '#4a4844', 'FUWO': '#c09030', 'FUW': '#c09030',
+    'SGTO': '#2a7a6a', 'SGT': '#2a7a6a',
+    'SHZO': '#3a6a9a', 'SHZ': '#3a6a9a',
+    'ZWAO': '#8a6a2a', 'NNBS': '#7a4a8a',
+    'LT': '#1a5fa8', 'LTO': '#1a5fa8',
+    '24H': '#2a7a9a', '24HO': '#2a7a9a',
+    'TDG': '#5a3a8a', 'TDGO': '#5a3a8a',
 }
+
 
 def get_source_display(code):
     return SOURCE_NAMES.get(code, code)
-
-def get_source_type(code):
-    return SOURCE_TYPES.get(code, 'Andere')
 
 def get_source_color(code):
     return SOURCE_COLORS.get(code, '#7A7A8A')
 
 
-# ── Routes ────────────────────────────────────────────────────────────────
+# ── Load all data at startup ────────────────────────────────────────────────
+ALL_ARTICLES = []
+
+def parse_date(pubtime):
+    if not pubtime:
+        return None, ''
+    try:
+        # Handle timezone offset like "2025-03-27 07:24:23+01"
+        dt_str = pubtime.strip()
+        if '+' in dt_str:
+            # Pad timezone to ±HH:MM format
+            parts = dt_str.rsplit('+', 1)
+            tz = parts[1]
+            if ':' not in tz:
+                tz = tz + ':00'
+            dt_str = parts[0] + '+' + tz
+        dt = datetime.fromisoformat(dt_str)
+        return dt.year, dt.strftime('%d.%m.%Y')
+    except Exception:
+        return None, str(pubtime)[:10]
+
+for lang, filename in DATA_FILES.items():
+    filepath = os.path.join(DATA_DIR, filename)
+    if not os.path.exists(filepath):
+        print(f'WARNING: data file not found: {filepath}')
+        continue
+    with open(filepath, 'r', encoding='utf-8') as f:
+        records = json.load(f)
+    for item in records:
+        classification = item.get('classification') or ''
+        # Skip non-topic articles
+        if classification.upper() == 'NOT TOPIC':
+            continue
+        year, date_str = parse_date(item.get('pubtime'))
+        ALL_ARTICLES.append({
+            'id':             item.get('id'),
+            'headline':       item.get('head', ''),
+            'summary':        item.get('summary', ''),
+            'classification': classification,
+            'verification':   item.get('verification', ''),
+            'source':         item.get('medium_code', ''),
+            'outlet':         get_source_display(item.get('medium_code', '')),
+            'color':          get_source_color(item.get('medium_code', '')),
+            'language':       lang,
+            'lang_label':     LANG_LABELS[lang],
+            'lang_color':     LANG_COLORS[lang],
+            'year':           year,
+            'date':           date_str,
+        })
+
+print(f'Loaded {len(ALL_ARTICLES):,} topic articles across {len(DATA_FILES)} languages')
+
+
+# ── Routes ─────────────────────────────────────────────────────────────────
 
 @app.route('/')
 def index():
     return send_from_directory('frontend', 'index.html')
 
-
-@app.route('/api/sources')
-def api_sources():
-    """Return all sources with article counts, sorted by count."""
-    counts = df['source'].value_counts().reset_index()
-    counts.columns = ['source', 'count']
-    # Only include sources with >5 articles
-    counts = counts[counts['count'] > 5]
-    result = []
-    for _, row in counts.iterrows():
-        code = row['source']
-        result.append({
-            'id':    code,
-            'name':  get_source_display(code),
-            'type':  get_source_type(code),
-            'color': get_source_color(code),
-            'count': int(row['count']),
-        })
-    return jsonify(result)
+@app.route('/<path:filename>')
+def static_files(filename):
+    return send_from_directory('frontend', filename)
 
 
 @app.route('/api/articles')
 def api_articles():
     """
-    Return articles filtered by query, sources, year range.
-    Query params:
-        q        – search term (searches headline + subtitle)
-        sources  – comma-separated source codes, e.g. NZZ,TA,SRF
-        year_from – e.g. 2022
-        year_to   – e.g. 2024
-        limit    – max results (default 50)
+    Search articles across all three language files.
+    Params:
+        q        – search term (headline + summary + classification)
+        lang     – comma-separated: de,fr,it
+        year     – single year filter e.g. 2024
+        source   – outlet code filter
+        limit    – max results (default 100)
+        offset   – pagination offset (default 0)
     """
-    q         = request.args.get('q', '').strip()
-    sources   = request.args.get('sources', '').strip()
-    year_from = request.args.get('year_from', type=int)
-    year_to   = request.args.get('year_to',   type=int)
-    limit     = request.args.get('limit', 50, type=int)
+    q      = request.args.get('q', '').strip().lower()
+    langs  = request.args.get('lang', '').strip()
+    year   = request.args.get('year', type=int)
+    source = request.args.get('source', '').strip()
+    limit  = request.args.get('limit', 100, type=int)
+    offset = request.args.get('offset', 0, type=int)
 
-    filtered = df.copy()
+    lang_list = [l.strip() for l in langs.split(',') if l.strip()] if langs else []
 
-    if q:
-        mask = (
-            filtered['head'].str.contains(q, case=False, na=False) |
-            filtered['title_full'].str.contains(q, case=False, na=False) |
-            filtered['subtitle'].str.contains(q, case=False, na=False)
-        )
-        filtered = filtered[mask]
+    results = []
+    for article in ALL_ARTICLES:
+        if lang_list and article['language'] not in lang_list:
+            continue
+        if year and article['year'] != year:
+            continue
+        if source and article['source'] != source:
+            continue
+        if q:
+            searchable = ' '.join([
+                article.get('headline', ''),
+                article.get('summary', ''),
+                article.get('classification', ''),
+            ]).lower()
+            if q not in searchable:
+                continue
+        results.append(article)
 
-    if sources:
-        src_list = [s.strip() for s in sources.split(',') if s.strip()]
-        filtered = filtered[filtered['source'].isin(src_list)]
+    total = len(results)
+    page  = results[offset:offset + limit]
 
-    if year_from:
-        filtered = filtered[filtered['year'] >= year_from]
-    if year_to:
-        filtered = filtered[filtered['year'] <= year_to]
-
-    filtered = filtered.sort_values('pubdate', ascending=False).head(limit)
-
-    result = []
-    for _, row in filtered.iterrows():
-        result.append({
-            'headline':  row['head']       or row['title_full'] or '',
-            'subtitle':  row['subtitle']   or '',
-            'date':      row['pubdate'].strftime('%d.%m.%Y') if pd.notna(row['pubdate']) else '',
-            'source':    row['source'],
-            'outlet':    get_source_display(row['source']),
-            'color':     get_source_color(row['source']),
-            'url':       row['articleURL'] if pd.notna(row['articleURL']) else None,
-        })
-    return jsonify(result)
-
-
-@app.route('/api/sources_for_query')
-def api_sources_for_query():
-    """
-    Return sources that have articles matching a search query,
-    with per-source article counts.
-    Query params: q (required)
-    """
-    q = request.args.get('q', '').strip()
-    if not q:
-        return jsonify([])
-
-    mask = (
-        df['head'].str.contains(q, case=False, na=False) |
-        df['title_full'].str.contains(q, case=False, na=False) |
-        df['subtitle'].str.contains(q, case=False, na=False)
-    )
-    matched = df[mask]
-
-    counts = matched['source'].value_counts().reset_index()
-    counts.columns = ['source', 'count']
-
-    result = []
-    for _, row in counts.iterrows():
-        code = row['source']
-        result.append({
-            'id':    code,
-            'name':  get_source_display(code),
-            'type':  get_source_type(code),
-            'color': get_source_color(code),
-            'count': int(row['count']),
-        })
-    return jsonify(result)
+    return jsonify({
+        'total':    total,
+        'offset':   offset,
+        'limit':    limit,
+        'articles': page,
+    })
 
 
 @app.route('/api/stats')
 def api_stats():
-    """Return high-level dataset statistics for the UI header."""
+    """High-level corpus statistics."""
+    by_lang = {}
+    for a in ALL_ARTICLES:
+        l = a['language']
+        by_lang[l] = by_lang.get(l, 0) + 1
+
+    sources = set(a['source'] for a in ALL_ARTICLES)
+    years   = [a['year'] for a in ALL_ARTICLES if a['year']]
+
     return jsonify({
-        'total_articles': len(df),
-        'total_sources':  int(df['source'].nunique()),
-        'year_min':       int(df['year'].min()),
-        'year_max':       int(df['year'].max()),
+        'total_articles': len(ALL_ARTICLES),
+        'total_sources':  len(sources),
+        'year_min':       min(years) if years else None,
+        'year_max':       max(years) if years else None,
+        'by_language':    by_lang,
     })
+
+
+@app.route('/api/classifications')
+def api_classifications():
+    """Return all classification categories with counts, optionally filtered by language."""
+    lang = request.args.get('lang', '').strip()
+    counts = {}
+    for a in ALL_ARTICLES:
+        if lang and a['language'] != lang:
+            continue
+        c = a['classification']
+        if c and c.upper() not in ('NOT TOPIC', 'NONE', ''):
+            counts[c] = counts.get(c, 0) + 1
+    sorted_counts = sorted(counts.items(), key=lambda x: -x[1])
+    return jsonify([{'label': k, 'count': v} for k, v in sorted_counts])
+
+
+@app.route('/api/sources')
+def api_sources():
+    """Return all sources with article counts."""
+    lang = request.args.get('lang', '').strip()
+    counts = {}
+    for a in ALL_ARTICLES:
+        if lang and a['language'] != lang:
+            continue
+        s = a['source']
+        if s:
+            counts[s] = counts.get(s, 0) + 1
+    result = []
+    for code, count in sorted(counts.items(), key=lambda x: -x[1]):
+        if count >= 2:
+            result.append({
+                'id':    code,
+                'name':  get_source_display(code),
+                'color': get_source_color(code),
+                'count': count,
+            })
+    return jsonify(result)
 
 
 if __name__ == '__main__':
