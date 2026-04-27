@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Pipeline — Swiss Media AI Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1916; --ink-mid: #4a4844; --ink-light: #8a8880; --ink-faint: #c8c6c0;
+  --paper: #f7f5f0; --paper-tinted: #efede8;
+  --accent: #b5122a; --accent-soft: #f5e8ea;
+  --rule: 1px solid var(--ink-faint); --rule-heavy: 2px solid var(--ink);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+}
+body { font-family: var(--font-body); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+.masthead { border-bottom: var(--rule-heavy); padding: 20px 0 12px; background: var(--paper); }
+.masthead-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+.masthead-top { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.masthead-title { font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+.masthead-title span { color: var(--accent); }
+.masthead-meta { font-size: 11px; color: var(--ink-light); font-family: var(--font-mono); letter-spacing: 0.04em; }
+.masthead-rule { border: none; border-top: 4px double var(--ink-faint); margin: 10px 0 0; }
+
+.nav-bar { background: var(--paper-tinted); border-bottom: var(--rule); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; display: flex; }
+.nav-btn {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 10px 18px; background: none; border: none; border-bottom: 3px solid transparent;
+  color: var(--ink-light); cursor: pointer; transition: color 0.15s, border-color 0.15s; text-decoration: none; display: inline-block;
+}
+.nav-btn:hover { color: var(--ink); }
+.nav-btn.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+.container { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+
+.page-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.page-title { font-family: var(--font-display); font-size: 30px; font-weight: 600; line-height: 1.15; }
+.page-subtitle { font-size: 14px; color: var(--ink-mid); margin-top: 6px; font-style: italic; }
+.page-header { margin-bottom: 28px; border-bottom: var(--rule); padding-bottom: 16px; }
+
+.pipeline-intro {
+  font-size: 15px; color: var(--ink-mid); line-height: 1.8;
+  margin-bottom: 36px; border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 18px; font-style: italic;
+}
+
+/* ── Step layout ── */
+.step { display: grid; grid-template-columns: 56px 1fr; }
+.step-connector { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+.step-num {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 13px;
+  flex-shrink: 0;
+}
+.step-line { width: 1px; background: var(--ink-faint); flex: 1; min-height: 20px; margin-top: 6px; }
+.step-last .step-line { display: none; }
+.step-body { padding: 0 0 36px 8px; }
+
+.step-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+.step-title { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin-bottom: 10px; line-height: 1.2; }
+.step-desc { font-size: 14px; color: var(--ink-mid); line-height: 1.7; margin-bottom: 14px; }
+.step-desc em { font-style: italic; color: var(--ink); }
+.step-desc code { font-family: var(--font-mono); font-size: 12px; background: var(--paper-tinted); padding: 1px 5px; border-radius: 2px; color: var(--ink); }
+
+/* ── Code block ── */
+.code-block {
+  background: #1e1c19; color: #c8c4bc;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.75;
+  padding: 16px 20px; border-radius: 4px;
+  overflow-x: auto; white-space: pre; margin-bottom: 12px;
+  border: 0.5px solid #3a3835;
+}
+.code-block .kw  { color: #f0c070; }   /* keywords */
+.code-block .str { color: #90d0f0; }   /* strings */
+.code-block .cm  { color: #6a8a6a; }   /* comments */
+.code-block .fn  { color: #d0a0e0; }   /* function names */
+.code-block .op  { color: #e08060; }   /* operators / decorators */
+.code-block .num { color: #90e0b0; }   /* numbers */
+
+/* ── Tech chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.chip {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  padding: 3px 10px; border-radius: 2px;
+  background: var(--paper-tinted); border: 0.5px solid var(--ink-faint); color: var(--ink-mid);
+}
+.chip.hi { background: var(--accent-soft); border-color: #d97a8a; color: #8a0018; }
+
+/* ── Schema table ── */
+.schema { border: 0.5px solid var(--ink-faint); border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+.schema-row { display: grid; grid-template-columns: 130px 80px 1fr; font-size: 12px; border-bottom: 0.5px solid var(--ink-faint); }
+.schema-row:last-child { border-bottom: none; }
+.schema-row.head { background: var(--paper-tinted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-light); }
+.schema-cell { padding: 8px 12px; line-height: 1.4; }
+.schema-cell code { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
+.type-pill { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
+.schema-cell.desc { color: var(--ink-mid); }
+
+/* ── Diagram ── */
+.diagram {
+  display: flex; align-items: center; gap: 0;
+  background: var(--paper-tinted); border: 0.5px solid var(--ink-faint);
+  border-radius: 4px; padding: 20px 16px; margin-bottom: 12px;
+  overflow-x: auto;
+}
+.d-box {
+  background: white; border: 0.5px solid var(--ink-faint);
+  border-radius: 3px; padding: 8px 14px; white-space: nowrap;
+  font-size: 12px; color: var(--ink-mid); flex-shrink: 0;
+  text-align: center; min-width: 90px;
+}
+.d-box strong { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--ink); font-weight: 400; margin-bottom: 2px; }
+.d-box.accent { border-color: var(--accent); border-width: 1px; }
+.d-box.accent strong { color: var(--accent); }
+.d-arrow { font-size: 18px; color: var(--ink-faint); padding: 0 8px; flex-shrink: 0; }
+
+/* ── Section divider ── */
+.section-rule { border: none; border-top: var(--rule); margin: 8px 0 32px; }
+
+/* ── Summary box ── */
+.summary-box {
+  background: var(--accent-soft); border: 1px solid #d97a8a;
+  border-radius: 4px; padding: 20px 24px; margin-top: 8px;
+}
+.summary-box h3 { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: #7a0018; margin-bottom: 10px; }
+.summary-box ul { padding-left: 18px; }
+.summary-box li { font-size: 13px; color: var(--ink-mid); line-height: 1.75; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-top">
+      <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
+      <div class="masthead-meta">13,026 articles · 2022–2025 · German-language press</div>
+    </div>
+    <hr class="masthead-rule">
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-btn" href="index.html">Overview</a>
+    <a class="nav-btn" href="search.html">Search</a>
+    <a class="nav-btn active" href="pipeline.html">Data Pipeline</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="page-header">
+    <div class="page-eyebrow">Methodology</div>
+    <h1 class="page-title">Data pipeline</h1>
+    <p class="page-subtitle">How 13,026 articles were extracted, filtered, and structured for analysis</p>
+  </div>
+
+  <p class="pipeline-intro">
+    This corpus was assembled to study how Swiss German-language media covered AI topics —
+    from early financial press mentions to the ChatGPT explosion of 2023–2024. The pipeline moves
+    from a proprietary media archive through linguistic corpus tools to a structured CSV
+    ready for downstream analysis and LLM classification.
+  </p>
+
+  <!-- End-to-end diagram -->
+  <div class="diagram">
+    <div class="d-box accent"><strong>Swissdox</strong>Media archive</div>
+    <div class="d-arrow">→</div>
+    <div class="d-box"><strong>LCP Query</strong>Token matching</div>
+    <div class="d-arrow">→</div>
+    <div class="d-box"><strong>TSV export</strong>Raw results</div>
+    <div class="d-arrow">→</div>
+    <div class="d-box"><strong>Pandas</strong>Clean &amp; dedup</div>
+    <div class="d-arrow">→</div>
+    <div class="d-box"><strong>CSV corpus</strong>13,026 rows</div>
+    <div class="d-arrow">→</div>
+    <div class="d-box accent"><strong>LLM / Flask</strong>Analysis &amp; API</div>
+  </div>
+
+  <hr class="section-rule">
+
+  <!-- ── Step 1 ── -->
+  <div class="step">
+    <div class="step-connector"><div class="step-num">1</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Source</div>
+      <div class="step-title">Swissdox archive query via LCP</div>
+      <div class="step-desc">
+        The <em>Swissdox</em> platform (University of Zurich) provides licensed access to Swiss press archives
+        covering print and online editions from the 1990s onwards. Queries are written in
+        <em>LCP (Linguistic Corpus Platform)</em> syntax — a domain-specific language for searching
+        tokenised, linguistically annotated corpora.<br><br>
+        Articles were matched when any segment contained one of the target token forms:
+        <code>AI</code>, <code>IA</code>, <code>GenAI</code>, <code>LLM</code>, or <code>Chatbot</code>.
+        Article-level metadata (headline, date, source code, URL) was extracted via the
+        <code>byYear</code> analysis block.
+      </div>
+      <div class="code-block"><span class="cm"># LCP query — search AI-related forms across all segments</span>
+<span class="op">Article</span> a
+
+<span class="op">Segment</span>@a s
+
+<span class="op">Token</span>@s t1
+    <span class="kw">OR</span>
+        form = <span class="str">"AI"</span>
+        form = <span class="str">"IA"</span>
+        form = <span class="str">"GenAI"</span>
+        form = <span class="str">"LLM"</span>
+        form = <span class="str">"Chatbot"</span>
+
+<span class="cm"># Extract article metadata aggregated by year</span>
+<span class="op">byYear</span> => analysis
+    attributes
+        a.head
+        a.subhead
+        a.pubdate
+        a.source
+        a.articleURL
+    functions
+        frequency</div>
+      <div class="chips">
+        <div class="chip hi">LCP / CatchPhrase</div>
+        <div class="chip">Swissdox</div>
+        <div class="chip">UZH Linguistik</div>
+        <div class="chip">Token-level matching</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 2 ── -->
+  <div class="step">
+    <div class="step-connector"><div class="step-num">2</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Export &amp; cleaning</div>
+      <div class="step-title">Result processing with Pandas</div>
+      <div class="step-desc">
+        Query results arrive as tab-separated values from the LCP API. Because a single article can
+        match multiple token forms (e.g. an article containing both <code>AI</code> and <code>LLM</code>
+        appears twice in the raw export), the first processing step is deduplication on <code>articleURL</code>.
+        Dates are normalised to ISO 8601. Rows with unparseable dates are dropped.
+        The cleaned file is exported as <code>swiss_ai_discourse_articles_de.csv</code>.
+      </div>
+      <div class="code-block"><span class="cm"># export_processor.ipynb</span>
+<span class="kw">import</span> pandas as pd
+
+<span class="cm"># Load raw TSV from LCP export</span>
+df = pd.<span class="fn">read_csv</span>(<span class="str">'query_result.tsv'</span>, sep=<span class="str">'\t'</span>)
+<span class="fn">print</span>(f<span class="str">"Raw rows: {len(df):,}"</span>)
+
+<span class="cm"># Deduplicate — same article can match multiple token forms</span>
+df = df.<span class="fn">drop_duplicates</span>(subset=[<span class="str">'articleURL'</span>])
+<span class="fn">print</span>(f<span class="str">"After dedup: {len(df):,}"</span>)
+
+<span class="cm"># Normalise date column to ISO 8601</span>
+df[<span class="str">'pubdate'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="str">'pubdate'</span>], errors=<span class="str">'coerce'</span>)
+df = df.<span class="fn">dropna</span>(subset=[<span class="str">'pubdate'</span>])
+df[<span class="str">'year'</span>] = df[<span class="str">'pubdate'</span>].dt.year
+
+<span class="cm"># Export</span>
+df.<span class="fn">to_csv</span>(<span class="str">'swiss_ai_discourse_articles_de.csv'</span>, index=<span class="kw">False</span>)
+<span class="fn">print</span>(f<span class="str">"Exported {len(df):,} articles — {df['source'].nunique()} outlets"</span>)</div>
+      <div class="chips">
+        <div class="chip hi">pandas</div>
+        <div class="chip">Jupyter Notebook</div>
+        <div class="chip">Python 3.11</div>
+        <div class="chip">TSV → CSV</div>
+        <div class="chip">Date normalisation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 3 ── -->
+  <div class="step">
+    <div class="step-connector"><div class="step-num">3</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Schema</div>
+      <div class="step-title">Output data schema</div>
+      <div class="step-desc">
+        Each row in the CSV represents one unique article. The seven fields below power
+        this viewer, the overview charts, and all downstream LLM analysis.
+        The <code>source</code> column contains Swissdox outlet codes (e.g. <code>NZZ</code>, <code>SRF</code>)
+        which are mapped to human-readable names and media types in the application layer.
+      </div>
+      <div class="schema">
+        <div class="schema-row head">
+          <div class="schema-cell">Field</div>
+          <div class="schema-cell">Type</div>
+          <div class="schema-cell">Description</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>head</code></div>
+          <div class="schema-cell type-pill">string</div>
+          <div class="schema-cell desc">Primary headline of the article</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>subtitle</code></div>
+          <div class="schema-cell type-pill">string</div>
+          <div class="schema-cell desc">Deck or subheadline (nullable)</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>pubdate</code></div>
+          <div class="schema-cell type-pill">date</div>
+          <div class="schema-cell desc">Publication date in ISO 8601 format</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>source</code></div>
+          <div class="schema-cell type-pill">string</div>
+          <div class="schema-cell desc">Swissdox outlet code (NZZ, SRF, BLIO…)</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>articleURL</code></div>
+          <div class="schema-cell type-pill">url</div>
+          <div class="schema-cell desc">Canonical article URL (nullable for print-only)</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>language</code></div>
+          <div class="schema-cell type-pill">string</div>
+          <div class="schema-cell desc">ISO 639-1 language code — <code>de</code> for this corpus</div>
+        </div>
+        <div class="schema-row">
+          <div class="schema-cell"><code>title_full</code></div>
+          <div class="schema-cell type-pill">string</div>
+          <div class="schema-cell desc">Full title field used as fallback for <code>head</code></div>
+        </div>
+      </div>
+      <div class="chips">
+        <div class="chip">CSV / UTF-8</div>
+        <div class="chip">13,026 rows</div>
+        <div class="chip">40+ outlet codes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 4 ── -->
+  <div class="step">
+    <div class="step-connector"><div class="step-num">4</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Analysis</div>
+      <div class="step-title">LLM topic extraction &amp; classification</div>
+      <div class="step-desc">
+        A vLLM server runs <em>Llama-3.1-8B-Instruct</em> (4-bit quantised via unsloth) on a UZH GPU cluster.
+        The <code>llm_module.run</code> pipeline classifies articles into user-defined topic categories,
+        generates summaries, and optionally runs sentiment scoring. Sessions are managed via
+        <code>tmux</code> to keep the vLLM server and the classification job independent.
+        <br><br>
+        The server must be started in a separate session before running classification.
+        Always close the entrypoint with <code>Ctrl+C</code> after use to free GPU resources.
+      </div>
+      <div class="code-block"><span class="cm"># 1. Start vLLM server in a dedicated tmux session</span>
+tmux new -s vllm_server
+
+python -m vllm.entrypoints.openai.api_server \
+    --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+    --served-model-name llama \
+    --enable-lora \
+    --max-model-len <span class="num">8192</span> \
+    --max-num-seqs <span class="num">128</span> \
+    --trust-remote-code \
+    --port <span class="num">8000</span>
+
+<span class="cm"># Ctrl+B, D  to detach and return to main session</span>
+
+<span class="cm"># 2. Run classification in a second session</span>
+tmux new -s classify
+
+python -m llm_module.run \
+    --input_file  data/cleaned.csv \
+    --output_file topics.json \
+    --categories  <span class="str">"Regulation,Economy,Security,Society,Education"</span> \
+    --mode        all \
+    --sample      <span class="num">500</span>
+
+<span class="cm"># Available modes: classify | summarize | verify | sentiment | all</span></div>
+      <div class="chips">
+        <div class="chip hi">Llama-3.1-8B-Instruct</div>
+        <div class="chip hi">vLLM</div>
+        <div class="chip hi">unsloth 4-bit quant</div>
+        <div class="chip">GPU cluster (UZH)</div>
+        <div class="chip">tmux sessions</div>
+        <div class="chip">OpenAI-compatible API</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 5 ── -->
+  <div class="step">
+    <div class="step-connector"><div class="step-num">5</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Infrastructure</div>
+      <div class="step-title">GPU server &amp; file synchronisation</div>
+      <div class="step-desc">
+        Processed files are synced between local workstation and the UZH GPU server using
+        <code>rsync</code>. The <code>rsync-exclude.txt</code> file prevents large directories
+        (<code>.venv/</code>, <code>data/</code>, <code>__pycache__/</code>) from being transferred.
+        Initial upload uses <code>scp</code>.
+      </div>
+      <div class="code-block"><span class="cm"># Upload project files to server (from local terminal)</span>
+scp -r <span class="str">"&lt;key_dir&gt;"</span> <span class="str">"&lt;local_folder&gt;"</span> user@server.cl.uzh.ch:/home/user/project/
+
+<span class="cm"># Sync: server → local (incremental, skips existing)</span>
+rsync -asv --ignore-existing \
+    --exclude-from rsync-exclude.txt \
+    -e <span class="str">"ssh -i &lt;key&gt;"</span> \
+    user@server.cl.uzh.ch:/home/user/project/ ./
+
+<span class="cm"># Sync: local → server</span>
+rsync -asv --ignore-existing \
+    --exclude-from rsync-exclude.txt \
+    -e <span class="str">"ssh -i &lt;key&gt;"</span> \
+    ./ user@server.cl.uzh.ch:/home/user/project/</div>
+      <div class="chips">
+        <div class="chip">rsync</div>
+        <div class="chip">scp / SSH</div>
+        <div class="chip">UZH GPU cluster</div>
+        <div class="chip">Ubuntu 24</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Step 6 ── -->
+  <div class="step step-last">
+    <div class="step-connector"><div class="step-num">6</div><div class="step-line"></div></div>
+    <div class="step-body">
+      <div class="step-tag">Serving</div>
+      <div class="step-title">Flask REST API &amp; this viewer</div>
+      <div class="step-desc">
+        A lightweight <em>Flask</em> application (<code>app.py</code>) exposes the processed CSV as a
+        REST API. It loads the CSV once at startup, maps Swissdox source codes to readable names and
+        media types, and serves four endpoints. This viewer calls those endpoints from the browser.
+      </div>
+      <div class="code-block"><span class="cm"># Install dependencies</span>
+pip install flask pandas
+
+<span class="cm"># Run locally</span>
+python app.py
+<span class="cm"># → http://localhost:5000</span>
+
+<span class="cm"># ── API endpoints ──────────────────────────────────────</span>
+
+<span class="cm"># Full-text search with optional filters</span>
+GET /api/articles?q=ChatGPT&amp;year_from=2023&amp;year_to=2024&amp;sources=NZZ,SRF&amp;limit=100
+
+<span class="cm"># All outlets with article counts (>5 articles)</span>
+GET /api/sources
+
+<span class="cm"># Corpus statistics (used for Overview header cards)</span>
+GET /api/stats
+
+<span class="cm"># Sources matching a specific query term</span>
+GET /api/sources_for_query?q=Regulierung</div>
+      <div class="chips">
+        <div class="chip hi">Flask</div>
+        <div class="chip">pandas</div>
+        <div class="chip">REST / JSON</div>
+        <div class="chip">port 5000</div>
+        <div class="chip">CORS-ready</div>
+      </div>
+
+      <div class="summary-box" style="margin-top: 20px;">
+        <h3>Quick-start checklist</h3>
+        <ul>
+          <li>Place <code>swiss_ai_discourse_articles_de.csv</code> in the <code>data/</code> folder</li>
+          <li>Place <code>index.html</code>, <code>search.html</code>, <code>pipeline.html</code> in the <code>frontend/</code> folder</li>
+          <li>Run <code>pip install flask pandas</code> then <code>python app.py</code></li>
+          <li>Open <code>http://localhost:5000</code> — the search page loads live data automatically</li>
+          <li>For LLM analysis, start the vLLM server on the GPU cluster first (Step 4)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
