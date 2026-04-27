@@ -170,10 +170,10 @@ def api_articles():
             continue
         if q:
             searchable = ' '.join([
-                article.get('headline', ''),
-                article.get('summary', ''),
-                article.get('classification', ''),
-            ]).lower()
+                article.get('headline') or '',
+                article.get('summary') or '',
+                article.get('classification') or '',
+        ]).lower()
             if q not in searchable:
                 continue
         results.append(article)
