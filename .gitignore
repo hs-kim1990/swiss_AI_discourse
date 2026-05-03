@@ -1,6 +1,6 @@
 # Ignore data folder (datasets, large files)
-/data/
-data/
+#/data/
+#data/
 
 # Python-related
 __pycache__/
