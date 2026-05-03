@@ -1,2 +1,3 @@
-Flask 
-Flask pandas
+Flask
+pandas
+gunicorn
