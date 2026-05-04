@@ -10,43 +10,52 @@ from pathlib import Path
 @dataclass
 class Config:
     """Configuration for LLM classification framework"""
-    
+
     # vLLM Server settings
     vllm_base_url: str = "http://localhost:8000"
+    vllm_servers: List[str] = None  # list of server URLs for failover; derived from vllm_base_url if not set
     model_name: str = "meta-llama/Llama-2-7b-chat-hf"
     api_key: Optional[str] = None
-    
+
     # Classification settings
     temperature: float = 0.1
     max_tokens: int = 512
     top_p: float = 0.9
-    
+
     # Document processing
     input_csv_file: str = "./documents/data.csv"
     output_folder: str = "./results"
     batch_size: int = 10
-    
+
     # Classification categories
     categories: List[str] = None
-    
+
+    # Topic modeling behavior: "explore" (seed+expand) or "utilize" (strict predefined taxonomy)
+    topic_modeling_mode: str = "explore"
+
     # Prompt template
     system_prompt: str = "You are a precise document classifier. Classify documents into the given categories based on their content."
-    
+
     def __post_init__(self):
         if self.categories is None:
             self.categories = []
-    
+        if self.vllm_servers is None:
+            self.vllm_servers = [self.vllm_base_url]
+        if self.topic_modeling_mode not in ("explore", "utilize"):
+            raise ValueError(f"topic_modeling_mode must be 'explore' or 'utilize', got '{self.topic_modeling_mode}'")
+
     @classmethod
     def from_json(cls, config_path: str) -> "Config":
         """Load configuration from JSON file"""
         with open(config_path, 'r', encoding='utf-8') as f:
             config_dict = json.load(f)
         return cls(**config_dict)
-    
+
     def to_json(self, config_path: str) -> None:
         """Save configuration to JSON file"""
         config_dict = {
             "vllm_base_url": self.vllm_base_url,
+            "vllm_servers": self.vllm_servers,
             "model_name": self.model_name,
             "api_key": self.api_key,
             "temperature": self.temperature,
@@ -56,11 +65,12 @@ class Config:
             "output_folder": self.output_folder,
             "batch_size": self.batch_size,
             "categories": self.categories,
+            "topic_modeling_mode": self.topic_modeling_mode,
             "system_prompt": self.system_prompt
         }
         with open(config_path, 'w', encoding='utf-8') as f:
             json.dump(config_dict, f, indent=2)
-    
+
     def validate(self) -> bool:
         """Validate configuration"""
         if not self.categories:
@@ -69,4 +79,6 @@ class Config:
             raise ValueError("Temperature must be between 0 and 2")
         if self.max_tokens < 1:
             raise ValueError("max_tokens must be positive")
+        if not self.vllm_servers:
+            raise ValueError("vllm_servers list cannot be empty")
         return True
