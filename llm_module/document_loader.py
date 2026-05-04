@@ -1,5 +1,5 @@
 """
-Document loader module for reading CSV documents
+Document loader module for reading CSV and TSV documents
 """
 import logging
 from pathlib import Path
@@ -12,38 +12,41 @@ logger = logging.getLogger(__name__)
 
 
 class DocumentLoader:
-    """Load and preprocess CSV documents"""
+    """Load and preprocess CSV or TSV documents"""
     
     def __init__(self, csv_file_path: str, required_columns: List[str] = None):
         """
         Initialize document loader
         
         Args:
-            csv_file_path: Path to CSV file
-            required_columns: List of required columns to load from CSV
+            csv_file_path: Path to CSV or TSV file
+            required_columns: List of required columns to load from file
         """
         self.csv_file_path = Path(csv_file_path)
         self.required_columns = required_columns or ["id", "pubtime", "medium_code", 
                                                       "language", "head", "content"]
         
         if not self.csv_file_path.exists():
-            raise ValueError(f"CSV file not found: {csv_file_path}")
+            raise ValueError(f"File not found: {csv_file_path}")
         
         if not self.csv_file_path.is_file():
             raise ValueError(f"Path is not a file: {csv_file_path}")
         
-        if self.csv_file_path.suffix.lower() != '.csv':
-            raise ValueError(f"File is not a CSV: {csv_file_path}")
+        if self.csv_file_path.suffix.lower() not in ('.csv', '.tsv'):
+            raise ValueError(f"File is not a CSV or TSV: {csv_file_path}")
     
     def load_document(self) -> Optional[pd.DataFrame]:
         """
-        Load the CSV document
+        Load the CSV/TSV document
         
         Returns:
             DataFrame with required columns or None if loading fails
         """
         try:
-            df = pd.read_csv(self.csv_file_path, encoding='utf-8')
+            # Use tab separator for .tsv files, otherwise default comma
+            suffix = self.csv_file_path.suffix.lower()
+            sep = '\t' if suffix == '.tsv' else ','
+            df = pd.read_csv(self.csv_file_path, encoding='utf-8', sep=sep)
             
             # Check for required columns
             missing_cols = [col for col in self.required_columns if col not in df.columns]
@@ -67,10 +70,10 @@ class DocumentLoader:
     
     def load_all_documents(self) -> List[Dict[str, Any]]:
         """
-        Load all rows from the CSV file and convert to list of row dictionaries
+        Load all rows from the CSV/TSV file and convert to list of row dictionaries
         
         Returns:
-            List of row dictionaries from CSV file
+            List of row dictionaries from CSV/TSV file
         """
         df = self.load_document()
         all_rows = []

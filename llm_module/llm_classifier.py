@@ -96,17 +96,14 @@ class LLMClassifier:
             return prompt
         
         if usage == "summary":
-            prompt = f"""Summarize the following document in one sentence:
+            prompt = f"""You are a news analyst for a migration policy research project called the 10M Initiative.
+                Read the following German news article and write a concise English summary (3-5 sentences).
+                Focus on: what happened, who is involved, and why it matters for migration policy.
 
-                - Give a concise summary of the main topic and key points.
-                - Do NOT include any classification or category information, just a neutral summary.
-                - Focus on the content of the document, not on metadata or publication details.
-                - Summarize in english, regardless of the document language.
-
-                Document:
+                Article:
                 {document_text}
 
-                Provide a concise summary in english."""
+                Summary:"""
                 
             return prompt
 

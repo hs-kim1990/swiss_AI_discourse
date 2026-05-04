@@ -8,6 +8,10 @@ from datetime import datetime
 from pathlib import Path
 
 from llm_module import Config, DocumentLoader, LLMClassifier
+try:
+    from tqdm import tqdm
+except Exception:
+    tqdm = None
 
 
 DEFAULT_CATEGORIES = ["Labor Market Integration", "Asylum & Protection", "Social Cohesion"]
@@ -83,6 +87,23 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--vllm_urls",
+        type=str,
+        default=None,
+        help=(
+            "Comma-separated vLLM base URLs to run in parallel. "
+            "Example: 'http://localhost:8090,http://localhost:8091'"
+        ),
+    )
+
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=None,
+        help=("Max worker threads to use for parallel run (defaults to number of URLs)."),
+    )
+
+    parser.add_argument(
         "--sample",
         type=int,
         default = None,
@@ -110,12 +131,13 @@ def main():
     
     # Initialize components separately
     loader = DocumentLoader(config.input_csv_file)
-    classifier = LLMClassifier(config)
-    
-    # Test connection
-    if not classifier.test_connection():
-        print("Failed to connect to vLLM server")
-        return
+    classifier = None
+    # If not running parallel across multiple servers, initialize and test single vLLM connection
+    if not args.vllm_urls:
+        classifier = LLMClassifier(config)
+        if not classifier.test_connection():
+            print("Failed to connect to vLLM server")
+            return
     
     # Load documents (CSV rows)
     documents = loader.load_all_documents()
@@ -125,9 +147,44 @@ def main():
         import random
         documents = random.sample(documents, min(args.sample, len(documents)))
 
-    # Classify with custom processing
+    # If user provided multiple vLLM URLs, run in parallel and exit
+    if args.vllm_urls:
+        urls = [u.strip() for u in args.vllm_urls.split(",") if u.strip()]
+        if not urls:
+            print("No valid vLLM URLs provided to --vllm_urls")
+            return
+
+        from llm_module.parallel_runner import parallel_classify
+
+        output_path = None
+        if args.output_file:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_filename = Path(args.output_file)
+            output_path = (
+                Path(config.output_folder) / f"{output_filename.stem}_{timestamp}{output_filename.suffix}"
+            )
+
+        results, summary = parallel_classify(
+            config,
+            urls,
+            text_fields=["head", "content"],
+            mode=args.mode,
+            max_workers=args.workers,
+            output_path=str(output_path) if output_path else None,
+        )
+
+        # Print summary
+        print("\n=== Classification Summary ===")
+        print(f"Total documents: {summary.get('total_documents', 0)}")
+        print(f"Success rate: {summary.get('success_rate', 0):.2%}")
+        print(f"Category distribution: {summary.get('category_distribution', {})}")
+        print(f"Sentiment distribution: {summary.get('sentiment_distribution', {})}")
+        return
+
+    # Classify with custom processing (show progress with tqdm if available)
     results = []
-    for doc in documents:
+    iterator = tqdm(documents, desc="Processing documents") if tqdm is not None else documents
+    for i, doc in enumerate(iterator):
         result = classifier.classify_document(doc, text_fields=["head", "content"], mode=args.mode)
         results.append(result)
 
@@ -137,18 +194,32 @@ def main():
         verification = result.get("verification")
         sentiment = result.get("sentiment")
 
-        if result:
-            print(f"========================== head: {doc.get('head')} ==========================")
-            if args.mode in ["all", "classify"] and classification is not None:
-                print(f"Classified row {doc['row_index']} (ID: {doc_id}): {classification}")            
-            if args.mode in ["all", "summarize"] and summary_text is not None:
-                print(f"Summarized row {doc['row_index']} (ID: {doc_id}): {summary_text}")
-            if args.mode in ["all", "verify"] and verification is not None:
-                print(f"Verified row {doc['row_index']} (ID: {doc_id}): {verification}")
-            if args.mode in ["all", "sentiment"] and sentiment is not None:
-                print(f"Sentiment for row {doc['row_index']} (ID: {doc_id}): {sentiment}")
-        else:
-            print(f"Failed to process row {doc['row_index']} (ID: {doc_id})")
+        # if result:
+        #     print(f"========================== head: {doc.get('head')} ==========================")
+        #     if args.mode in ["all", "classify"] and classification is not None:
+        #         print(f"Classified row {doc['row_index']} (ID: {doc_id}): {classification}")
+        #     if args.mode in ["all", "summarize"] and summary_text is not None:
+        #         print(f"Summarized row {doc['row_index']} (ID: {doc_id}): {summary_text}")
+        #     if args.mode in ["all", "verify"] and verification is not None:
+        #         print(f"Verified row {doc['row_index']} (ID: {doc_id}): {verification}")
+        #     if args.mode in ["all", "sentiment"] and sentiment is not None:
+        #         print(f"Sentiment for row {doc['row_index']} (ID: {doc_id}): {sentiment}")
+        # else:
+        #     print(f"Failed to process row {doc['row_index']} (ID: {doc_id})")
+
+        # Every 100 documents, print a summarized intermediate result
+        processed = i + 1
+        if processed % 100 == 0:
+            try:
+                interim_summary = classifier.generate_summary(results)
+                print(f"\n--- Interim summary after {processed} documents ---")
+                print(f"Processed: {interim_summary['total_documents']}")
+                print(f"Success rate: {interim_summary['success_rate']:.2%}")
+                print(f"Category distribution: {interim_summary['category_distribution']}")
+                print(f"Verification rate: {interim_summary.get('verification_rate', 0):.2%}")
+                print(f"Sentiment distribution: {interim_summary.get('sentiment_distribution', {})}\n")
+            except Exception as e:
+                print(f"Failed to generate interim summary at {processed} documents: {e}")
 
     output_path = None
     if args.output_file:
