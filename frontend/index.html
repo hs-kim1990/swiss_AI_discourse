@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swiss Media AI Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1916;
+  --ink-mid: #4a4844;
+  --ink-light: #8a8880;
+  --ink-faint: #c8c6c0;
+  --paper: #f7f5f0;
+  --paper-tinted: #efede8;
+  --accent: #b5122a;
+  --accent-soft: #f5e8ea;
+  --rule: 1px solid var(--ink-faint);
+  --rule-heavy: 2px solid var(--ink);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+body { font-family: var(--font-body); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+/* ── Masthead ── */
+.masthead { border-bottom: var(--rule-heavy); padding: 20px 0 12px; background: var(--paper); }
+.masthead-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+.masthead-top { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.masthead-title { font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+.masthead-title span { color: var(--accent); }
+.masthead-meta { font-size: 11px; color: var(--ink-light); font-family: var(--font-mono); letter-spacing: 0.04em; }
+.masthead-rule { border: none; border-top: 4px double var(--ink-faint); margin: 10px 0 0; }
+
+/* ── Nav ── */
+.nav-bar { background: var(--paper-tinted); border-bottom: var(--rule); position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 960px; margin: 0 auto; padding: 0 24px; display: flex; gap: 0; }
+.nav-btn {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 10px 18px; background: none; border: none; border-bottom: 3px solid transparent;
+  color: var(--ink-light); cursor: pointer; transition: color 0.15s, border-color 0.15s;
+  text-decoration: none; display: inline-block;
+}
+.nav-btn:hover { color: var(--ink); }
+.nav-btn.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── Pages ── */
+.page { display: none; max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+.page.active { display: block; }
+
+/* ── Page header ── */
+.page-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.page-title { font-family: var(--font-display); font-size: 30px; font-weight: 600; line-height: 1.15; }
+.page-subtitle { font-size: 14px; color: var(--ink-mid); margin-top: 6px; font-style: italic; }
+.overview-header { margin-bottom: 28px; border-bottom: var(--rule); padding-bottom: 16px; }
+
+/* ── Section head ── */
+.section-head {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-mid); margin: 28px 0 14px; padding-bottom: 6px; border-bottom: var(--rule);
+}
+
+/* ── Stat cards ── */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+@media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+.stat-card { background: var(--paper-tinted); border: 0.5px solid var(--ink-faint); border-radius: 4px; padding: 16px; }
+.stat-card .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px; }
+.stat-card .value { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--ink); line-height: 1; }
+.stat-card .sub { font-size: 11px; color: var(--ink-light); margin-top: 4px; }
+
+/* ── Charts ── */
+.chart-wrap { position: relative; width: 100%; }
+
+/* ── Search ── */
+.search-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 8px; display: block; }
+.search-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.search-input {
+  flex: 1; padding: 10px 14px; font-family: var(--font-body); font-size: 14px;
+  border: 1px solid var(--ink-faint); border-radius: 3px; background: white; color: var(--ink);
+}
+.search-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.search-btn {
+  padding: 10px 20px; background: var(--ink); color: var(--paper); border: none; border-radius: 3px;
+  cursor: pointer; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; transition: background 0.15s; white-space: nowrap;
+}
+.search-btn:hover { background: var(--accent); }
+.filters-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+.filter-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.06em; }
+.filter-select {
+  font-family: var(--font-mono); font-size: 11px; padding: 5px 10px;
+  border: 0.5px solid var(--ink-faint); border-radius: 3px;
+  background: var(--paper-tinted); color: var(--ink); cursor: pointer;
+}
+.results-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); margin-bottom: 16px; padding-bottom: 10px; border-bottom: var(--rule); }
+.results-count span { color: var(--accent); }
+
+/* ── Article list ── */
+.article-item {
+  padding: 14px 0; border-bottom: var(--rule);
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;
+}
+.article-item:first-child { border-top: var(--rule); }
+.article-headline { font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 1.3; color: var(--ink); margin-bottom: 4px; }
+.article-headline a { color: inherit; text-decoration: none; }
+.article-headline a:hover { color: var(--accent); }
+.article-subtitle { font-size: 13px; color: var(--ink-mid); line-height: 1.4; font-style: italic; }
+.article-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.source-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.article-outlet { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; color: var(--ink-mid); text-transform: uppercase; }
+.article-date { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
+.no-results { text-align: center; padding: 48px 0; color: var(--ink-light); }
+.no-results .em { font-family: var(--font-display); font-size: 20px; color: var(--ink-mid); display: block; margin-bottom: 8px; }
+.search-hint { padding: 40px 0; text-align: center; color: var(--ink-light); }
+.search-hint .hint-title { font-family: var(--font-display); font-size: 18px; color: var(--ink-mid); margin-bottom: 10px; }
+.quick-link { color: var(--accent); cursor: pointer; text-decoration: underline; }
+
+/* ── Pipeline ── */
+.pipeline-intro {
+  font-size: 15px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 28px;
+  border-left: 3px solid var(--accent); padding-left: 16px; font-style: italic;
+}
+.step { display: grid; grid-template-columns: 48px 1fr; gap: 0; }
+.step-connector { display: flex; flex-direction: column; align-items: center; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 12px; flex-shrink: 0; position: relative; z-index: 1;
+}
+.step-line { width: 1px; background: var(--ink-faint); flex: 1; min-height: 24px; }
+.step-last .step-line { display: none; }
+.step-body { padding: 0 0 28px 16px; }
+.step-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.step-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.step-desc { font-size: 14px; color: var(--ink-mid); line-height: 1.65; margin-bottom: 10px; }
+.step-code {
+  background: var(--ink); color: #c8f0c8; font-family: var(--font-mono); font-size: 11px;
+  padding: 12px 16px; border-radius: 3px; overflow-x: auto; line-height: 1.7;
+  white-space: pre; margin-top: 8px;
+}
+.step-code .kw { color: #f0c8a0; }
+.step-code .str { color: #a0d8f0; }
+.step-code .cm { color: #7a9a7a; }
+.tech-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
+  padding: 3px 9px; border-radius: 2px;
+  background: var(--paper-tinted); border: 0.5px solid var(--ink-faint); color: var(--ink-mid);
+}
+.chip.hi { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.data-schema { border: 0.5px solid var(--ink-faint); border-radius: 4px; overflow: hidden; margin-top: 10px; }
+.schema-row { display: grid; grid-template-columns: 140px 90px 1fr; font-size: 12px; border-bottom: 0.5px solid var(--ink-faint); }
+.schema-row:last-child { border-bottom: none; }
+.schema-row.head { background: var(--paper-tinted); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-light); }
+.schema-cell { padding: 7px 12px; }
+.type-tag { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
+
+/* ── Term cards ── */
+.term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 28px; }
+.term-card { border: 0.5px solid var(--ink-faint); padding: 10px 12px; border-radius: 3px; }
+.term-card .term { font-family: var(--font-mono); font-size: 16px; font-weight: 400; color: var(--ink); }
+.term-card .desc { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+
+/* ── Type legend ── */
+.type-legend-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--ink-faint); }
+.type-legend-row:last-child { border-bottom: none; }
+.type-legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.type-legend-name { font-size: 13px; flex: 1; color: var(--ink); }
+.type-legend-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
+.type-legend-pct { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); min-width: 32px; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- ══ MASTHEAD ══ -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-top">
+      <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
+      <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
+    </div>
+    <hr class="masthead-rule">
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-btn active" href="index.html">Overview</a>
+    <a class="nav-btn" href="search.html">Search</a>
+    <a class="nav-btn" href="pipeline.html">Data Pipeline</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: OVERVIEW
+══════════════════════════════════════════ -->
+<div class="page active" id="page-overview">
+
+  <div class="overview-header">
+    <div class="page-eyebrow">Corpus overview</div>
+    <h1 class="page-title">Swiss AI discourse in German-language media</h1>
+    <p class="page-subtitle">Topic-classified articles across German, French and Italian Swiss media — filtered from the Swissdox corpus via LCP, 2023–2026</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="label">Topic articles</div><div class="value">5,545</div><div class="sub">After NOT TOPIC filtering</div></div>
+    <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">2,403 topic articles</div></div>
+    <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
+  </div>
+
+  <!-- Per-language breakdown cards -->
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
+    <div class="stat-card" style="border-left:3px solid #b5122a;">
+      <div class="label" style="color:#b5122a;">Deutsch (DE)</div>
+      <div class="value">4,597</div>
+      <div class="sub">SRF · Tages-Anzeiger · NZZ · Blick · Zentralschweiz</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #1a5fa8;">
+      <div class="label" style="color:#1a5fa8;">Français (FR)</div>
+      <div class="value">—</div>
+      <div class="sub">File pending upload</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid #1a8a3a;">
+      <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
+      <div class="value">948</div>
+      <div class="sub">RSI (Radiotelevisione svizzera italiana)</div>
+    </div>
+  </div>
+
+  <div class="section-head">Topic articles per year — DE + IT combined (2023–2026)</div>
+  <div class="chart-wrap" style="height:220px; margin-bottom:32px;">
+    <canvas id="yearChart" role="img" aria-label="Bar chart showing AI article volume by year, spiking from 2022 onwards">
+      2023: 3025 articles. 2024: 4032 articles. 2025 (partial): 2113 articles.
+    </canvas>
+  </div>
+
+  <div class="section-head">Outlets by topic article count</div>
+  <div class="chart-wrap" style="height:260px; margin-bottom:32px;">
+    <canvas id="sourceChart" role="img" aria-label="Horizontal bar chart of top 12 Swiss outlets by article count">
+      Cash Online: 1069. NZZ Online: 913. NZZ: 744.
+    </canvas>
+  </div>
+
+  <div class="section-head">Key terminology tracked</div>
+  <div class="term-grid">
+    <div class="term-card" style="border-left:3px solid var(--accent);">
+      <div class="term">AI / IA</div><div class="desc">Primary term (EN/FR)</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
+      <div class="term">KI</div><div class="desc">Künstliche Intelligenz</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
+      <div class="term">LLM</div><div class="desc">Large language models</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
+      <div class="term">GenAI</div><div class="desc">Generative AI</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
+      <div class="term">Chatbot</div><div class="desc">Conversational AI</div>
+    </div>
+  </div>
+
+  <div class="section-head">Articles by language</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
+    <div class="chart-wrap" style="height:240px;">
+      <canvas id="typeChart" role="img" aria-label="Donut chart of articles by media type">
+        National press, regional, financial, and broadcast media.
+      </canvas>
+    </div>
+    <div id="type-legend" style="padding-top:20px;"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: SEARCH
+══════════════════════════════════════════ -->
+<div class="page" id="page-search">
+
+  <div class="overview-header">
+    <div class="page-eyebrow">Article search</div>
+    <h1 class="page-title">Search the corpus</h1>
+    <p class="page-subtitle">Full-text search across headlines and subtitles of all 13,026 articles</p>
+  </div>
+
+  <label class="search-label" for="searchInput">Search headlines &amp; subtitles</label>
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="text"
+           placeholder='e.g. ChatGPT, Regulierung, Datenschutz…' autocomplete="off">
+    <button class="search-btn" onclick="doSearch()">Search</button>
+  </div>
+
+  <div class="filters-row">
+    <span class="filter-label">Filter:</span>
+    <select class="filter-select" id="yearFilter">
+      <option value="">All years</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+    </select>
+    <select class="filter-select" id="sourceFilter">
+      <option value="">All outlets</option>
+    </select>
+    <select class="filter-select" id="limitFilter">
+      <option value="50">50 results</option>
+      <option value="100">100 results</option>
+      <option value="200">200 results</option>
+      <option value="500">500 results</option>
+    </select>
+  </div>
+
+  <div id="searchStatus" class="results-count" style="display:none;"></div>
+  <div id="articleList"></div>
+
+  <div id="searchHint" class="search-hint">
+    <div class="hint-title">Enter a search term above</div>
+    <div style="font-size:13px;">
+      Try:
+      <span class="quick-link" onclick="quickSearch('ChatGPT')">ChatGPT</span> ·
+      <span class="quick-link" onclick="quickSearch('Regulierung')">Regulierung</span> ·
+      <span class="quick-link" onclick="quickSearch('Deepfake')">Deepfake</span> ·
+      <span class="quick-link" onclick="quickSearch('OpenAI')">OpenAI</span> ·
+      <span class="quick-link" onclick="quickSearch('Datenschutz')">Datenschutz</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: PIPELINE
+══════════════════════════════════════════ -->
+<div class="page" id="page-pipeline">
+
+  <div class="overview-header">
+    <div class="page-eyebrow">Methodology</div>
+    <h1 class="page-title">Data pipeline</h1>
+    <p class="page-subtitle">How 13,026 articles were extracted, filtered, and structured for analysis</p>
+  </div>
+
+  <p class="pipeline-intro">This corpus was assembled to study how Swiss German-language media covered AI — from early mentions in financial press to the ChatGPT explosion. The pipeline moves from a proprietary media archive through linguistic corpus tools to a structured CSV ready for analysis.</p>
+
+  <div>
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-connector"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-tag">Source</div>
+        <div class="step-title">Swissdox archive query</div>
+        <div class="step-desc">
+          The Swissdox platform (UZH) provides licensed access to Swiss press archives. Queries are written in
+          LCP (Linguistic Corpus Platform) syntax. Articles were matched by token form — searching for
+          <em>AI, IA, GenAI, LLM, Chatbot</em> in any segment, with article-level metadata extracted.
+        </div>
+        <div class="step-code"><span class="cm"># LCP Query — search AI-related forms in all segments</span>
+<span class="kw">Article</span> a
+<span class="kw">Segment</span>@a s
+<span class="kw">Token</span>@s t1
+  <span class="kw">OR</span>
+    form = <span class="str">"AI"</span>
+    form = <span class="str">"IA"</span>
+    form = <span class="str">"GenAI"</span>
+    form = <span class="str">"LLM"</span>
+    form = <span class="str">"Chatbot"</span>
+
+<span class="kw">byYear</span> => analysis
+  attributes
+    a.head, a.subhead, a.pubdate, a.source, a.articleURL
+  functions
+    frequency</div>
+        <div class="tech-chips">
+          <div class="chip hi">LCP / CatchPhrase</div>
+          <div class="chip">Swissdox</div>
+          <div class="chip">UZH Linguistik</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-connector"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-tag">Export</div>
+        <div class="step-title">Result processing &amp; export</div>
+        <div class="step-desc">
+          Query results arrive as TSV/JSON from the LCP API. The export processor notebook normalises
+          encoding, deduplicates articles (same URL appearing across multiple token matches),
+          and coerces date formats to ISO 8601.
+        </div>
+        <div class="step-code"><span class="cm"># export_processor.ipynb</span>
+<span class="kw">import</span> pandas as pd
+
+df = pd.read_csv(<span class="str">'query_result.tsv'</span>, sep=<span class="str">'\t'</span>)
+
+<span class="cm"># Deduplicate on article URL (same article can match multiple tokens)</span>
+df = df.drop_duplicates(subset=[<span class="str">'articleURL'</span>])
+
+<span class="cm"># Normalise date column</span>
+df[<span class="str">'pubdate'</span>] = pd.to_datetime(df[<span class="str">'pubdate'</span>], errors=<span class="str">'coerce'</span>)
+df = df.dropna(subset=[<span class="str">'pubdate'</span>])
+df[<span class="str">'year'</span>] = df[<span class="str">'pubdate'</span>].dt.year
+
+df.to_csv(<span class="str">'swiss_ai_discourse_articles_de.csv'</span>, index=<span class="str">False</span>)
+print(f<span class="str">"Exported {len(df):,} articles"</span>)</div>
+        <div class="tech-chips">
+          <div class="chip hi">pandas</div>
+          <div class="chip">Jupyter</div>
+          <div class="chip">Python 3.11</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-connector"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-tag">Schema</div>
+        <div class="step-title">Structured data format</div>
+        <div class="step-desc">Each row in the output CSV represents one unique article. The schema below powers this viewer and all downstream analysis.</div>
+        <div class="data-schema">
+          <div class="schema-row head"><div class="schema-cell">Field</div><div class="schema-cell">Type</div><div class="schema-cell">Description</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>head</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Primary headline</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>subtitle</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Deck / subheadline</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>pubdate</code></div><div class="schema-cell type-tag">date</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Publication date (ISO 8601)</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>source</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Swissdox outlet code (NZZ, SRF…)</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>articleURL</code></div><div class="schema-cell type-tag">url</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Canonical article link</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>language</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">ISO 639-1 code (de)</div></div>
+          <div class="schema-row"><div class="schema-cell"><code>title_full</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Full title fallback field</div></div>
+        </div>
+        <div class="tech-chips"><div class="chip">CSV / UTF-8</div><div class="chip">13,026 rows</div></div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="step-connector"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-tag">Analysis</div>
+        <div class="step-title">LLM topic extraction &amp; classification</div>
+        <div class="step-desc">
+          Two Jupyter notebooks power the analytical layer: <em>initial_data_analysis.ipynb</em> produces
+          corpus statistics and distributions; the topic extraction pipeline runs Llama-3.1-8B via a vLLM
+          server on a UZH GPU cluster. Articles are classified into custom topic categories
+          (e.g. Regulation, Economy, Security) or summarised.
+        </div>
+        <div class="step-code"><span class="cm"># 1. Start vLLM server (in a tmux session)</span>
+python -m vllm.entrypoints.openai.api_server \
+  --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+  --served-model-name llama \
+  --enable-lora \
+  --max-model-len 8192 \
+  --port 8000
+
+<span class="cm"># 2. Run classification pipeline</span>
+python -m llm_module.run \
+  --input_file data/cleaned.csv \
+  --output_file topics.json \
+  --categories <span class="str">"Regulation,Economy,Security,Society"</span> \
+  --mode all \
+  --sample 500</div>
+        <div class="tech-chips">
+          <div class="chip hi">Llama-3.1-8B</div>
+          <div class="chip hi">vLLM</div>
+          <div class="chip">GPU cluster (UZH)</div>
+          <div class="chip">unsloth 4-bit quant</div>
+          <div class="chip">tmux sessions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step step-last">
+      <div class="step-connector"><div class="step-num">5</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-tag">Serving</div>
+        <div class="step-title">Flask API + this viewer</div>
+        <div class="step-desc">
+          A lightweight Flask app (<code>app.py</code>) exposes the processed CSV as a REST API with
+          endpoints for full-text search, source filtering, and year-range queries.
+          This frontend calls those endpoints from the browser.
+        </div>
+        <div class="step-code"><span class="cm"># Run locally</span>
+pip install flask pandas
+python app.py
+<span class="cm"># → http://localhost:5000</span>
+
+<span class="cm"># Key endpoints</span>
+GET /api/articles?q=ChatGPT&year_from=2023&sources=NZZ,SRF
+GET /api/sources
+GET /api/stats</div>
+        <div class="tech-chips">
+          <div class="chip hi">Flask</div>
+          <div class="chip">pandas</div>
+          <div class="chip">REST API</div>
+          <div class="chip">port 5000</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+// ── Page navigation ───────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  if (id === 'search' && !dataLoaded) loadData();
+}
+
+// ── Source metadata ───────────────────────────────────────────────
+const SOURCE_COLORS = {
+  CASO:'#B5122A', NZZO:'#4a4844', NZZ:'#7a6ab8', BLIO:'#c25b3a',
+  SGTO:'#2a7a6a', SHZO:'#3a6a9a', ZWAO:'#8a6a2a', SGT:'#5a8a3a',
+  NNBS:'#7a4a8a', FUWO:'#c09030', SRF:'#c06030', TA:'#3a5a8a',
+  NNTA:'#6a8a5a', FUW:'#9a7030', SHZ:'#4a7a9a', BAZ:'#8BBCAA',
+  BLI:'#D45B5B', AZ:'#7BB4D4', AZO:'#7BB4D4', BEOL:'#3a8a6a',
+  WOZ:'#C4A882', SGT2:'#A882C4', FUW2:'#E8C060',
+};
+const SOURCE_NAMES = {
+  CASO:'Cash Online', NZZO:'NZZ Online', NZZ:'NZZ', BLIO:'Blick Online',
+  SGTO:'St.Galler Tgbl. Online', SHZO:'Schweizer HZ Online', ZWAO:'Zentralschweiz Online',
+  SGT:'St.Galler Tgbl.', NNBS:'Basler Zeitung', FUWO:'Finanz & Wirt. Online',
+  SRF:'SRF', TA:'Tages-Anzeiger', NNTA:'Tages-Anzeiger', FUW:'Finanz & Wirtschaft',
+  SHZ:'Schweizer Handelszeitung', BAZ:'Basler Zeitung', BLI:'Blick', AZ:'Aargauer Zeitung',
+  AZO:'Aargauer Zeitung Online', BEOL:'Berner Zeitung', WOZ:'WOZ', NZZM:'NZZ am Sonntag',
+};
+
+// ── Search: data loading ──────────────────────────────────────────
+let ARTICLES = [];
+let dataLoaded = false;
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/articles?limit=5000');
+    if (!res.ok) throw new Error('API not available');
+    const data = await res.json();
+    ARTICLES = data;
+    dataLoaded = true;
+    populateSourceFilter();
+  } catch (e) {
+    document.getElementById('searchHint').innerHTML = `
+      <div style="color:var(--ink-light); font-size:13px; padding:32px 0; text-align:center;">
+        <div style="font-family:var(--font-display); font-size:16px; color:var(--ink-mid); margin-bottom:10px;">
+          Connect to the Flask API to enable live search
+        </div>
+        Run <code style="background:var(--paper-tinted); padding:2px 7px; font-size:12px; border-radius:2px;">python app.py</code>
+        and open this viewer at
+        <code style="background:var(--paper-tinted); padding:2px 7px; font-size:12px; border-radius:2px;">localhost:5000</code>
+      </div>`;
+  }
+}
+
+function populateSourceFilter() {
+  const codes = [...new Set(ARTICLES.map(a => a.source))].sort();
+  const sel = document.getElementById('sourceFilter');
+  codes.forEach(code => {
+    const o = document.createElement('option');
+    o.value = code;
+    o.textContent = SOURCE_NAMES[code] || code;
+    sel.appendChild(o);
+  });
+}
+
+// ── Search: execution ─────────────────────────────────────────────
+function quickSearch(term) {
+  document.getElementById('searchInput').value = term;
+  doSearch();
+}
+
+function doSearch() {
+  const q       = document.getElementById('searchInput').value.trim().toLowerCase();
+  const year    = document.getElementById('yearFilter').value;
+  const source  = document.getElementById('sourceFilter').value;
+  const limit   = parseInt(document.getElementById('limitFilter').value);
+
+  document.getElementById('searchHint').style.display = 'none';
+  document.getElementById('searchStatus').style.display = 'block';
+
+  if (!dataLoaded) {
+    document.getElementById('searchStatus').innerHTML = 'Loading data…';
+    loadData().then(doSearch);
+    return;
+  }
+
+  const results = ARTICLES.filter(a => {
+    const text = ((a.headline || '') + ' ' + (a.subtitle || '')).toLowerCase();
+    if (q && !text.includes(q)) return false;
+    if (year && !(a.date || '').includes(year)) return false;
+    if (source && a.source !== source) return false;
+    return true;
+  }).slice(0, limit);
+
+  document.getElementById('searchStatus').innerHTML =
+    `Showing <span>${results.length.toLocaleString()}</span> result${results.length !== 1 ? 's' : ''} for "${q || 'all articles'}"`;
+
+  const list = document.getElementById('articleList');
+  if (results.length === 0) {
+    list.innerHTML = `<div class="no-results"><span class="em">Keine Ergebnisse</span>No articles match your query.</div>`;
+    return;
+  }
+
+  list.innerHTML = results.map(a => {
+    const color = SOURCE_COLORS[a.source] || '#888';
+    const name  = SOURCE_NAMES[a.source] || a.outlet || a.source;
+    const title = a.headline || a.title_full || '(no headline)';
+    const link  = a.url
+      ? `<a href="${a.url}" target="_blank" rel="noopener">${escHtml(title)}</a>`
+      : escHtml(title);
+    return `
+    <div class="article-item">
+      <div>
+        <div class="article-headline">${link}</div>
+        ${a.subtitle ? `<div class="article-subtitle">${escHtml(a.subtitle)}</div>` : ''}
+        <div class="article-meta">
+          <span class="source-dot" style="background:${color}"></span>
+          <span class="article-outlet">${escHtml(name)}</span>
+          <span class="article-date">${a.date || ''}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+// ── Charts ────────────────────────────────────────────────────────
+const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
+const YEAR_DATA   = [542, 2403, 2223, 377];
+
+new Chart(document.getElementById('yearChart'), {
+  type: 'bar',
+  data: {
+    labels: YEAR_LABELS,
+    datasets: [{
+      data: YEAR_DATA,
+      backgroundColor: YEAR_DATA.map((_, i) => i === 1 ? '#B5122A' : '#c8c6c0'),
+      borderWidth: 0,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString() + ' articles' } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { family: 'DM Mono', size: 11 }, color: '#8a8880' } },
+      y: { grid: { color: '#e8e6e0' }, ticks: { font: { family: 'DM Mono', size: 10 }, color: '#8a8880', callback: v => v.toLocaleString() } }
+    }
+  }
+});
+
+const SRC_LABELS = ['SRF', 'Tages-Anzeiger', 'RSI', 'NZZ', 'Blick', 'Zentralschweiz', 'Tages-Anzeiger Schweiz'];
+const SRC_DATA   = [1233, 951, 948, 788, 733, 728, 164];
+const SRC_COLORS = ['#c06030', '#3a5a8a', '#1a8a3a', '#7a6ab8', '#D45B5B', '#8a6a2a', '#5a7aaa'];
+
+new Chart(document.getElementById('sourceChart'), {
+  type: 'bar',
+  data: {
+    labels: SRC_LABELS,
+    datasets: [{
+      data: SRC_DATA,
+      backgroundColor: SRC_COLORS,
+      borderWidth: 0,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' articles' } }
+    },
+    scales: {
+      x: { grid: { color: '#e8e6e0' }, ticks: { font: { family: 'DM Mono', size: 10 }, color: '#8a8880', callback: v => v.toLocaleString() } },
+      y: { grid: { display: false }, ticks: { font: { size: 12 }, color: '#4a4844' } }
+    }
+  }
+});
+
+const TYPE_LABELS = ['Deutsch (DE)', 'Italiano (IT)', 'Français (FR)'];
+const TYPE_DATA   = [4597, 948, 0];
+const TYPE_COLORS = ['#b5122a', '#1a8a3a', '#1a5fa8'];
+
+new Chart(document.getElementById('typeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: TYPE_LABELS,
+    datasets: [{
+      data: TYPE_DATA,
+      backgroundColor: TYPE_COLORS,
+      borderWidth: 2,
+      borderColor: '#f7f5f0',
+      hoverOffset: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+const total = TYPE_DATA.reduce((a, b) => a + b, 0);
+const legendEl = document.getElementById('type-legend');
+TYPE_LABELS.forEach((label, i) => {
+  const pct = Math.round(TYPE_DATA[i] / total * 100);
+  const row = document.createElement('div');
+  row.className = 'type-legend-row';
+  row.innerHTML = `
+    <span class="type-legend-sq" style="background:${TYPE_COLORS[i]}"></span>
+    <span class="type-legend-name">${label}</span>
+    <span class="type-legend-count">${TYPE_DATA[i].toLocaleString()}</span>
+    <span class="type-legend-pct">${pct}%</span>`;
+  legendEl.appendChild(row);
+});
+</script>
+</body>
+</html>
