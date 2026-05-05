@@ -1,7 +1,7 @@
 """
 Configuration module for LLM classifier
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 import json
 from pathlib import Path
@@ -10,39 +10,58 @@ from pathlib import Path
 @dataclass
 class Config:
     """Configuration for LLM classification framework"""
-    
+
     # vLLM Server settings
     vllm_base_url: str = "http://localhost:8000"
     model_name: str = "meta-llama/Llama-2-7b-chat-hf"
     api_key: Optional[str] = None
-    
+
     # Classification settings
     temperature: float = 0.1
     max_tokens: int = 512
     top_p: float = 0.9
-    
+
     # Document processing
     input_csv_file: str = "./documents/data.csv"
     output_folder: str = "./results"
     batch_size: int = 10
-    
+
     # Classification categories
     categories: List[str] = None
-    
+
+    # Topic modeling mode: "explore" (seed-and-expand) or "utilize" (fixed predefined taxonomy)
+    topic_mode: str = "explore"
+
+    # Full taxonomy JSON - used to extract top-level category names. Runtime-only, not serialised.
+    # Structure: {"taxonomy": {category: {"subgroups": {subgroup: {...}}}}}
+    subtopic_taxonomy: Optional[Dict[str, Any]] = None
+
+    # Flat category->subgroup list - drives the subtopic step in utilize mode. Runtime-only.
+    # Structure: {category_name: [subgroup_name, ...]}
+    # Loaded from results/category_subtopic_map.json.
+    subtopic_map: Optional[Dict[str, List[str]]] = None
+
+    # BCP-47 language code detected from the input corpus (de / fr / it).
+    # Used to inject the correct language name into prompts.
+    document_language: str = "de"
+
     # Prompt template
     system_prompt: str = "You are a precise document classifier. Classify documents into the given categories based on their content."
-    
+
     def __post_init__(self):
         if self.categories is None:
             self.categories = []
-    
+
     @classmethod
     def from_json(cls, config_path: str) -> "Config":
         """Load configuration from JSON file"""
         with open(config_path, 'r', encoding='utf-8') as f:
             config_dict = json.load(f)
+        # runtime-only fields must not be passed to the constructor
+        config_dict.pop("subtopic_taxonomy", None)
+        config_dict.pop("subtopic_map", None)
         return cls(**config_dict)
-    
+
     def to_json(self, config_path: str) -> None:
         """Save configuration to JSON file"""
         config_dict = {
@@ -56,11 +75,12 @@ class Config:
             "output_folder": self.output_folder,
             "batch_size": self.batch_size,
             "categories": self.categories,
+            "topic_mode": self.topic_mode,
             "system_prompt": self.system_prompt
         }
-        with open(config_path, 'w', encoding='utf-8') as f:
+        with open(config_path, "w", encoding="utf-8") as f:
             json.dump(config_dict, f, indent=2)
-    
+
     def validate(self) -> bool:
         """Validate configuration"""
         if not self.categories:
@@ -69,4 +89,6 @@ class Config:
             raise ValueError("Temperature must be between 0 and 2")
         if self.max_tokens < 1:
             raise ValueError("max_tokens must be positive")
+        if self.topic_mode not in ("explore", "utilize"):
+            raise ValueError("topic_mode must be 'explore' or 'utilize'")
         return True
