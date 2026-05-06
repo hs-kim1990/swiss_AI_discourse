@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Swiss AI Discourse — 10 Million Initiative</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--border:#e0e4ec;--text:#1a2035;--text2:#5a6278;--accent:#3b5bdb;--r:12px;--sh:0 2px 12px rgba(0,0,0,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
+#loading h2{font-size:18px;color:var(--text)}
+#loading p{font-size:13px;color:var(--text2)}
+.progress-bar{width:320px;height:6px;background:#e0e4ec;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s ease;width:0%}
+.app{display:none}
+.header{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.header h1{font-size:16px;font-weight:700;padding:14px 0;white-space:nowrap}
+.tabs{display:flex;gap:2px}
+.tab-btn{padding:12px 18px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border-bottom:3px solid transparent;transition:all .15s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.main{padding:20px;max-width:1400px;margin:0 auto}
+.ai-summary{background:linear-gradient(135deg,#eef2ff 0%,#f0f9ff 100%);border:1px solid #c5d3f0;border-radius:var(--r);padding:16px 20px;margin-bottom:20px}
+.ai-summary::before{content:'✦ AI Summary';font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:8px}
+.ai-summary p{font-size:13px;line-height:1.65;color:#2d3a5c}
+.filter-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:18px;box-shadow:var(--sh)}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-group label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+.filter-row{display:flex;gap:5px;flex-wrap:wrap}
+.chip{padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:12px;color:var(--text2);transition:all .12s;font-weight:500}
+.chip.active{border-color:var(--accent);background:#eef2ff;color:var(--accent)}
+.chip:hover{border-color:var(--accent)}
+.sel{border:1.5px solid var(--border);border-radius:7px;padding:5px 9px;font-size:12px;background:#fff;color:var(--text);outline:none;height:30px}
+.sel:focus{border-color:var(--accent)}
+.sec-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title span{font-size:11px;color:var(--text2);font-weight:400}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:20px}
+.topic-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);border-left:4px solid #ccc}
+.topic-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.1)}
+.topic-card .t-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.topic-card .t-stats{font-size:11px;color:var(--text2);margin-bottom:8px;display:flex;gap:6px;align-items:center}
+.topic-card .dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.subtopics-list{display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+.topic-card.expanded .subtopics-list{display:block}
+.sub-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.sub-row .sn{font-size:10px;color:var(--text2);width:110px;flex-shrink:0;line-height:1.2}
+.sub-row .sw{flex:1;background:#f0f0f0;border-radius:3px;height:5px;overflow:hidden}
+.sub-row .sb{height:100%;border-radius:3px}
+.sub-row .sc{font-size:10px;color:var(--text2);width:32px;text-align:right;flex-shrink:0}
+.expand-hint{font-size:10px;color:var(--text2)}
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.chart-card canvas{max-height:290px}
+.detail-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh)}
+.detail-bar label{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap}
+.detail-sel{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;color:var(--text);background:#fff;outline:none;min-width:300px}
+.detail-sel:focus{border-color:var(--accent)}
+.stats-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;box-shadow:var(--sh);flex:1;min-width:120px}
+.stat-box .sv{font-size:24px;font-weight:800;color:var(--text)}
+.stat-box .sl{font-size:10px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.stat-box .ss{font-size:11px;color:var(--text2);margin-top:3px}
+.supden-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.supden-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh);overflow-y:auto;max-height:600px}
+.supden-card h3{font-size:13px;font-weight:700;margin-bottom:10px;position:sticky;top:0;background:#fff;padding-bottom:6px;z-index:1}
+.sup-title{color:#155724}
+.den-title{color:#721c24}
+.sub-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sub-nav-btn{padding:4px 10px;border-radius:16px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:11px;color:var(--text2);transition:all .12s}
+.sub-nav-btn.active{border-color:var(--accent);background:#eef2ff;color:var(--accent)}
+.sd-block{margin-bottom:14px}
+.sd-block .sd-sub-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;padding:4px 10px;border-radius:4px;display:inline-block}
+.sd-block.sup-block .sd-sub-label{background:#d4edda;color:#155724}
+.sd-block.den-block .sd-sub-label{background:#f8d7da;color:#721c24}
+.sd-list{list-style:none;padding:0}
+.sd-list li{position:relative;padding:6px 10px 6px 20px;font-size:12px;line-height:1.55;color:var(--text2);border-bottom:1px solid #f0f0f0}
+.sd-list li:last-child{border-bottom:none}
+.sd-list li::before{content:"•";position:absolute;left:6px;font-weight:700}
+.sup-block .sd-list li::before{color:#28a745}
+.den-block .sd-list li::before{color:#dc3545}
+.sent-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.sent-positive{background:#d4edda;color:#155724}
+.sent-negative{background:#f8d7da;color:#721c24}
+.sent-neutral{background:#e2e3e5;color:#495057}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.tf-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.tf-search{flex:1;min-width:180px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;outline:none}
+.tf-search:focus{border-color:var(--accent)}
+.tf-sel{padding:6px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:#fff;outline:none}
+.tf-sel:focus{border-color:var(--accent)}
+.dt{width:100%;border-collapse:collapse;font-size:11px}
+.dt th{background:#f8f9fa;padding:8px 9px;text-align:left;font-weight:600;color:var(--text2);border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;cursor:pointer;user-select:none}
+.dt th:hover{background:#eef0f5}
+.dt td{padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4}
+.dt tr:hover td{background:#fafbff}
+.pg{display:flex;gap:5px;justify-content:center;align-items:center;margin-top:14px}
+.pb{padding:5px 10px;border:1.5px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:12px}
+.pb.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pb:hover:not(.active){border-color:var(--accent)}
+.pi{font-size:11px;color:var(--text2)}
+@media(max-width:900px){.charts-row,.supden-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading">
+  <h2>🇨🇭 Swiss AI Discourse Dashboard</h2>
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+  <p id="load-msg">Loading data…</p>
+</div>
+
+<!-- APP (hidden until data loads) -->
+<div class="app" id="app">
+<div class="header">
+  <h1>🇨🇭 Swiss Political Discourse — <em style="font-weight:400;color:#5a6278">10 Million Initiative</em></h1>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('detail')">Topic Detail</button>
+  </div>
+</div>
+
+<!-- TAB 1 -->
+<div id="tab-overview" class="tab-content active"><div class="main">
+  <div class="ai-summary"><p id="ov-ai"></p></div>
+  <div class="filter-bar">
+    <div class="filter-group"><label>Language</label>
+      <div class="filter-row" id="lang-filters">
+        <button class="chip active" data-lang="all" onclick="toggleLang(this,'all')">All</button>
+        <button class="chip" data-lang="de" onclick="toggleLang(this,'de')">🇩🇪 German</button>
+        <button class="chip" data-lang="fr" onclick="toggleLang(this,'fr')">🇫🇷 French</button>
+        <button class="chip" data-lang="it" onclick="toggleLang(this,'it')">🇮🇹 Italian</button>
+      </div>
+    </div>
+    <div class="filter-group"><label>Medium</label>
+      <select class="sel" id="medium-filter" onchange="updateCharts()" style="min-width:140px">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
+    </div>
+    <div class="filter-group"><label>Group By</label>
+      <div class="filter-row">
+        <button class="chip active" id="gb-class" onclick="setGroupBy('classification')">Topic</button>
+        <button class="chip" id="gb-lang" onclick="setGroupBy('language')">Language</button>
+        <button class="chip" id="gb-sent" onclick="setGroupBy('sentiment')">Sentiment</button>
+      </div>
+    </div>
+  </div>
+  <div class="sec-title">Topic Overview <span>Click a card to expand subtopics</span></div>
+  <div class="cards-grid" id="topic-cards"></div>
+  <div class="charts-row">
+    <div class="chart-card"><div class="sec-title">Timeline <span id="tl-sub"></span></div><canvas id="timeline-chart"></canvas></div>
+    <div class="chart-card"><div class="sec-title">Topics by Volume</div><canvas id="bar-chart"></canvas></div>
+  </div>
+</div></div>
+
+<!-- TAB 2 -->
+<div id="tab-detail" class="tab-content"><div class="main">
+  <div class="detail-bar">
+    <label>Select Topic:</label>
+    <select class="detail-sel" id="detail-cls" onchange="loadDetailView()"><option value="Immigration & Asylum Policy">Immigration & Asylum Policy</option><option value="Swiss-EU Relations & Bilateral Agreements">Swiss-EU Relations & Bilateral Agreements</option><option value="Refugee & Migrant Integration">Refugee & Migrant Integration</option><option value="Swiss Domestic Politics & Governance">Swiss Domestic Politics & Governance</option><option value="Economy, Labor & Finance">Economy, Labor & Finance</option><option value="Defense, Security & Military">Defense, Security & Military</option><option value="Healthcare, Social Welfare & Education">Healthcare, Social Welfare & Education</option><option value="Environment, Energy & Infrastructure">Environment, Energy & Infrastructure</option><option value="International Relations & Geopolitics">International Relations & Geopolitics</option><option value="Demographic Change & Population">Demographic Change & Population</option></select>
+  </div>
+  <div class="ai-summary"><p id="topic-ai"></p></div>
+  <div class="stats-row" id="detail-stats"></div>
+  <div class="filter-bar" style="margin-bottom:14px">
+    <div class="filter-group"><label>Language</label>
+      <div class="filter-row" id="dl-filters">
+        <button class="chip active" data-lang="all" onclick="toggleDLang(this,'all')">All</button>
+        <button class="chip" data-lang="de" onclick="toggleDLang(this,'de')">🇩🇪 German</button>
+        <button class="chip" data-lang="fr" onclick="toggleDLang(this,'fr')">🇫🇷 French</button>
+        <button class="chip" data-lang="it" onclick="toggleDLang(this,'it')">🇮🇹 Italian</button>
+      </div>
+    </div>
+    <div class="filter-group"><label>Medium</label>
+      <select class="sel" id="d-medium" onchange="updateDetailCharts()" style="min-width:130px">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
+    </div>
+    <div class="filter-group"><label>Subtopic</label>
+      <select class="sel" id="d-subtopic" onchange="updateDetailCharts()" style="min-width:170px">
+        <option value="">All Subtopics</option>
+      </select>
+    </div>
+  </div>
+  <div class="charts-row" style="margin-bottom:14px">
+    <div class="chart-card"><div class="sec-title">Timeline</div><canvas id="d-timeline"></canvas></div>
+    <div class="chart-card"><div class="sec-title">Sentiment by Subtopic</div><canvas id="d-sentiment"></canvas></div>
+  </div>
+  <div class="sec-title">Supporting &amp; Opposing Arguments <span>Select a subtopic to filter; "All" shows every subtopic</span></div>
+  <div class="sub-nav" id="sub-nav"></div>
+  <div class="supden-row">
+    <div class="supden-card"><h3 class="sup-title">&#10003; Supporting the 10M Initiative</h3><div id="sup-content"></div></div>
+    <div class="supden-card"><h3 class="den-title">&#10007; Opposing the 10M Initiative</h3><div id="den-content"></div></div>
+  </div>
+  <div class="sec-title">Articles <span id="tbl-info"></span></div>
+  <div class="table-card">
+    <div class="tf-row">
+      <input class="tf-search" id="tbl-search" placeholder="Search headline or summary..." oninput="filterTable()">
+      <select class="tf-sel" id="tbl-lang" onchange="filterTable()">
+        <option value="">All Languages</option>
+        <option value="de">German</option><option value="fr">French</option><option value="it">Italian</option>
+      </select>
+      <select class="tf-sel" id="tbl-medium" onchange="filterTable()">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
+      <select class="tf-sel" id="tbl-sub" onchange="filterTable()"><option value="">All Subtopics</option></select>
+      <select class="tf-sel" id="tbl-sent" onchange="filterTable()">
+        <option value="">All Sentiments</option>
+        <option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="dt"><thead><tr>
+      <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
+      <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
+      <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
+      <th>Headline</th><th>Summary</th>
+    </tr></thead><tbody id="tbl-body"></tbody></table>
+    </div>
+    <div class="pg" id="pg"></div>
+  </div>
+</div></div>
+</div><!-- /app -->
+
+<script>
+// ── GLOBALS ─────────────────────────────────────────
+let PREPROC, ITEMS, SUMS;
+const TC={'Immigration & Asylum Policy':'#e74c3c','Swiss-EU Relations & Bilateral Agreements':'#3498db','Refugee & Migrant Integration':'#f39c12','Swiss Domestic Politics & Governance':'#8e44ad','Economy, Labor & Finance':'#1abc9c','Defense, Security & Military':'#2c3e50','Healthcare, Social Welfare & Education':'#16a085','Environment, Energy & Infrastructure':'#27ae60','International Relations & Geopolitics':'#e91e63','Demographic Change & Population':'#9b59b6','Others':'#95a5a6'};
+const LC={de:'#e74c3c',fr:'#3498db',it:'#27ae60'};
+const SC={positive:'#28a745',neutral:'#6c757d',negative:'#dc3545'};
+let selLangs=new Set(['all']),selMed='',groupBy='classification';
+let dLangs=new Set(['all']),dSelSub='',dSelMed='';
+let tlChart=null,barChart=null,dTlChart=null,dSentChart=null;
+let curCls='Economy, Labor & Finance';
+let tblData=[],tblFiltered=[],sortKey='pubtime',sortDir=-1,curPage=1;
+const PZ=50;
+
+// ── DATA LOADING ────────────────────────────────────
+async function loadData() {
+  const prog=document.getElementById('prog');
+  const msg=document.getElementById('load-msg');
+  const files=[
+    ['data/preproc.json',  'Timeline & statistics…', 20],
+    ['data/items.json',    'Articles index…',         70],
+    ['data/summaries.json','AI summaries…',           95],
+  ];
+  const results=[];
+  for(const [url,label,pct] of files) {
+    msg.textContent=label;
+    const r=await fetch(url);
+    if(!r.ok) throw new Error(`Failed: ${url}`);
+    results.push(await r.json());
+    prog.style.width=pct+'%';
+  }
+  [PREPROC, ITEMS, SUMS]=results;
+  prog.style.width='100%';
+  msg.textContent='Ready!';
+  await new Promise(r=>setTimeout(r,300));
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('ov-ai').textContent=SUMS.overview||'';
+  buildCards(); updateCharts();
+}
+
+// ── TABS ─────────────────────────────────────────────
+function switchTab(t){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='overview'&&i===0)||(t==='detail'&&i===1)));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='detail') loadDetailView();
+}
+function toggleLang(btn,lang){
+  if(lang==='all'){selLangs=new Set(['all']);document.querySelectorAll('#lang-filters .chip').forEach(b=>b.classList.toggle('active',b.dataset.lang==='all'));}
+  else{selLangs.delete('all');document.querySelector('#lang-filters [data-lang="all"]').classList.remove('active');
+    if(selLangs.has(lang)){selLangs.delete(lang);btn.classList.remove('active');}
+    else{selLangs.add(lang);btn.classList.add('active');}
+    if(selLangs.size===0){selLangs.add('all');document.querySelector('#lang-filters [data-lang="all"]').classList.add('active');}
+  }updateCharts();
+}
+function toggleDLang(btn,lang){
+  if(lang==='all'){dLangs=new Set(['all']);document.querySelectorAll('#dl-filters .chip').forEach(b=>b.classList.toggle('active',b.dataset.lang==='all'));}
+  else{dLangs.delete('all');document.querySelector('#dl-filters [data-lang="all"]').classList.remove('active');
+    if(dLangs.has(lang)){dLangs.delete(lang);btn.classList.remove('active');}
+    else{dLangs.add(lang);btn.classList.add('active');}
+    if(dLangs.size===0){dLangs.add('all');document.querySelector('#dl-filters [data-lang="all"]').classList.add('active');}
+  }updateDetailCharts();
+}
+function setGroupBy(g){
+  groupBy=g;['class','lang','sent'].forEach(k=>document.getElementById('gb-'+k).classList.remove('active'));
+  document.getElementById('gb-'+(g==='classification'?'class':g==='language'?'lang':'sent')).classList.add('active');
+  updateCharts();
+}
+function aggTimeline(langF,medF,clsF){
+  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
+  let gkeys=new Set();
+  if(groupBy==='classification') Object.keys(PREPROC.topicStats).forEach(c=>gkeys.add(c));
+  else if(groupBy==='language') gkeys=new Set(['de','fr','it']);
+  else gkeys=new Set(['positive','neutral','negative']);
+  const counts={};gkeys.forEach(k=>{counts[k]={};months.forEach(m=>counts[k][m]=0)});
+  for(const month of months){const md=tl[month];
+    for(const [cls,cd] of Object.entries(md)){if(clsF&&cls!==clsF) continue;
+      for(const [lang,ld] of Object.entries(cd)){if(langF&&!langF.includes(lang)) continue;
+        for(const [med,st] of Object.entries(ld)){if(medF&&med!==medF) continue;
+          if(groupBy==='classification'){if(counts[cls])counts[cls][month]=(counts[cls][month]||0)+st.n;}
+          else if(groupBy==='language'){counts[lang][month]=(counts[lang][month]||0)+st.n;}
+          else{counts['positive'][month]=(counts['positive'][month]||0)+st.p;
+               counts['negative'][month]=(counts['negative'][month]||0)+st.g;
+               counts['neutral'][month]=(counts['neutral'][month]||0)+st.u;}
+        }
+      }
+    }
+  }
+  return{months,counts,gkeys:[...gkeys]};
+}
+function buildCards(){
+  const stats=PREPROC.topicStats,total=Object.values(stats).reduce((s,v)=>s+v.total,0);
+  const cont=document.getElementById('topic-cards');cont.innerHTML='';
+  const sorted=Object.entries(stats).filter(([c])=>c!=='Others').sort((a,b)=>b[1].total-a[1].total);
+  for(const [cls,data] of sorted){
+    const pct=((data.total/total)*100).toFixed(1),color=TC[cls]||'#999';
+    const subs=Object.entries(data.subtopics).sort((a,b)=>b[1].n-a[1].n);
+    const maxS=subs.length>0?Math.max(...subs.map(s=>s[1].n)):1;
+    const subHtml=subs.slice(0,8).map(([sn,sd])=>`<div class="sub-row"><div class="sn">${sn}</div><div class="sw"><div class="sb" style="width:${(sd.n/maxS*100).toFixed(1)}%;background:${color}88"></div></div><div class="sc">${sd.n}</div></div>`).join('');
+    const card=document.createElement('div');card.className='topic-card';card.style.borderLeftColor=color;
+    card.innerHTML=`<div class="t-name">${cls}</div><div class="t-stats"><span class="dot" style="background:${color}"></span>${data.total.toLocaleString()} articles &middot; ${pct}%</div><div class="expand-hint">&#9660; Click to expand</div><div class="subtopics-list">${subHtml}</div>`;
+    card.onclick=()=>{card.classList.toggle('expanded');card.querySelector('.expand-hint').textContent=card.classList.contains('expanded')?'▲ Collapse':'▼ Click to expand';};
+    cont.appendChild(card);
+  }
+}
+function updateCharts(){
+  selMed=document.getElementById('medium-filter').value;
+  const langF=selLangs.has('all')?null:[...selLangs];
+  const {months,counts,gkeys}=aggTimeline(langF,selMed,null);
+  document.getElementById('tl-sub').textContent='by '+groupBy+' · '+(selLangs.has('all')?'All langs':[...selLangs].join(','))+(selMed?' · '+selMed:'');
+  const tDs=gkeys.filter(k=>counts[k]&&Object.values(counts[k]).some(v=>v>0)).map(k=>{
+    const c=groupBy==='classification'?(TC[k]||'#999'):groupBy==='language'?LC[k]:SC[k];
+    return{label:k,data:months.map(m=>counts[k][m]||0),borderColor:c,backgroundColor:c+'22',fill:false,tension:.3,pointRadius:2,borderWidth:2};
+  });
+  if(tlChart) tlChart.destroy();
+  tlChart=new Chart(document.getElementById('timeline-chart'),{type:'line',data:{labels:months,datasets:tDs},
+    options:{responsive:true,maintainAspectRatio:true,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:9}}}},
+      scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+  let tCnts={};
+  for(const [cls] of Object.entries(PREPROC.topicStats).filter(([c])=>c!=='Others')){
+    let cnt=0;
+    for(const md of Object.values(PREPROC.timeline)){if(!md[cls]) continue;
+      for(const [lang,ld] of Object.entries(md[cls])){if(langF&&!langF.includes(lang)) continue;
+        for(const [med,st] of Object.entries(ld)){if(selMed&&med!==selMed) continue;cnt+=st.n;}
+      }
+    }tCnts[cls]=cnt;
+  }
+  const sT=Object.entries(tCnts).sort((a,b)=>a[1]-b[1]);
+  if(barChart) barChart.destroy();
+  barChart=new Chart(document.getElementById('bar-chart'),{type:'bar',
+    data:{labels:sT.map(([c])=>c.length>22?c.slice(0,20)+'...':c),datasets:[{label:'Articles',data:sT.map(([,n])=>n),backgroundColor:sT.map(([c])=>TC[c]||'#999'),borderRadius:3}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
+      scales:{x:{beginAtZero:true,ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+}
+function loadDetailView(){
+  curCls=document.getElementById('detail-cls').value;
+  document.getElementById('topic-ai').textContent=(SUMS.topics&&SUMS.topics[curCls])||'';
+  const stats=PREPROC.topicStats[curCls];if(!stats) return;
+  const subs=Object.keys(stats.subtopics).sort();
+  ['d-subtopic','tbl-sub'].forEach(id=>{
+    const sel=document.getElementById(id),prev=sel.value;
+    sel.innerHTML='<option value="">All Subtopics</option>'+subs.map(s=>`<option value="${s}">${s}</option>`).join('');
+    if(subs.includes(prev)) sel.value=prev;
+  });
+  buildSubNav(subs);updateDetailStats();updateDetailCharts();renderSupDen('');loadTableData();
+}
+function buildSubNav(subs){
+  const nav=document.getElementById('sub-nav');
+  nav.innerHTML='<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>'+
+    subs.map(s=>`<button class="sub-nav-btn" data-sub="${s}" onclick="selectSubNav(this,this.dataset.sub)">${s}</button>`).join('');
+}
+function selectSubNav(btn,sub){
+  document.querySelectorAll('.sub-nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  renderSupDen(sub);
+}
+function updateDetailStats(){
+  const stats=PREPROC.topicStats[curCls],items=ITEMS[curCls]||[];
+  let p=0,g=0,u=0,de=0,fr=0,it=0;
+  for(const s of Object.values(stats.subtopics)){p+=s.p;g+=s.g;u+=s.u;de+=s.de;fr+=s.fr;it+=s.it;}
+  const t=stats.total,dates=items.map(i=>i[1]).sort();
+  const dr=dates.length?dates[0].slice(0,10)+' - '+dates[dates.length-1].slice(0,10):'';
+  document.getElementById('detail-stats').innerHTML=`
+    <div class="stat-box"><div class="sv">${t.toLocaleString()}</div><div class="sl">Total</div><div class="ss">${dr}</div></div>
+    <div class="stat-box"><div class="sv" style="color:#e74c3c">${de.toLocaleString()}</div><div class="sl">German</div><div class="ss">${((de/t)*100).toFixed(1)}%</div></div>
+    <div class="stat-box"><div class="sv" style="color:#3498db">${fr.toLocaleString()}</div><div class="sl">French</div><div class="ss">${((fr/t)*100).toFixed(1)}%</div></div>
+    <div class="stat-box"><div class="sv" style="color:#27ae60">${it.toLocaleString()}</div><div class="sl">Italian</div><div class="ss">${((it/t)*100).toFixed(1)}%</div></div>
+    <div class="stat-box"><div class="sv" style="color:#28a745">${p.toLocaleString()}</div><div class="sl">Positive</div><div class="ss">${((p/t)*100).toFixed(1)}%</div></div>
+    <div class="stat-box"><div class="sv" style="color:#6c757d">${u.toLocaleString()}</div><div class="sl">Neutral</div><div class="ss">${((u/t)*100).toFixed(1)}%</div></div>
+    <div class="stat-box"><div class="sv" style="color:#dc3545">${g.toLocaleString()}</div><div class="sl">Negative</div><div class="ss">${((g/t)*100).toFixed(1)}%</div></div>`;
+}
+function updateDetailCharts(){
+  dSelMed=document.getElementById('d-medium').value||null;
+  dSelSub=document.getElementById('d-subtopic').value||null;
+  const lf=dLangs.has('all')?null:[...dLangs];
+  const {months,counts}=aggDetailTl(curCls,lf,dSelMed,dSelSub);
+  const tc=TC[curCls]||'#3b5bdb';
+  if(dTlChart) dTlChart.destroy();
+  let ds;
+  if(lf&&!dSelSub){ds=lf.map(l=>{return{label:l==='de'?'German':l==='fr'?'French':'Italian',data:months.map(m=>(counts[l]&&counts[l][m])||0),borderColor:LC[l],fill:false,tension:.3,pointRadius:2,borderWidth:2}});}
+  else{ds=[{label:dSelSub||curCls,data:months.map(m=>counts['_all'][m]||0),borderColor:tc,backgroundColor:tc+'22',fill:true,tension:.3,pointRadius:2,borderWidth:2}];}
+  dTlChart=new Chart(document.getElementById('d-timeline'),{type:'line',data:{labels:months,datasets:ds},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}}},
+      scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+  buildSentChart(curCls,dSelSub);
+}
+function aggDetailTl(cls,lf,mf,sf){
+  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
+  const counts={'_all':{}};if(lf) lf.forEach(l=>counts[l]={});
+  months.forEach(m=>{counts['_all'][m]=0;if(lf)lf.forEach(l=>counts[l][m]=0)});
+  if(sf){const items=ITEMS[cls]||[];
+    for(const it of items){if(it[5]!==sf) continue;if(lf&&!lf.includes(it[3])) continue;if(mf&&it[2]!==mf) continue;
+      const mo=it[1].slice(0,7);if(mo in counts['_all']) counts['_all'][mo]++;}
+  }else{for(const month of months){const md=tl[month];if(!md[cls]) continue;
+    for(const [lang,ld] of Object.entries(md[cls])){if(lf&&!lf.includes(lang)) continue;
+      for(const [med,st] of Object.entries(ld)){if(mf&&med!==mf) continue;
+        counts['_all'][month]=(counts['_all'][month]||0)+st.n;
+        if(lf&&counts[lang]) counts[lang][month]=(counts[lang][month]||0)+st.n;
+      }
+    }
+  }}
+  return{months,counts};
+}
+function buildSentChart(cls,sf){
+  const stats=PREPROC.topicStats[cls];
+  const subs=Object.entries(stats.subtopics).filter(([s])=>!sf||s===sf).sort((a,b)=>b[1].n-a[1].n).slice(0,12);
+  const labels=subs.map(([s])=>s.length>20?s.slice(0,18)+'...':s);
+  const pos=subs.map(([,d])=>d.n>0?+(d.p/d.n*100).toFixed(1):0);
+  const neu=subs.map(([,d])=>d.n>0?+(d.u/d.n*100).toFixed(1):0);
+  const neg=subs.map(([,d])=>d.n>0?+(d.g/d.n*100).toFixed(1):0);
+  if(dSentChart) dSentChart.destroy();
+  dSentChart=new Chart(document.getElementById('d-sentiment'),{type:'bar',
+    data:{labels,datasets:[{label:'Positive',data:pos,backgroundColor:'#28a74588',borderRadius:3},{label:'Neutral',data:neu,backgroundColor:'#6c757d55',borderRadius:3},{label:'Negative',data:neg,backgroundColor:'#dc354588',borderRadius:3}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},
+      scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+}
+function makeBulletBlock(sub,points,isSup){
+  const cls=isSup?'sup-block':'den-block';
+  return`<div class="sd-block ${cls}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+}
+function renderSupDen(sub){
+  const supEl=document.getElementById('sup-content'),denEl=document.getElementById('den-content');
+  const subs_data=SUMS.subtopics||{};
+  if(sub){
+    const key=curCls+'|||'+sub,sm=subs_data[key];
+    if(sm){supEl.innerHTML=makeBulletBlock(sub,sm.sup,true);denEl.innerHTML=makeBulletBlock(sub,sm.den,false);}
+    else{supEl.innerHTML=denEl.innerHTML='<p style="color:#aaa;font-size:12px;padding:8px">No data for this subtopic.</p>';}
+  }else{
+    const stats=PREPROC.topicStats[curCls],subs=Object.keys(stats.subtopics).sort();
+    let sh='',dh='';
+    for(const s of subs){const k=curCls+'|||'+s,sm=subs_data[k];
+      if(sm){sh+=makeBulletBlock(s,sm.sup,true);dh+=makeBulletBlock(s,sm.den,false);}
+    }
+    supEl.innerHTML=sh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries available.</p>';
+    denEl.innerHTML=dh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries available.</p>';
+  }
+}
+function loadTableData(){
+  tblData=(ITEMS[curCls]||[]).map(it=>{return{id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7]}});
+  sortKey='pubtime';sortDir=-1;curPage=1;filterTable();
+}
+function filterTable(){
+  const q=document.getElementById('tbl-search').value.toLowerCase();
+  const lf=document.getElementById('tbl-lang').value,mf=document.getElementById('tbl-medium').value;
+  const sf=document.getElementById('tbl-sub').value,sentf=document.getElementById('tbl-sent').value;
+  tblFiltered=tblData.filter(it=>{
+    if(lf&&it.language!==lf)return false;if(mf&&it.medium_code!==mf)return false;
+    if(sf&&it.subtopic!==sf)return false;if(sentf&&it.sentiment!==sentf)return false;
+    if(q&&!it.head.toLowerCase().includes(q)&&!it.summary.toLowerCase().includes(q))return false;return true;
+  });
+  tblFiltered.sort((a,b)=>{let av=a[sortKey]||'',bv=b[sortKey]||'';return sortDir*(av<bv?-1:av>bv?1:0);});
+  curPage=1;renderTable();
+}
+function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}
+  tblFiltered.sort((a,b)=>{let av=a[k]||'',bv=b[k]||'';return sortDir*(av<bv?-1:av>bv?1:0);});renderTable();}
+function renderTable(){
+  const tot=tblFiltered.length,start=(curPage-1)*PZ,pg=tblFiltered.slice(start,start+PZ);
+  document.getElementById('tbl-info').textContent='('+tot.toLocaleString()+' articles'+(tot<tblData.length?', filtered':'')+')';
+  const sb=s=>`<span class="sent-badge sent-${s}">${s}</span>`;
+  document.getElementById('tbl-body').innerHTML=pg.map(it=>`<tr>
+    <td style="font-family:monospace;color:var(--text2);font-size:10px">${it.id}</td>
+    <td style="white-space:nowrap;font-size:11px">${it.pubtime.slice(0,10)}</td>
+    <td style="font-weight:600;font-size:11px">${it.medium_code}</td>
+    <td style="font-size:11px">${it.language}</td>
+    <td style="max-width:130px;font-size:10px;color:var(--text2)">${it.subtopic}</td>
+    <td>${sb(it.sentiment||'neutral')}</td>
+    <td style="max-width:240px;font-weight:500;font-size:11px">${it.head}</td>
+    <td style="max-width:280px;font-size:10px;color:var(--text2)">${it.summary}</td>
+  </tr>`).join('');
+  const tp=Math.ceil(tot/PZ),pgEl=document.getElementById('pg');
+  if(tp<=1){pgEl.innerHTML='';return;}
+  let ps=[1];if(curPage>3)ps.push('...');
+  for(let i=Math.max(2,curPage-1);i<=Math.min(tp-1,curPage+1);i++)ps.push(i);
+  if(curPage<tp-2)ps.push('...');if(tp>1)ps.push(tp);
+  pgEl.innerHTML=`<button class="pb" onclick="gp(${curPage-1})" ${curPage===1?'disabled':''}>&#8249;</button>
+    ${ps.map(p=>p==='...'?'<span class="pi">...</span>':`<button class="pb ${p===curPage?'active':''}" onclick="gp(${p})">${p}</button>`).join('')}
+    <button class="pb" onclick="gp(${curPage+1})" ${curPage===tp?'disabled':''}>&#8250;</button>
+    <span class="pi">${start+1}-${Math.min(start+PZ,tot)} of ${tot.toLocaleString()}</span>`;
+}
+function gp(p){const tp=Math.ceil(tblFiltered.length/PZ);if(p<1||p>tp)return;curPage=p;renderTable();document.getElementById('tab-detail').scrollIntoView({behavior:'smooth'});}
+
+// ── BOOT ─────────────────────────────────────────────
+loadData().catch(err=>{
+  document.getElementById('load-msg').textContent='Error: '+err.message;
+  document.getElementById('load-msg').style.color='#dc3545';
+});
+</script>
+</body>
+</html>
