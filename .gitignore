@@ -1,6 +1,5 @@
 # Ignore data folder (datasets, large files)
 /data/
-data/
 results/*
 
 # Python-related
