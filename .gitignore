@@ -1,6 +1,7 @@
 # Ignore data folder (datasets, large files)
 /data/
 data/
+results/*
 
 # Python-related
 __pycache__/
@@ -16,3 +17,6 @@ ENV/
 
 # Environment files
 .env
+
+# zip files
+*.zip
