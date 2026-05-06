@@ -20,3 +20,10 @@ ENV/
 
 # zip files
 *.zip
+
+# Claude Code internal files (worktrees, sessions)
+.claude/
+
+# Dashboard monolithic items file (replaced by split files)
+docs/data/items.json
+dashboard_package/
