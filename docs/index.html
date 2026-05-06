@@ -389,7 +389,7 @@ async function loadDetailView(){
 }
 function buildSubNav(subs){
   const nav=document.getElementById('sub-nav');
-  nav.innerHTML='<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>'+
+  nav.innerHTML=`<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>`+
     subs.map(s=>`<button class="sub-nav-btn" data-sub="${s}" onclick="selectSubNav(this,this.dataset.sub)">${s}</button>`).join('');
 }
 function selectSubNav(btn,sub){
