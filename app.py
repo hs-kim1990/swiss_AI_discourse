@@ -7,6 +7,7 @@ app = Flask(__name__, static_folder='frontend')
 
 # ── File paths ─────────────────────────────────────────────────────────────
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+DOCS_DATA_DIR = os.path.join(os.path.dirname(__file__), 'docs', 'data')
 
 DATA_FILES = {
     'de': 'run_swissdocx_0322_Germany_20260413_214420.json',
@@ -82,10 +83,8 @@ def parse_date(pubtime):
     if not pubtime:
         return None, ''
     try:
-        # Handle timezone offset like "2025-03-27 07:24:23+01"
         dt_str = pubtime.strip()
         if '+' in dt_str:
-            # Pad timezone to ±HH:MM format
             parts = dt_str.rsplit('+', 1)
             tz = parts[1]
             if ':' not in tz:
@@ -105,7 +104,6 @@ for lang, filename in DATA_FILES.items():
         records = json.load(f)
     for item in records:
         classification = item.get('classification') or ''
-        # Skip non-topic articles
         if classification.upper() == 'NOT TOPIC':
             continue
         year, date_str = parse_date(item.get('pubtime'))
@@ -139,18 +137,56 @@ def static_files(filename):
     return send_from_directory('frontend', filename)
 
 
+# ── Dashboard data routes ───────────────────────────────────────────────────
+
+@app.route('/api/dashboard/preproc')
+def dashboard_preproc():
+    """Serve preproc.json from docs/data/"""
+    filepath = os.path.join(DOCS_DATA_DIR, 'preproc.json')
+    if not os.path.exists(filepath):
+        return jsonify({'error': 'preproc.json not found'}), 404
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return jsonify(json.load(f))
+
+@app.route('/api/dashboard/summaries')
+def dashboard_summaries():
+    """Serve summaries.json from docs/data/"""
+    filepath = os.path.join(DOCS_DATA_DIR, 'summaries.json')
+    if not os.path.exists(filepath):
+        return jsonify({'error': 'summaries.json not found'}), 404
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return jsonify(json.load(f))
+
+@app.route('/api/dashboard/items_index')
+def dashboard_items_index():
+    """Serve items_index.json from docs/data/, rewriting item URLs to use Flask routes"""
+    filepath = os.path.join(DOCS_DATA_DIR, 'items_index.json')
+    if not os.path.exists(filepath):
+        return jsonify({'error': 'items_index.json not found'}), 404
+    with open(filepath, 'r', encoding='utf-8') as f:
+        index = json.load(f)
+    # Rewrite each value to go through Flask so relative paths work
+    rewritten = {}
+    for cls, url in index.items():
+        # Extract just the filename from whatever path is stored
+        filename = os.path.basename(url)
+        rewritten[cls] = f'/api/dashboard/items/{filename}'
+    return jsonify(rewritten)
+
+@app.route('/api/dashboard/items/<filename>')
+def dashboard_items(filename):
+    """Serve individual topic items JSON files from docs/data/"""
+    filepath = os.path.join(DOCS_DATA_DIR, filename)
+    if not os.path.exists(filepath):
+        return jsonify({'error': f'{filename} not found'}), 404
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return jsonify(json.load(f))
+
+
+# ── Existing API routes ─────────────────────────────────────────────────────
+
 @app.route('/api/articles')
 def api_articles():
-    """
-    Search articles across all three language files.
-    Params:
-        q        – search term (headline + summary + classification)
-        lang     – comma-separated: de,fr,it
-        year     – single year filter e.g. 2024
-        source   – outlet code filter
-        limit    – max results (default 100)
-        offset   – pagination offset (default 0)
-    """
     q      = request.args.get('q', '').strip().lower()
     langs  = request.args.get('lang', '').strip()
     year   = request.args.get('year', type=int)
@@ -173,7 +209,7 @@ def api_articles():
                 article.get('headline') or '',
                 article.get('summary') or '',
                 article.get('classification') or '',
-        ]).lower()
+            ]).lower()
             if q not in searchable:
                 continue
         results.append(article)
@@ -191,7 +227,6 @@ def api_articles():
 
 @app.route('/api/stats')
 def api_stats():
-    """High-level corpus statistics."""
     by_lang = {}
     for a in ALL_ARTICLES:
         l = a['language']
@@ -211,7 +246,6 @@ def api_stats():
 
 @app.route('/api/classifications')
 def api_classifications():
-    """Return all classification categories with counts, optionally filtered by language."""
     lang = request.args.get('lang', '').strip()
     counts = {}
     for a in ALL_ARTICLES:
@@ -226,7 +260,6 @@ def api_classifications():
 
 @app.route('/api/sources')
 def api_sources():
-    """Return all sources with article counts."""
     lang = request.args.get('lang', '').strip()
     counts = {}
     for a in ALL_ARTICLES:

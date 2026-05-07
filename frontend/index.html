@@ -646,7 +646,8 @@ const PZ=50;
 
 async function loadDashData() {
   try {
-    const steps=[['docs/data/preproc.json'],['docs/data/summaries.json'],['docs/data/items_index.json']];
+    const steps=[['/api/dashboard/preproc'],['/api/dashboard/summaries'],['/api/dashboard/items_index']];
+
     const results=[];
     for(const [url] of steps){ const r=await fetch(url); if(!r.ok) throw new Error('Failed: '+url); results.push(await r.json()); }
     [PREPROC,SUMS,ITEMS_INDEX]=results;
