@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swiss Media AI Monitor</title>
+<title>Abstimmungs-Explorer — 10-Millionen-Initiative</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -182,8 +182,8 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 <div class="masthead">
   <div class="masthead-inner">
     <div class="masthead-top">
-      <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
-      <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
+      <div class="masthead-title">Abstimmungs-<span>Explorer</span></div>
+      <div class="masthead-meta">42,461 topic articles · DE · FR · IT · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
   </div>
@@ -205,14 +205,14 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 
   <div class="overview-header">
     <div class="page-eyebrow">Corpus overview</div>
-    <h1 class="page-title">Swiss AI discourse in German-language media</h1>
-    <p class="page-subtitle">Topic-classified articles across German, French and Italian Swiss media — filtered from the Swissdox corpus via LCP, 2023–2026</p>
+    <h1 class="page-title">10-Millionen-Initiative — Medienberichterstattung</h1>
+    <p class="page-subtitle">Themenklassifizierte Artikel aus deutsch-, französisch- und italienischsprachigen Schweizer Medien — gefiltert aus dem Swissdox-Korpus via LCP, 2023–2026</p>
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="label">Topic articles</div><div class="value">5,545</div><div class="sub">After NOT TOPIC filtering</div></div>
+    <div class="stat-card"><div class="label">Topic articles</div><div class="value">42,461</div><div class="sub">After NOT TOPIC filtering</div></div>
     <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
-    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">2,403 topic articles</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">18,202 topic articles</div></div>
     <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
   </div>
 
@@ -220,22 +220,22 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
     <div class="stat-card" style="border-left:3px solid #b5122a;">
       <div class="label" style="color:#b5122a;">Deutsch (DE)</div>
-      <div class="value">4,597</div>
-      <div class="sub">SRF · Tages-Anzeiger · NZZ · Blick · Zentralschweiz</div>
+      <div class="value">17,724</div>
+      <div class="sub">NZZ · SRF · Tages-Anzeiger · Blick · Zentralschweiz</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a5fa8;">
       <div class="label" style="color:#1a5fa8;">Français (FR)</div>
-      <div class="value">—</div>
-      <div class="sub">File pending upload</div>
+      <div class="value">23,516</div>
+      <div class="sub">Le Temps · L'Hebdo · Tribune de Lausanne</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a8a3a;">
       <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
-      <div class="value">948</div>
+      <div class="value">1,221</div>
       <div class="sub">RSI (Radiotelevisione svizzera italiana)</div>
     </div>
   </div>
 
-  <div class="section-head">Topic articles per year — DE + IT combined (2023–2026)</div>
+  <div class="section-head">Topic articles per year — DE + FR + IT combined (2023–2026)</div>
   <div class="chart-wrap" style="height:220px; margin-bottom:32px;">
     <canvas id="yearChart" role="img" aria-label="Bar chart showing AI article volume by year, spiking from 2022 onwards">
       2023: 3025 articles. 2024: 4032 articles. 2025 (partial): 2113 articles.
@@ -249,22 +249,55 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     </canvas>
   </div>
 
-  <div class="section-head">Key terminology tracked</div>
+  <div class="section-head">Schlüsselbegriffe zur 10-Millionen-Initiative — Erwähnungen im Korpus</div>
   <div class="term-grid">
     <div class="term-card" style="border-left:3px solid var(--accent);">
-      <div class="term">AI / IA</div><div class="desc">Primary term (EN/FR)</div>
+      <div class="term">Asyl / Asile</div>
+      <div class="desc">1,743 Erwähnungen · Asylpolitik (DE/FR/IT)</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--accent);">
+      <div class="term">SVP / UDC</div>
+      <div class="desc">872 Erwähnungen · Initianten-Partei</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--accent);">
+      <div class="term">Bevölkerung / Population</div>
+      <div class="desc">782 Erwähnungen · Kernthema der Initiative</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--accent);">
+      <div class="term">Zuwanderung / Immigration</div>
+      <div class="desc">716 Erwähnungen · Zuwanderungssteuerung</div>
     </div>
     <div class="term-card" style="border-left:3px solid var(--ink-mid);">
-      <div class="term">KI</div><div class="desc">Künstliche Intelligenz</div>
+      <div class="term">Grenze / Frontière</div>
+      <div class="desc">293 Erwähnungen · Grenzkontrollen (DE/FR)</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
+      <div class="term">Abstimmung / Votation</div>
+      <div class="desc">260 Erwähnungen · Volksabstimmung</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
+      <div class="term">10-Millionen-Initiative</div>
+      <div class="desc">220 Erwähnungen · Kernbegriff der Initiative</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
+      <div class="term">Integration</div>
+      <div class="desc">208 Erwähnungen · Integrationspolitik</div>
     </div>
     <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">LLM</div><div class="desc">Large language models</div>
+      <div class="term">EU-Abkommen / Accord UE</div>
+      <div class="desc">122 Erwähnungen · Bilaterale Beziehungen</div>
     </div>
     <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">GenAI</div><div class="desc">Generative AI</div>
+      <div class="term">Bilaterale / Bilatérales</div>
+      <div class="desc">120 Erwähnungen · Bilaterale Verträge</div>
     </div>
     <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">Chatbot</div><div class="desc">Conversational AI</div>
+      <div class="term">Schengen</div>
+      <div class="desc">44 Erwähnungen · Freizügigkeit</div>
+    </div>
+    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
+      <div class="term">Volksinitiative / Initiative populaire</div>
+      <div class="desc">35 Erwähnungen · Direktdemokratie</div>
     </div>
   </div>
 
@@ -648,7 +681,7 @@ document.getElementById('searchInput').addEventListener('keydown', e => {
 
 // ── Charts ────────────────────────────────────────────────────────
 const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
-const YEAR_DATA   = [542, 2403, 2223, 377];
+const YEAR_DATA   = [4554, 18202, 16423, 3282];
 
 new Chart(document.getElementById('yearChart'), {
   type: 'bar',
@@ -675,9 +708,9 @@ new Chart(document.getElementById('yearChart'), {
   }
 });
 
-const SRC_LABELS = ['SRF', 'Tages-Anzeiger', 'RSI', 'NZZ', 'Blick', 'Zentralschweiz', 'Tages-Anzeiger Schweiz'];
-const SRC_DATA   = [1233, 951, 948, 788, 733, 728, 164];
-const SRC_COLORS = ['#c06030', '#3a5a8a', '#1a8a3a', '#7a6ab8', '#D45B5B', '#8a6a2a', '#5a7aaa'];
+const SRC_LABELS = ['Le Temps Online', "L'Hebdo / Heures", 'NZZ', 'Le Temps', 'SRF', 'Tages-Anzeiger', 'Schweizer Ztg. Online', 'Tribune de Lausanne', 'Blick', 'RSI'];
+const SRC_DATA   = [7182, 5806, 5763, 5239, 4750, 3480, 2848, 2145, 1814, 1221];
+const SRC_COLORS = ['#1a5fa8', '#3a7ac8', '#7a6ab8', '#2a6fb8', '#c06030', '#3a5a8a', '#5a8ab8', '#4a7ab8', '#D45B5B', '#1a8a3a'];
 
 new Chart(document.getElementById('sourceChart'), {
   type: 'bar',
@@ -705,9 +738,9 @@ new Chart(document.getElementById('sourceChart'), {
   }
 });
 
-const TYPE_LABELS = ['Deutsch (DE)', 'Italiano (IT)', 'Français (FR)'];
-const TYPE_DATA   = [4597, 948, 0];
-const TYPE_COLORS = ['#b5122a', '#1a8a3a', '#1a5fa8'];
+const TYPE_LABELS = ['Deutsch (DE)', 'Français (FR)', 'Italiano (IT)'];
+const TYPE_DATA   = [17724, 23516, 1221];
+const TYPE_COLORS = ['#b5122a', '#1a5fa8', '#1a8a3a'];
 
 new Chart(document.getElementById('typeChart'), {
   type: 'doughnut',
