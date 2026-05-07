@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swiss Media AI Monitor</title>
+<title>Abstimmungsexplorer: Exploring Discourse in Swiss Media</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -259,7 +259,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 <div class="masthead">
   <div class="masthead-inner">
     <div class="masthead-top">
-      <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
+      <div class="masthead-title">Abstimmungsexplorer: <span>Exploring Discourse</span> in Swiss Media</div>
       <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
@@ -282,7 +282,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 
   <div class="overview-header">
     <div class="page-eyebrow">Corpus overview</div>
-    <h1 class="page-title">Swiss AI discourse in German-language media</h1>
+    <h1 class="page-title">Abstimmungsexplorer: Exploring Discourse in Swiss Media</h1>
     <p class="page-subtitle">Topic-classified articles across German, French and Italian Swiss media — filtered from the Swissdox corpus via LCP, 2023–2026</p>
   </div>
 
@@ -646,7 +646,7 @@ const PZ=50;
 
 async function loadDashData() {
   try {
-    const steps=[['data/preproc.json'],['data/summaries.json'],['data/items_index.json']];
+    const steps=[['docs/data/preproc.json'],['docs/data/summaries.json'],['docs/data/items_index.json']];
     const results=[];
     for(const [url] of steps){ const r=await fetch(url); if(!r.ok) throw new Error('Failed: '+url); results.push(await r.json()); }
     [PREPROC,SUMS,ITEMS_INDEX]=results;
