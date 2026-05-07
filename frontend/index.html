@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abstimmungs-Explorer — 10-Millionen-Initiative</title>
+<title>Swiss Media AI Monitor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -25,6 +25,8 @@
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Source Serif 4', Georgia, serif;
   --font-mono: 'DM Mono', monospace;
+  /* Dashboard vars */
+  --card:#fff;--border:#e0e4ec;--text:#1a2035;--text2:#5a6278;--daccent:#3b5bdb;--r:12px;--sh:0 2px 12px rgba(0,0,0,.07);
 }
 
 body { font-family: var(--font-body); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; }
@@ -148,12 +150,12 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 .step-code .str { color: #a0d8f0; }
 .step-code .cm { color: #7a9a7a; }
 .tech-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.chip {
+.chip-tech {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em;
   padding: 3px 9px; border-radius: 2px;
   background: var(--paper-tinted); border: 0.5px solid var(--ink-faint); color: var(--ink-mid);
 }
-.chip.hi { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.chip-tech.hi { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 .data-schema { border: 0.5px solid var(--ink-faint); border-radius: 4px; overflow: hidden; margin-top: 10px; }
 .schema-row { display: grid; grid-template-columns: 140px 90px 1fr; font-size: 12px; border-bottom: 0.5px solid var(--ink-faint); }
 .schema-row:last-child { border-bottom: none; }
@@ -161,19 +163,94 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 .schema-cell { padding: 7px 12px; }
 .type-tag { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
 
-/* ── Term cards ── */
-.term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-bottom: 28px; }
-.term-card { border: 0.5px solid var(--ink-faint); padding: 10px 12px; border-radius: 3px; }
-.term-card .term { font-family: var(--font-mono); font-size: 16px; font-weight: 400; color: var(--ink); }
-.term-card .desc { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+/* ── Dashboard styles ── */
+.ai-summary{background:linear-gradient(135deg,#eef2ff 0%,#f0f9ff 100%);border:1px solid #c5d3f0;border-radius:var(--r);padding:16px 20px;margin-bottom:20px}
+.ai-summary::before{content:'✦ AI Summary';font-size:10px;font-weight:700;color:var(--daccent);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:8px}
+.ai-summary p{font-size:13px;line-height:1.65;color:#2d3a5c}
+.filter-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:18px;box-shadow:var(--sh)}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-group label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+.filter-row-d{display:flex;gap:5px;flex-wrap:wrap}
+.chip{padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:12px;color:var(--text2);transition:all .12s;font-weight:500}
+.chip.active{border-color:var(--daccent);background:#eef2ff;color:var(--daccent)}
+.chip:hover{border-color:var(--daccent)}
+.sel{border:1.5px solid var(--border);border-radius:7px;padding:5px 9px;font-size:12px;background:#fff;color:var(--text);outline:none;height:30px}
+.sel:focus{border-color:var(--daccent)}
+.sec-title-d{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title-d span{font-size:11px;color:var(--text2);font-weight:400}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:20px}
+.topic-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);border-left:4px solid #ccc}
+.topic-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.1)}
+.topic-card .t-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.topic-card .t-stats{font-size:11px;color:var(--text2);margin-bottom:8px;display:flex;gap:6px;align-items:center}
+.topic-card .dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.subtopics-list{display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:8px}
+.topic-card.expanded .subtopics-list{display:block}
+.sub-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.sub-row .sn{font-size:10px;color:var(--text2);width:110px;flex-shrink:0;line-height:1.2}
+.sub-row .sw{flex:1;background:#f0f0f0;border-radius:3px;height:5px;overflow:hidden}
+.sub-row .sb{height:100%;border-radius:3px}
+.sub-row .sc{font-size:10px;color:var(--text2);width:32px;text-align:right;flex-shrink:0}
+.expand-hint{font-size:10px;color:var(--text2)}
+.charts-row-d{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card-d{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.chart-card-d canvas{max-height:290px}
+.detail-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh)}
+.detail-bar label{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap}
+.detail-sel{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;color:var(--text);background:#fff;outline:none;min-width:300px}
+.detail-sel:focus{border-color:var(--daccent)}
+.stats-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;box-shadow:var(--sh);flex:1;min-width:120px}
+.stat-box .sv{font-size:24px;font-weight:800;color:var(--text)}
+.stat-box .sl{font-size:10px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.stat-box .ss{font-size:11px;color:var(--text2);margin-top:3px}
+.supden-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.supden-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh);overflow-y:auto;max-height:600px}
+.supden-card h3{font-size:13px;font-weight:700;margin-bottom:10px;position:sticky;top:0;background:#fff;padding-bottom:6px;z-index:1}
+.sup-title{color:#155724}
+.den-title{color:#721c24}
+.sub-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sub-nav-btn{padding:4px 10px;border-radius:16px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:11px;color:var(--text2);transition:all .12s}
+.sub-nav-btn.active{border-color:var(--daccent);background:#eef2ff;color:var(--daccent)}
+.sd-block{margin-bottom:14px}
+.sd-block .sd-sub-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;padding:4px 10px;border-radius:4px;display:inline-block}
+.sd-block.sup-block .sd-sub-label{background:#d4edda;color:#155724}
+.sd-block.den-block .sd-sub-label{background:#f8d7da;color:#721c24}
+.sd-list{list-style:none;padding:0}
+.sd-list li{position:relative;padding:6px 10px 6px 20px;font-size:12px;line-height:1.55;color:var(--text2);border-bottom:1px solid #f0f0f0}
+.sd-list li:last-child{border-bottom:none}
+.sd-list li::before{content:"•";position:absolute;left:6px;font-weight:700}
+.sup-block .sd-list li::before{color:#28a745}
+.den-block .sd-list li::before{color:#dc3545}
+.sent-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.sent-positive{background:#d4edda;color:#155724}
+.sent-negative{background:#f8d7da;color:#721c24}
+.sent-neutral{background:#e2e3e5;color:#495057}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.tf-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.tf-search{flex:1;min-width:180px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;outline:none}
+.tf-search:focus{border-color:var(--daccent)}
+.tf-sel{padding:6px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:#fff;outline:none}
+.tf-sel:focus{border-color:var(--daccent)}
+.dt{width:100%;border-collapse:collapse;font-size:11px}
+.dt th{background:#f8f9fa;padding:8px 9px;text-align:left;font-weight:600;color:var(--text2);border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;cursor:pointer;user-select:none}
+.dt th:hover{background:#eef0f5}
+.dt td{padding:7px 9px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4}
+.dt tr:hover td{background:#fafbff}
+.pg{display:flex;gap:5px;justify-content:center;align-items:center;margin-top:14px}
+.pb{padding:5px 10px;border:1.5px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;font-size:12px}
+.pb.active{background:var(--daccent);color:#fff;border-color:var(--daccent)}
+.pb:hover:not(.active){border-color:var(--daccent)}
+.pi{font-size:11px;color:var(--text2)}
 
-/* ── Type legend ── */
-.type-legend-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--ink-faint); }
-.type-legend-row:last-child { border-bottom: none; }
-.type-legend-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-.type-legend-name { font-size: 13px; flex: 1; color: var(--ink); }
-.type-legend-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
-.type-legend-pct { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); min-width: 32px; text-align: right; }
+/* ── Dashboard inner tabs ── */
+.dash-tabs{display:flex;gap:0;border-bottom:var(--rule);margin-bottom:20px}
+.dash-tab-btn{font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;padding:10px 18px;background:none;border:none;border-bottom:3px solid transparent;color:var(--ink-light);cursor:pointer;transition:color 0.15s,border-color 0.15s}
+.dash-tab-btn.active{color:var(--ink);border-bottom-color:var(--accent)}
+.dash-tab-content{display:none}
+.dash-tab-content.active{display:block}
+
+@media(max-width:900px){.charts-row-d,.supden-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -182,8 +259,8 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 <div class="masthead">
   <div class="masthead-inner">
     <div class="masthead-top">
-      <div class="masthead-title">Abstimmungs-<span>Explorer</span></div>
-      <div class="masthead-meta">42,461 topic articles · DE · FR · IT · 2023–2026</div>
+      <div class="masthead-title">Swiss Media <span>AI</span> Monitor</div>
+      <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
   </div>
@@ -205,155 +282,196 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 
   <div class="overview-header">
     <div class="page-eyebrow">Corpus overview</div>
-    <h1 class="page-title">10-Millionen-Initiative — Medienberichterstattung</h1>
-    <p class="page-subtitle">Themenklassifizierte Artikel aus deutsch-, französisch- und italienischsprachigen Schweizer Medien — gefiltert aus dem Swissdox-Korpus via LCP, 2023–2026</p>
+    <h1 class="page-title">Swiss AI discourse in German-language media</h1>
+    <p class="page-subtitle">Topic-classified articles across German, French and Italian Swiss media — filtered from the Swissdox corpus via LCP, 2023–2026</p>
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="label">Topic articles</div><div class="value">42,461</div><div class="sub">After NOT TOPIC filtering</div></div>
+    <div class="stat-card"><div class="label">Topic articles</div><div class="value">5,545</div><div class="sub">After NOT TOPIC filtering</div></div>
     <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
-    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">18,202 topic articles</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">2,403 topic articles</div></div>
     <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
   </div>
 
-  <!-- Per-language breakdown cards -->
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
     <div class="stat-card" style="border-left:3px solid #b5122a;">
       <div class="label" style="color:#b5122a;">Deutsch (DE)</div>
-      <div class="value">17,724</div>
-      <div class="sub">NZZ · SRF · Tages-Anzeiger · Blick · Zentralschweiz</div>
+      <div class="value">4,597</div>
+      <div class="sub">SRF · Tages-Anzeiger · NZZ · Blick · Zentralschweiz</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a5fa8;">
       <div class="label" style="color:#1a5fa8;">Français (FR)</div>
-      <div class="value">23,516</div>
-      <div class="sub">Le Temps · L'Hebdo · Tribune de Lausanne</div>
+      <div class="value">—</div>
+      <div class="sub">File pending upload</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a8a3a;">
       <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
-      <div class="value">1,221</div>
+      <div class="value">948</div>
       <div class="sub">RSI (Radiotelevisione svizzera italiana)</div>
     </div>
   </div>
 
-  <div class="section-head">Topic articles per year — DE + FR + IT combined (2023–2026)</div>
+  <div class="section-head">Topic articles per year — DE + IT combined (2023–2026)</div>
   <div class="chart-wrap" style="height:220px; margin-bottom:32px;">
-    <canvas id="yearChart" role="img" aria-label="Bar chart showing AI article volume by year, spiking from 2022 onwards">
-      2023: 3025 articles. 2024: 4032 articles. 2025 (partial): 2113 articles.
-    </canvas>
+    <canvas id="yearChart"></canvas>
   </div>
 
   <div class="section-head">Outlets by topic article count</div>
   <div class="chart-wrap" style="height:260px; margin-bottom:32px;">
-    <canvas id="sourceChart" role="img" aria-label="Horizontal bar chart of top 12 Swiss outlets by article count">
-      Cash Online: 1069. NZZ Online: 913. NZZ: 744.
-    </canvas>
+    <canvas id="sourceChart"></canvas>
   </div>
 
+  <!-- ══ DASHBOARD replaces Schlüsselbegriffe section onwards ══ -->
   <div class="section-head">Schlüsselbegriffe zur 10-Millionen-Initiative — Erwähnungen im Korpus</div>
-  <div class="term-grid">
-    <div class="term-card" style="border-left:3px solid var(--accent);">
-      <div class="term">Asyl / Asile</div>
-      <div class="desc">1,743 Erwähnungen · Asylpolitik (DE/FR/IT)</div>
+
+  <div class="dash-tabs">
+    <button class="dash-tab-btn active" onclick="switchDashTab('overview')">Overview</button>
+    <button class="dash-tab-btn" onclick="switchDashTab('detail')">Topic Detail</button>
+  </div>
+
+  <!-- ── DASH: Overview tab ── -->
+  <div id="dash-tab-overview" class="dash-tab-content active">
+    <div class="ai-summary"><p id="ov-ai"></p></div>
+    <div class="filter-bar">
+      <div class="filter-group"><label>Language</label>
+        <div class="filter-row-d" id="lang-filters">
+          <button class="chip active" data-lang="all" onclick="toggleLang(this,'all')">All</button>
+          <button class="chip" data-lang="de" onclick="toggleLang(this,'de')">🇩🇪 German</button>
+          <button class="chip" data-lang="fr" onclick="toggleLang(this,'fr')">🇫🇷 French</button>
+          <button class="chip" data-lang="it" onclick="toggleLang(this,'it')">🇮🇹 Italian</button>
+        </div>
+      </div>
+      <div class="filter-group"><label>Medium</label>
+        <select class="sel" id="medium-filter" onchange="updateCharts()" style="min-width:140px">
+          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Group By</label>
+        <div class="filter-row-d">
+          <button class="chip active" id="gb-class" onclick="setGroupBy('classification')">Topic</button>
+          <button class="chip" id="gb-lang" onclick="setGroupBy('language')">Language</button>
+          <button class="chip" id="gb-sent" onclick="setGroupBy('sentiment')">Sentiment</button>
+        </div>
+      </div>
     </div>
-    <div class="term-card" style="border-left:3px solid var(--accent);">
-      <div class="term">SVP / UDC</div>
-      <div class="desc">872 Erwähnungen · Initianten-Partei</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--accent);">
-      <div class="term">Bevölkerung / Population</div>
-      <div class="desc">782 Erwähnungen · Kernthema der Initiative</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--accent);">
-      <div class="term">Zuwanderung / Immigration</div>
-      <div class="desc">716 Erwähnungen · Zuwanderungssteuerung</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
-      <div class="term">Grenze / Frontière</div>
-      <div class="desc">293 Erwähnungen · Grenzkontrollen (DE/FR)</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
-      <div class="term">Abstimmung / Votation</div>
-      <div class="desc">260 Erwähnungen · Volksabstimmung</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
-      <div class="term">10-Millionen-Initiative</div>
-      <div class="desc">220 Erwähnungen · Kernbegriff der Initiative</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-mid);">
-      <div class="term">Integration</div>
-      <div class="desc">208 Erwähnungen · Integrationspolitik</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">EU-Abkommen / Accord UE</div>
-      <div class="desc">122 Erwähnungen · Bilaterale Beziehungen</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">Bilaterale / Bilatérales</div>
-      <div class="desc">120 Erwähnungen · Bilaterale Verträge</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">Schengen</div>
-      <div class="desc">44 Erwähnungen · Freizügigkeit</div>
-    </div>
-    <div class="term-card" style="border-left:3px solid var(--ink-faint);">
-      <div class="term">Volksinitiative / Initiative populaire</div>
-      <div class="desc">35 Erwähnungen · Direktdemokratie</div>
+    <div class="sec-title-d">Topic Overview <span>Click a card to expand subtopics</span></div>
+    <div class="cards-grid" id="topic-cards"></div>
+    <div class="charts-row-d">
+      <div class="chart-card-d"><div class="sec-title-d">Timeline <span id="tl-sub"></span></div><canvas id="timeline-chart"></canvas></div>
+      <div class="chart-card-d"><div class="sec-title-d">Topics by Volume</div><canvas id="bar-chart"></canvas></div>
     </div>
   </div>
 
-  <div class="section-head">Articles by language</div>
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
-    <div class="chart-wrap" style="height:240px;">
-      <canvas id="typeChart" role="img" aria-label="Donut chart of articles by media type">
-        National press, regional, financial, and broadcast media.
-      </canvas>
+  <!-- ── DASH: Detail tab ── -->
+  <div id="dash-tab-detail" class="dash-tab-content">
+    <div class="detail-bar">
+      <label>Select Topic:</label>
+      <select class="detail-sel" id="detail-cls" onchange="loadDetailView()">
+        <option value="Immigration & Asylum Policy">Immigration &amp; Asylum Policy</option>
+        <option value="Swiss-EU Relations & Bilateral Agreements">Swiss-EU Relations &amp; Bilateral Agreements</option>
+        <option value="Refugee & Migrant Integration">Refugee &amp; Migrant Integration</option>
+        <option value="Swiss Domestic Politics & Governance">Swiss Domestic Politics &amp; Governance</option>
+        <option value="Economy, Labor & Finance">Economy, Labor &amp; Finance</option>
+        <option value="Defense, Security & Military">Defense, Security &amp; Military</option>
+        <option value="Healthcare, Social Welfare & Education">Healthcare, Social Welfare &amp; Education</option>
+        <option value="Environment, Energy & Infrastructure">Environment, Energy &amp; Infrastructure</option>
+        <option value="International Relations & Geopolitics">International Relations &amp; Geopolitics</option>
+        <option value="Demographic Change & Population">Demographic Change &amp; Population</option>
+      </select>
+      <span id="topic-load-status" style="font-size:11px;color:var(--text2);margin-left:8px"></span>
     </div>
-    <div id="type-legend" style="padding-top:20px;"></div>
+    <div class="ai-summary"><p id="topic-ai"></p></div>
+    <div class="stats-row" id="detail-stats"></div>
+    <div class="filter-bar" style="margin-bottom:14px">
+      <div class="filter-group"><label>Language</label>
+        <div class="filter-row-d" id="dl-filters">
+          <button class="chip active" data-lang="all" onclick="toggleDLang(this,'all')">All</button>
+          <button class="chip" data-lang="de" onclick="toggleDLang(this,'de')">🇩🇪 German</button>
+          <button class="chip" data-lang="fr" onclick="toggleDLang(this,'fr')">🇫🇷 French</button>
+          <button class="chip" data-lang="it" onclick="toggleDLang(this,'it')">🇮🇹 Italian</button>
+        </div>
+      </div>
+      <div class="filter-group"><label>Medium</label>
+        <select class="sel" id="d-medium" onchange="updateDetailCharts()" style="min-width:130px">
+          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Subtopic</label>
+        <select class="sel" id="d-subtopic" onchange="updateDetailCharts()" style="min-width:170px">
+          <option value="">All Subtopics</option>
+        </select>
+      </div>
+    </div>
+    <div class="charts-row-d" style="margin-bottom:14px">
+      <div class="chart-card-d"><div class="sec-title-d">Timeline</div><canvas id="d-timeline"></canvas></div>
+      <div class="chart-card-d"><div class="sec-title-d">Sentiment by Subtopic</div><canvas id="d-sentiment"></canvas></div>
+    </div>
+    <div class="sec-title-d">Supporting &amp; Opposing Arguments <span>Select a subtopic to filter</span></div>
+    <div class="sub-nav" id="sub-nav"></div>
+    <div class="supden-row">
+      <div class="supden-card"><h3 class="sup-title">✓ Supporting the 10M Initiative</h3><div id="sup-content"></div></div>
+      <div class="supden-card"><h3 class="den-title">✗ Opposing the 10M Initiative</h3><div id="den-content"></div></div>
+    </div>
+    <div class="sec-title-d">Articles <span id="tbl-info"></span></div>
+    <div class="table-card">
+      <div class="tf-row">
+        <input class="tf-search" id="tbl-search" placeholder="Search headline or summary..." oninput="filterTable()">
+        <select class="tf-sel" id="tbl-lang" onchange="filterTable()">
+          <option value="">All Languages</option>
+          <option value="de">German</option><option value="fr">French</option><option value="it">Italian</option>
+        </select>
+        <select class="tf-sel" id="tbl-medium" onchange="filterTable()">
+          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+        </select>
+        <select class="tf-sel" id="tbl-sub" onchange="filterTable()"><option value="">All Subtopics</option></select>
+        <select class="tf-sel" id="tbl-sent" onchange="filterTable()">
+          <option value="">All Sentiments</option>
+          <option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="dt"><thead><tr>
+          <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
+          <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
+          <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
+          <th>Headline</th><th>Summary</th>
+        </tr></thead><tbody id="tbl-body"></tbody></table>
+      </div>
+      <div class="pg" id="pg"></div>
+    </div>
   </div>
 
-</div>
+</div><!-- end page-overview -->
 
 <!-- ══════════════════════════════════════════
      PAGE: SEARCH
 ══════════════════════════════════════════ -->
 <div class="page" id="page-search">
-
   <div class="overview-header">
     <div class="page-eyebrow">Article search</div>
     <h1 class="page-title">Search the corpus</h1>
     <p class="page-subtitle">Full-text search across headlines and subtitles of all 13,026 articles</p>
   </div>
-
   <label class="search-label" for="searchInput">Search headlines &amp; subtitles</label>
   <div class="search-row">
-    <input class="search-input" id="searchInput" type="text"
-           placeholder='e.g. ChatGPT, Regulierung, Datenschutz…' autocomplete="off">
+    <input class="search-input" id="searchInput" type="text" placeholder='e.g. ChatGPT, Regulierung, Datenschutz…' autocomplete="off">
     <button class="search-btn" onclick="doSearch()">Search</button>
   </div>
-
   <div class="filters-row">
     <span class="filter-label">Filter:</span>
     <select class="filter-select" id="yearFilter">
       <option value="">All years</option>
-      <option value="2022">2022</option>
-      <option value="2023">2023</option>
-      <option value="2024">2024</option>
-      <option value="2025">2025</option>
+      <option value="2022">2022</option><option value="2023">2023</option>
+      <option value="2024">2024</option><option value="2025">2025</option>
     </select>
-    <select class="filter-select" id="sourceFilter">
-      <option value="">All outlets</option>
-    </select>
+    <select class="filter-select" id="sourceFilter"><option value="">All outlets</option></select>
     <select class="filter-select" id="limitFilter">
-      <option value="50">50 results</option>
-      <option value="100">100 results</option>
-      <option value="200">200 results</option>
-      <option value="500">500 results</option>
+      <option value="50">50 results</option><option value="100">100 results</option>
+      <option value="200">200 results</option><option value="500">500 results</option>
     </select>
   </div>
-
   <div id="searchStatus" class="results-count" style="display:none;"></div>
   <div id="articleList"></div>
-
   <div id="searchHint" class="search-hint">
     <div class="hint-title">Enter a search term above</div>
     <div style="font-size:13px;">
@@ -365,180 +483,55 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
       <span class="quick-link" onclick="quickSearch('Datenschutz')">Datenschutz</span>
     </div>
   </div>
-
 </div>
 
 <!-- ══════════════════════════════════════════
      PAGE: PIPELINE
 ══════════════════════════════════════════ -->
 <div class="page" id="page-pipeline">
-
   <div class="overview-header">
     <div class="page-eyebrow">Methodology</div>
     <h1 class="page-title">Data pipeline</h1>
     <p class="page-subtitle">How 13,026 articles were extracted, filtered, and structured for analysis</p>
   </div>
-
   <p class="pipeline-intro">This corpus was assembled to study how Swiss German-language media covered AI — from early mentions in financial press to the ChatGPT explosion. The pipeline moves from a proprietary media archive through linguistic corpus tools to a structured CSV ready for analysis.</p>
-
   <div>
-
-    <!-- Step 1 -->
     <div class="step">
       <div class="step-connector"><div class="step-num">1</div><div class="step-line"></div></div>
       <div class="step-body">
         <div class="step-tag">Source</div>
         <div class="step-title">Swissdox archive query</div>
-        <div class="step-desc">
-          The Swissdox platform (UZH) provides licensed access to Swiss press archives. Queries are written in
-          LCP (Linguistic Corpus Platform) syntax. Articles were matched by token form — searching for
-          <em>AI, IA, GenAI, LLM, Chatbot</em> in any segment, with article-level metadata extracted.
-        </div>
-        <div class="step-code"><span class="cm"># LCP Query — search AI-related forms in all segments</span>
-<span class="kw">Article</span> a
-<span class="kw">Segment</span>@a s
-<span class="kw">Token</span>@s t1
-  <span class="kw">OR</span>
-    form = <span class="str">"AI"</span>
-    form = <span class="str">"IA"</span>
-    form = <span class="str">"GenAI"</span>
-    form = <span class="str">"LLM"</span>
-    form = <span class="str">"Chatbot"</span>
-
-<span class="kw">byYear</span> => analysis
-  attributes
-    a.head, a.subhead, a.pubdate, a.source, a.articleURL
-  functions
-    frequency</div>
-        <div class="tech-chips">
-          <div class="chip hi">LCP / CatchPhrase</div>
-          <div class="chip">Swissdox</div>
-          <div class="chip">UZH Linguistik</div>
-        </div>
+        <div class="step-desc">The Swissdox platform (UZH) provides licensed access to Swiss press archives. Queries are written in LCP (Linguistic Corpus Platform) syntax. Articles were matched by token form — searching for <em>AI, IA, GenAI, LLM, Chatbot</em> in any segment, with article-level metadata extracted.</div>
+        <div class="tech-chips"><div class="chip-tech hi">LCP / CatchPhrase</div><div class="chip-tech">Swissdox</div><div class="chip-tech">UZH Linguistik</div></div>
       </div>
     </div>
-
-    <!-- Step 2 -->
     <div class="step">
       <div class="step-connector"><div class="step-num">2</div><div class="step-line"></div></div>
       <div class="step-body">
         <div class="step-tag">Export</div>
         <div class="step-title">Result processing &amp; export</div>
-        <div class="step-desc">
-          Query results arrive as TSV/JSON from the LCP API. The export processor notebook normalises
-          encoding, deduplicates articles (same URL appearing across multiple token matches),
-          and coerces date formats to ISO 8601.
-        </div>
-        <div class="step-code"><span class="cm"># export_processor.ipynb</span>
-<span class="kw">import</span> pandas as pd
-
-df = pd.read_csv(<span class="str">'query_result.tsv'</span>, sep=<span class="str">'\t'</span>)
-
-<span class="cm"># Deduplicate on article URL (same article can match multiple tokens)</span>
-df = df.drop_duplicates(subset=[<span class="str">'articleURL'</span>])
-
-<span class="cm"># Normalise date column</span>
-df[<span class="str">'pubdate'</span>] = pd.to_datetime(df[<span class="str">'pubdate'</span>], errors=<span class="str">'coerce'</span>)
-df = df.dropna(subset=[<span class="str">'pubdate'</span>])
-df[<span class="str">'year'</span>] = df[<span class="str">'pubdate'</span>].dt.year
-
-df.to_csv(<span class="str">'swiss_ai_discourse_articles_de.csv'</span>, index=<span class="str">False</span>)
-print(f<span class="str">"Exported {len(df):,} articles"</span>)</div>
-        <div class="tech-chips">
-          <div class="chip hi">pandas</div>
-          <div class="chip">Jupyter</div>
-          <div class="chip">Python 3.11</div>
-        </div>
+        <div class="step-desc">Query results arrive as TSV/JSON from the LCP API. The export processor notebook normalises encoding, deduplicates articles, and coerces date formats to ISO 8601.</div>
+        <div class="tech-chips"><div class="chip-tech hi">pandas</div><div class="chip-tech">Jupyter</div><div class="chip-tech">Python 3.11</div></div>
       </div>
     </div>
-
-    <!-- Step 3 -->
     <div class="step">
       <div class="step-connector"><div class="step-num">3</div><div class="step-line"></div></div>
       <div class="step-body">
-        <div class="step-tag">Schema</div>
-        <div class="step-title">Structured data format</div>
-        <div class="step-desc">Each row in the output CSV represents one unique article. The schema below powers this viewer and all downstream analysis.</div>
-        <div class="data-schema">
-          <div class="schema-row head"><div class="schema-cell">Field</div><div class="schema-cell">Type</div><div class="schema-cell">Description</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>head</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Primary headline</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>subtitle</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Deck / subheadline</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>pubdate</code></div><div class="schema-cell type-tag">date</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Publication date (ISO 8601)</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>source</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Swissdox outlet code (NZZ, SRF…)</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>articleURL</code></div><div class="schema-cell type-tag">url</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Canonical article link</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>language</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">ISO 639-1 code (de)</div></div>
-          <div class="schema-row"><div class="schema-cell"><code>title_full</code></div><div class="schema-cell type-tag">string</div><div class="schema-cell" style="font-size:12px;color:var(--ink-mid);">Full title fallback field</div></div>
-        </div>
-        <div class="tech-chips"><div class="chip">CSV / UTF-8</div><div class="chip">13,026 rows</div></div>
-      </div>
-    </div>
-
-    <!-- Step 4 -->
-    <div class="step">
-      <div class="step-connector"><div class="step-num">4</div><div class="step-line"></div></div>
-      <div class="step-body">
         <div class="step-tag">Analysis</div>
         <div class="step-title">LLM topic extraction &amp; classification</div>
-        <div class="step-desc">
-          Two Jupyter notebooks power the analytical layer: <em>initial_data_analysis.ipynb</em> produces
-          corpus statistics and distributions; the topic extraction pipeline runs Llama-3.1-8B via a vLLM
-          server on a UZH GPU cluster. Articles are classified into custom topic categories
-          (e.g. Regulation, Economy, Security) or summarised.
-        </div>
-        <div class="step-code"><span class="cm"># 1. Start vLLM server (in a tmux session)</span>
-python -m vllm.entrypoints.openai.api_server \
-  --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
-  --served-model-name llama \
-  --enable-lora \
-  --max-model-len 8192 \
-  --port 8000
-
-<span class="cm"># 2. Run classification pipeline</span>
-python -m llm_module.run \
-  --input_file data/cleaned.csv \
-  --output_file topics.json \
-  --categories <span class="str">"Regulation,Economy,Security,Society"</span> \
-  --mode all \
-  --sample 500</div>
-        <div class="tech-chips">
-          <div class="chip hi">Llama-3.1-8B</div>
-          <div class="chip hi">vLLM</div>
-          <div class="chip">GPU cluster (UZH)</div>
-          <div class="chip">unsloth 4-bit quant</div>
-          <div class="chip">tmux sessions</div>
-        </div>
+        <div class="step-desc">Llama-3.1-8B via a vLLM server on a UZH GPU cluster classifies articles into custom topic categories or summarises them.</div>
+        <div class="tech-chips"><div class="chip-tech hi">Llama-3.1-8B</div><div class="chip-tech hi">vLLM</div><div class="chip-tech">GPU cluster (UZH)</div><div class="chip-tech">unsloth 4-bit quant</div></div>
       </div>
     </div>
-
-    <!-- Step 5 -->
     <div class="step step-last">
-      <div class="step-connector"><div class="step-num">5</div><div class="step-line"></div></div>
+      <div class="step-connector"><div class="step-num">4</div><div class="step-line"></div></div>
       <div class="step-body">
         <div class="step-tag">Serving</div>
         <div class="step-title">Flask API + this viewer</div>
-        <div class="step-desc">
-          A lightweight Flask app (<code>app.py</code>) exposes the processed CSV as a REST API with
-          endpoints for full-text search, source filtering, and year-range queries.
-          This frontend calls those endpoints from the browser.
-        </div>
-        <div class="step-code"><span class="cm"># Run locally</span>
-pip install flask pandas
-python app.py
-<span class="cm"># → http://localhost:5000</span>
-
-<span class="cm"># Key endpoints</span>
-GET /api/articles?q=ChatGPT&year_from=2023&sources=NZZ,SRF
-GET /api/sources
-GET /api/stats</div>
-        <div class="tech-chips">
-          <div class="chip hi">Flask</div>
-          <div class="chip">pandas</div>
-          <div class="chip">REST API</div>
-          <div class="chip">port 5000</div>
-        </div>
+        <div class="step-desc">A lightweight Flask app (<code>app.py</code>) exposes the processed CSV as a REST API. This frontend calls those endpoints from the browser.</div>
+        <div class="tech-chips"><div class="chip-tech hi">Flask</div><div class="chip-tech">pandas</div><div class="chip-tech">REST API</div><div class="chip-tech">port 5000</div></div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -549,232 +542,299 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  document.getElementById('nav-' + id).classList.add('active');
-  if (id === 'search' && !dataLoaded) loadData();
+  if (id === 'search' && !searchDataLoaded) loadSearchData();
 }
 
 // ── Source metadata ───────────────────────────────────────────────
 const SOURCE_COLORS = {
-  CASO:'#B5122A', NZZO:'#4a4844', NZZ:'#7a6ab8', BLIO:'#c25b3a',
-  SGTO:'#2a7a6a', SHZO:'#3a6a9a', ZWAO:'#8a6a2a', SGT:'#5a8a3a',
-  NNBS:'#7a4a8a', FUWO:'#c09030', SRF:'#c06030', TA:'#3a5a8a',
-  NNTA:'#6a8a5a', FUW:'#9a7030', SHZ:'#4a7a9a', BAZ:'#8BBCAA',
-  BLI:'#D45B5B', AZ:'#7BB4D4', AZO:'#7BB4D4', BEOL:'#3a8a6a',
-  WOZ:'#C4A882', SGT2:'#A882C4', FUW2:'#E8C060',
+  CASO:'#B5122A',NZZO:'#4a4844',NZZ:'#7a6ab8',BLIO:'#c25b3a',SGTO:'#2a7a6a',SHZO:'#3a6a9a',
+  ZWAO:'#8a6a2a',SGT:'#5a8a3a',NNBS:'#7a4a8a',FUWO:'#c09030',SRF:'#c06030',TA:'#3a5a8a',
+  NNTA:'#6a8a5a',FUW:'#9a7030',SHZ:'#4a7a9a',BAZ:'#8BBCAA',BLI:'#D45B5B',AZ:'#7BB4D4',
+  AZO:'#7BB4D4',BEOL:'#3a8a6a',WOZ:'#C4A882',SGT2:'#A882C4',FUW2:'#E8C060',
 };
 const SOURCE_NAMES = {
-  CASO:'Cash Online', NZZO:'NZZ Online', NZZ:'NZZ', BLIO:'Blick Online',
-  SGTO:'St.Galler Tgbl. Online', SHZO:'Schweizer HZ Online', ZWAO:'Zentralschweiz Online',
-  SGT:'St.Galler Tgbl.', NNBS:'Basler Zeitung', FUWO:'Finanz & Wirt. Online',
-  SRF:'SRF', TA:'Tages-Anzeiger', NNTA:'Tages-Anzeiger', FUW:'Finanz & Wirtschaft',
-  SHZ:'Schweizer Handelszeitung', BAZ:'Basler Zeitung', BLI:'Blick', AZ:'Aargauer Zeitung',
-  AZO:'Aargauer Zeitung Online', BEOL:'Berner Zeitung', WOZ:'WOZ', NZZM:'NZZ am Sonntag',
+  CASO:'Cash Online',NZZO:'NZZ Online',NZZ:'NZZ',BLIO:'Blick Online',SGTO:'St.Galler Tgbl. Online',
+  SHZO:'Schweizer HZ Online',ZWAO:'Zentralschweiz Online',SGT:'St.Galler Tgbl.',NNBS:'Basler Zeitung',
+  FUWO:'Finanz & Wirt. Online',SRF:'SRF',TA:'Tages-Anzeiger',NNTA:'Tages-Anzeiger',FUW:'Finanz & Wirtschaft',
+  SHZ:'Schweizer Handelszeitung',BAZ:'Basler Zeitung',BLI:'Blick',AZ:'Aargauer Zeitung',
+  AZO:'Aargauer Zeitung Online',BEOL:'Berner Zeitung',WOZ:'WOZ',NZZM:'NZZ am Sonntag',
 };
 
-// ── Search: data loading ──────────────────────────────────────────
-let ARTICLES = [];
-let dataLoaded = false;
+// ── Search ────────────────────────────────────────────────────────
+let SEARCH_ARTICLES = [], searchDataLoaded = false;
 
-async function loadData() {
+async function loadSearchData() {
   try {
     const res = await fetch('/api/articles?limit=5000');
     if (!res.ok) throw new Error('API not available');
-    const data = await res.json();
-    ARTICLES = data;
-    dataLoaded = true;
-    populateSourceFilter();
+    SEARCH_ARTICLES = await res.json();
+    searchDataLoaded = true;
+    const codes = [...new Set(SEARCH_ARTICLES.map(a => a.source))].sort();
+    const sel = document.getElementById('sourceFilter');
+    codes.forEach(code => { const o = document.createElement('option'); o.value = code; o.textContent = SOURCE_NAMES[code] || code; sel.appendChild(o); });
   } catch (e) {
-    document.getElementById('searchHint').innerHTML = `
-      <div style="color:var(--ink-light); font-size:13px; padding:32px 0; text-align:center;">
-        <div style="font-family:var(--font-display); font-size:16px; color:var(--ink-mid); margin-bottom:10px;">
-          Connect to the Flask API to enable live search
-        </div>
-        Run <code style="background:var(--paper-tinted); padding:2px 7px; font-size:12px; border-radius:2px;">python app.py</code>
-        and open this viewer at
-        <code style="background:var(--paper-tinted); padding:2px 7px; font-size:12px; border-radius:2px;">localhost:5000</code>
-      </div>`;
+    document.getElementById('searchHint').innerHTML = `<div style="color:var(--ink-light);font-size:13px;padding:32px 0;text-align:center;"><div style="font-family:var(--font-display);font-size:16px;color:var(--ink-mid);margin-bottom:10px;">Connect to the Flask API to enable live search</div>Run <code style="background:var(--paper-tinted);padding:2px 7px;border-radius:2px;">python app.py</code> and open at <code style="background:var(--paper-tinted);padding:2px 7px;border-radius:2px;">localhost:5000</code></div>`;
   }
 }
 
-function populateSourceFilter() {
-  const codes = [...new Set(ARTICLES.map(a => a.source))].sort();
-  const sel = document.getElementById('sourceFilter');
-  codes.forEach(code => {
-    const o = document.createElement('option');
-    o.value = code;
-    o.textContent = SOURCE_NAMES[code] || code;
-    sel.appendChild(o);
-  });
-}
-
-// ── Search: execution ─────────────────────────────────────────────
-function quickSearch(term) {
-  document.getElementById('searchInput').value = term;
-  doSearch();
-}
+function quickSearch(term) { document.getElementById('searchInput').value = term; doSearch(); }
 
 function doSearch() {
-  const q       = document.getElementById('searchInput').value.trim().toLowerCase();
-  const year    = document.getElementById('yearFilter').value;
-  const source  = document.getElementById('sourceFilter').value;
-  const limit   = parseInt(document.getElementById('limitFilter').value);
-
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const year = document.getElementById('yearFilter').value;
+  const source = document.getElementById('sourceFilter').value;
+  const limit = parseInt(document.getElementById('limitFilter').value);
   document.getElementById('searchHint').style.display = 'none';
   document.getElementById('searchStatus').style.display = 'block';
-
-  if (!dataLoaded) {
-    document.getElementById('searchStatus').innerHTML = 'Loading data…';
-    loadData().then(doSearch);
-    return;
-  }
-
-  const results = ARTICLES.filter(a => {
-    const text = ((a.headline || '') + ' ' + (a.subtitle || '')).toLowerCase();
+  if (!searchDataLoaded) { document.getElementById('searchStatus').innerHTML = 'Loading data…'; loadSearchData().then(doSearch); return; }
+  const results = SEARCH_ARTICLES.filter(a => {
+    const text = ((a.headline||'')+' '+(a.subtitle||'')).toLowerCase();
     if (q && !text.includes(q)) return false;
-    if (year && !(a.date || '').includes(year)) return false;
+    if (year && !(a.date||'').includes(year)) return false;
     if (source && a.source !== source) return false;
     return true;
   }).slice(0, limit);
-
-  document.getElementById('searchStatus').innerHTML =
-    `Showing <span>${results.length.toLocaleString()}</span> result${results.length !== 1 ? 's' : ''} for "${q || 'all articles'}"`;
-
+  document.getElementById('searchStatus').innerHTML = `Showing <span>${results.length.toLocaleString()}</span> result${results.length!==1?'s':''} for "${q||'all articles'}"`;
   const list = document.getElementById('articleList');
-  if (results.length === 0) {
-    list.innerHTML = `<div class="no-results"><span class="em">Keine Ergebnisse</span>No articles match your query.</div>`;
-    return;
-  }
-
+  if (results.length === 0) { list.innerHTML = `<div class="no-results"><span class="em">Keine Ergebnisse</span>No articles match your query.</div>`; return; }
   list.innerHTML = results.map(a => {
-    const color = SOURCE_COLORS[a.source] || '#888';
-    const name  = SOURCE_NAMES[a.source] || a.outlet || a.source;
-    const title = a.headline || a.title_full || '(no headline)';
-    const link  = a.url
-      ? `<a href="${a.url}" target="_blank" rel="noopener">${escHtml(title)}</a>`
-      : escHtml(title);
-    return `
-    <div class="article-item">
-      <div>
-        <div class="article-headline">${link}</div>
-        ${a.subtitle ? `<div class="article-subtitle">${escHtml(a.subtitle)}</div>` : ''}
-        <div class="article-meta">
-          <span class="source-dot" style="background:${color}"></span>
-          <span class="article-outlet">${escHtml(name)}</span>
-          <span class="article-date">${a.date || ''}</span>
-        </div>
-      </div>
-    </div>`;
+    const color = SOURCE_COLORS[a.source]||'#888';
+    const name = SOURCE_NAMES[a.source]||a.outlet||a.source;
+    const title = a.headline||a.title_full||'(no headline)';
+    const link = a.url ? `<a href="${a.url}" target="_blank" rel="noopener">${escHtml(title)}</a>` : escHtml(title);
+    return `<div class="article-item"><div><div class="article-headline">${link}</div>${a.subtitle?`<div class="article-subtitle">${escHtml(a.subtitle)}</div>`:''}<div class="article-meta"><span class="source-dot" style="background:${color}"></span><span class="article-outlet">${escHtml(name)}</span><span class="article-date">${a.date||''}</span></div></div></div>`;
   }).join('');
 }
 
-function escHtml(s) {
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+// ── Overview bar charts ───────────────────────────────────────────
+const YEAR_LABELS = ['2023','2024','2025','2026*'];
+const YEAR_DATA   = [542, 2403, 2223, 377];
+new Chart(document.getElementById('yearChart'), {
+  type:'bar', data:{ labels:YEAR_LABELS, datasets:[{ data:YEAR_DATA, backgroundColor:YEAR_DATA.map((_,i)=>i===1?'#B5122A':'#c8c6c0'), borderWidth:0, borderRadius:2 }] },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toLocaleString()+' articles'}} },
+    scales:{ x:{grid:{display:false},ticks:{font:{family:'DM Mono',size:11},color:'#8a8880'}}, y:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}} } }
+});
+new Chart(document.getElementById('sourceChart'), {
+  type:'bar', data:{ labels:['SRF','Tages-Anzeiger','RSI','NZZ','Blick','Zentralschweiz','Tages-Anzeiger Schweiz'], datasets:[{ data:[1233,951,948,788,733,728,164], backgroundColor:['#c06030','#3a5a8a','#1a8a3a','#7a6ab8','#D45B5B','#8a6a2a','#5a7aaa'], borderWidth:0, borderRadius:2 }] },
+  options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()+' articles'}} },
+    scales:{ x:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}}, y:{grid:{display:false},ticks:{font:{size:12},color:'#4a4844'}} } }
+});
+
+// ── Dashboard tab switching ───────────────────────────────────────
+function switchDashTab(t) {
+  document.querySelectorAll('.dash-tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='overview'&&i===0)||(t==='detail'&&i===1)));
+  document.querySelectorAll('.dash-tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('dash-tab-'+t).classList.add('active');
+  if (t==='detail') loadDetailView();
 }
 
-document.getElementById('searchInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doSearch();
-});
+// ── Dashboard STATE ───────────────────────────────────────────────
+let PREPROC, SUMS, ITEMS_INDEX;
+const ITEMS_CACHE={};
+const TC={'Immigration & Asylum Policy':'#e74c3c','Swiss-EU Relations & Bilateral Agreements':'#3498db','Refugee & Migrant Integration':'#f39c12','Swiss Domestic Politics & Governance':'#8e44ad','Economy, Labor & Finance':'#1abc9c','Defense, Security & Military':'#2c3e50','Healthcare, Social Welfare & Education':'#16a085','Environment, Energy & Infrastructure':'#27ae60','International Relations & Geopolitics':'#e91e63','Demographic Change & Population':'#9b59b6','Others':'#95a5a6'};
+const LC={de:'#e74c3c',fr:'#3498db',it:'#27ae60'};
+const SC={positive:'#28a745',neutral:'#6c757d',negative:'#dc3545'};
+let selLangs=new Set(['all']),selMed='',groupBy='classification';
+let dLangs=new Set(['all']);
+let tlChart=null,barChart=null,dTlChart=null,dSentChart=null;
+let curCls='Economy, Labor & Finance';
+let tblData=[],tblFiltered=[],sortKey='pubtime',sortDir=-1,curPage=1;
+const PZ=50;
 
-// ── Charts ────────────────────────────────────────────────────────
-const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
-const YEAR_DATA   = [4554, 18202, 16423, 3282];
+async function loadDashData() {
+  try {
+    const steps=[['data/preproc.json'],['data/summaries.json'],['data/items_index.json']];
+    const results=[];
+    for(const [url] of steps){ const r=await fetch(url); if(!r.ok) throw new Error('Failed: '+url); results.push(await r.json()); }
+    [PREPROC,SUMS,ITEMS_INDEX]=results;
+    document.getElementById('ov-ai').textContent=(SUMS.overview)||'';
+    buildCards(); updateCharts();
+  } catch(e) {
+    document.getElementById('ov-ai').textContent='Dashboard data unavailable: '+e.message;
+  }
+}
 
-new Chart(document.getElementById('yearChart'), {
-  type: 'bar',
-  data: {
-    labels: YEAR_LABELS,
-    datasets: [{
-      data: YEAR_DATA,
-      backgroundColor: YEAR_DATA.map((_, i) => i === 1 ? '#B5122A' : '#c8c6c0'),
-      borderWidth: 0,
-      borderRadius: 2,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString() + ' articles' } }
-    },
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { family: 'DM Mono', size: 11 }, color: '#8a8880' } },
-      y: { grid: { color: '#e8e6e0' }, ticks: { font: { family: 'DM Mono', size: 10 }, color: '#8a8880', callback: v => v.toLocaleString() } }
+async function getItems(cls){
+  if(ITEMS_CACHE[cls]) return ITEMS_CACHE[cls];
+  const url=ITEMS_INDEX[cls]; if(!url) return [];
+  document.getElementById('topic-load-status').textContent='Loading articles…';
+  const r=await fetch(url); if(!r.ok){document.getElementById('topic-load-status').textContent='';return[];}
+  const data=await r.json(); ITEMS_CACHE[cls]=data;
+  document.getElementById('topic-load-status').textContent='';
+  return data;
+}
+
+function toggleLang(btn,lang){
+  if(lang==='all'){selLangs=new Set(['all']);document.querySelectorAll('#lang-filters .chip').forEach(b=>b.classList.toggle('active',b.dataset.lang==='all'));}
+  else{selLangs.delete('all');document.querySelector('#lang-filters [data-lang="all"]').classList.remove('active');
+    if(selLangs.has(lang)){selLangs.delete(lang);btn.classList.remove('active');}else{selLangs.add(lang);btn.classList.add('active');}
+    if(selLangs.size===0){selLangs.add('all');document.querySelector('#lang-filters [data-lang="all"]').classList.add('active');}
+  }updateCharts();
+}
+function toggleDLang(btn,lang){
+  if(lang==='all'){dLangs=new Set(['all']);document.querySelectorAll('#dl-filters .chip').forEach(b=>b.classList.toggle('active',b.dataset.lang==='all'));}
+  else{dLangs.delete('all');document.querySelector('#dl-filters [data-lang="all"]').classList.remove('active');
+    if(dLangs.has(lang)){dLangs.delete(lang);btn.classList.remove('active');}else{dLangs.add(lang);btn.classList.add('active');}
+    if(dLangs.size===0){dLangs.add('all');document.querySelector('#dl-filters [data-lang="all"]').classList.add('active');}
+  }updateDetailCharts();
+}
+function setGroupBy(g){
+  groupBy=g;['class','lang','sent'].forEach(k=>document.getElementById('gb-'+k).classList.remove('active'));
+  document.getElementById('gb-'+(g==='classification'?'class':g==='language'?'lang':'sent')).classList.add('active');
+  updateCharts();
+}
+function aggTimeline(langF,medF,clsF){
+  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
+  let gkeys=new Set();
+  if(groupBy==='classification') Object.keys(PREPROC.topicStats).forEach(c=>gkeys.add(c));
+  else if(groupBy==='language') gkeys=new Set(['de','fr','it']);
+  else gkeys=new Set(['positive','neutral','negative']);
+  const counts={};gkeys.forEach(k=>{counts[k]={};months.forEach(m=>counts[k][m]=0)});
+  for(const month of months){const md=tl[month];
+    for(const [cls,cd] of Object.entries(md)){if(clsF&&cls!==clsF)continue;
+      for(const [lang,ld] of Object.entries(cd)){if(langF&&!langF.includes(lang))continue;
+        for(const [med,st] of Object.entries(ld)){if(medF&&med!==medF)continue;
+          if(groupBy==='classification'){if(counts[cls])counts[cls][month]=(counts[cls][month]||0)+st.n;}
+          else if(groupBy==='language'){counts[lang][month]=(counts[lang][month]||0)+st.n;}
+          else{counts['positive'][month]=(counts['positive'][month]||0)+st.p;counts['negative'][month]=(counts['negative'][month]||0)+st.g;counts['neutral'][month]=(counts['neutral'][month]||0)+st.u;}
+        }
+      }
     }
   }
-});
-
-const SRC_LABELS = ['Le Temps Online', "L'Hebdo / Heures", 'NZZ', 'Le Temps', 'SRF', 'Tages-Anzeiger', 'Schweizer Ztg. Online', 'Tribune de Lausanne', 'Blick', 'RSI'];
-const SRC_DATA   = [7182, 5806, 5763, 5239, 4750, 3480, 2848, 2145, 1814, 1221];
-const SRC_COLORS = ['#1a5fa8', '#3a7ac8', '#7a6ab8', '#2a6fb8', '#c06030', '#3a5a8a', '#5a8ab8', '#4a7ab8', '#D45B5B', '#1a8a3a'];
-
-new Chart(document.getElementById('sourceChart'), {
-  type: 'bar',
-  data: {
-    labels: SRC_LABELS,
-    datasets: [{
-      data: SRC_DATA,
-      backgroundColor: SRC_COLORS,
-      borderWidth: 0,
-      borderRadius: 2,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() + ' articles' } }
-    },
-    scales: {
-      x: { grid: { color: '#e8e6e0' }, ticks: { font: { family: 'DM Mono', size: 10 }, color: '#8a8880', callback: v => v.toLocaleString() } },
-      y: { grid: { display: false }, ticks: { font: { size: 12 }, color: '#4a4844' } }
-    }
+  return{months,counts,gkeys:[...gkeys]};
+}
+function buildCards(){
+  if(!PREPROC) return;
+  const stats=PREPROC.topicStats,total=Object.values(stats).reduce((s,v)=>s+v.total,0);
+  const cont=document.getElementById('topic-cards');cont.innerHTML='';
+  Object.entries(stats).filter(([c])=>c!=='Others').sort((a,b)=>b[1].total-a[1].total).forEach(([cls,data])=>{
+    const pct=((data.total/total)*100).toFixed(1),color=TC[cls]||'#999';
+    const subs=Object.entries(data.subtopics).sort((a,b)=>b[1].n-a[1].n);
+    const maxS=subs.length>0?Math.max(...subs.map(s=>s[1].n)):1;
+    const subHtml=subs.slice(0,8).map(([sn,sd])=>`<div class="sub-row"><div class="sn">${sn}</div><div class="sw"><div class="sb" style="width:${(sd.n/maxS*100).toFixed(1)}%;background:${color}88"></div></div><div class="sc">${sd.n}</div></div>`).join('');
+    const card=document.createElement('div');card.className='topic-card';card.style.borderLeftColor=color;
+    card.innerHTML=`<div class="t-name">${cls}</div><div class="t-stats"><span class="dot" style="background:${color}"></span>${data.total.toLocaleString()} articles &middot; ${pct}%</div><div class="expand-hint">▼ Click to expand</div><div class="subtopics-list">${subHtml}</div>`;
+    card.onclick=()=>{card.classList.toggle('expanded');card.querySelector('.expand-hint').textContent=card.classList.contains('expanded')?'▲ Collapse':'▼ Click to expand';};
+    cont.appendChild(card);
+  });
+}
+function updateCharts(){
+  if(!PREPROC) return;
+  selMed=document.getElementById('medium-filter').value;
+  const langF=selLangs.has('all')?null:[...selLangs];
+  const {months,counts,gkeys}=aggTimeline(langF,selMed,null);
+  document.getElementById('tl-sub').textContent='by '+groupBy+' · '+(selLangs.has('all')?'All langs':[...selLangs].join(','))+(selMed?' · '+selMed:'');
+  const tDs=gkeys.filter(k=>counts[k]&&Object.values(counts[k]).some(v=>v>0)).map(k=>{
+    const c=groupBy==='classification'?(TC[k]||'#999'):groupBy==='language'?LC[k]:SC[k];
+    return{label:k,data:months.map(m=>counts[k][m]||0),borderColor:c,backgroundColor:c+'22',fill:false,tension:.3,pointRadius:2,borderWidth:2};
+  });
+  if(tlChart)tlChart.destroy();
+  tlChart=new Chart(document.getElementById('timeline-chart'),{type:'line',data:{labels:months,datasets:tDs},options:{responsive:true,maintainAspectRatio:true,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:9}}}},scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+  let tCnts={};
+  for(const [cls] of Object.entries(PREPROC.topicStats).filter(([c])=>c!=='Others')){
+    let cnt=0;
+    for(const md of Object.values(PREPROC.timeline)){if(!md[cls])continue;for(const [lang,ld] of Object.entries(md[cls])){if(langF&&!langF.includes(lang))continue;for(const [med,st] of Object.entries(ld)){if(selMed&&med!==selMed)continue;cnt+=st.n;}}}
+    tCnts[cls]=cnt;
   }
-});
+  const sT=Object.entries(tCnts).sort((a,b)=>a[1]-b[1]);
+  if(barChart)barChart.destroy();
+  barChart=new Chart(document.getElementById('bar-chart'),{type:'bar',data:{labels:sT.map(([c])=>c.length>22?c.slice(0,20)+'...':c),datasets:[{label:'Articles',data:sT.map(([,n])=>n),backgroundColor:sT.map(([c])=>TC[c]||'#999'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+}
+async function loadDetailView(){
+  if(!PREPROC) return;
+  curCls=document.getElementById('detail-cls').value;
+  document.getElementById('topic-ai').textContent=(SUMS.topics&&SUMS.topics[curCls])||'';
+  const stats=PREPROC.topicStats[curCls]; if(!stats) return;
+  const subs=Object.keys(stats.subtopics).sort();
+  ['d-subtopic','tbl-sub'].forEach(id=>{
+    const sel=document.getElementById(id),prev=sel.value;
+    sel.innerHTML='<option value="">All Subtopics</option>'+subs.map(s=>`<option value="${s}">${s}</option>`).join('');
+    if(subs.includes(prev))sel.value=prev;
+  });
+  buildSubNav(subs);updateDetailStats();updateDetailCharts();renderSupDen('');
+  const items=await getItems(curCls);
+  tblData=items.map(it=>({id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7]}));
+  sortKey='pubtime';sortDir=-1;curPage=1;filterTable();
+}
+function buildSubNav(subs){
+  document.getElementById('sub-nav').innerHTML=`<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>`+subs.map(s=>`<button class="sub-nav-btn" data-sub="${s}" onclick="selectSubNav(this,this.dataset.sub)">${s}</button>`).join('');
+}
+function selectSubNav(btn,sub){document.querySelectorAll('.sub-nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSupDen(sub);}
+function updateDetailStats(){
+  if(!PREPROC) return;
+  const stats=PREPROC.topicStats[curCls];
+  let p=0,g=0,u=0,de=0,fr=0,it=0;
+  for(const s of Object.values(stats.subtopics)){p+=s.p;g+=s.g;u+=s.u;de+=s.de;fr+=s.fr;it+=s.it;}
+  const t=stats.total;
+  document.getElementById('detail-stats').innerHTML=`<div class="stat-box"><div class="sv">${t.toLocaleString()}</div><div class="sl">Total</div></div><div class="stat-box"><div class="sv" style="color:#e74c3c">${de.toLocaleString()}</div><div class="sl">German</div><div class="ss">${((de/t)*100).toFixed(1)}%</div></div><div class="stat-box"><div class="sv" style="color:#3498db">${fr.toLocaleString()}</div><div class="sl">French</div><div class="ss">${((fr/t)*100).toFixed(1)}%</div></div><div class="stat-box"><div class="sv" style="color:#27ae60">${it.toLocaleString()}</div><div class="sl">Italian</div><div class="ss">${((it/t)*100).toFixed(1)}%</div></div><div class="stat-box"><div class="sv" style="color:#28a745">${p.toLocaleString()}</div><div class="sl">Positive</div><div class="ss">${((p/t)*100).toFixed(1)}%</div></div><div class="stat-box"><div class="sv" style="color:#6c757d">${u.toLocaleString()}</div><div class="sl">Neutral</div><div class="ss">${((u/t)*100).toFixed(1)}%</div></div><div class="stat-box"><div class="sv" style="color:#dc3545">${g.toLocaleString()}</div><div class="sl">Negative</div><div class="ss">${((g/t)*100).toFixed(1)}%</div></div>`;
+}
+function updateDetailCharts(){
+  if(!PREPROC) return;
+  const dSelMed=document.getElementById('d-medium').value||null;
+  const dSelSub=document.getElementById('d-subtopic').value||null;
+  const lf=dLangs.has('all')?null:[...dLangs];
+  const {months,counts}=aggDetailTl(curCls,lf,dSelMed,dSelSub);
+  const tc=TC[curCls]||'#3b5bdb';
+  if(dTlChart)dTlChart.destroy();
+  let ds;
+  if(lf&&!dSelSub){ds=lf.map(l=>({label:l==='de'?'German':l==='fr'?'French':'Italian',data:months.map(m=>(counts[l]&&counts[l][m])||0),borderColor:LC[l],fill:false,tension:.3,pointRadius:2,borderWidth:2}));}
+  else{ds=[{label:dSelSub||curCls,data:months.map(m=>counts['_all'][m]||0),borderColor:tc,backgroundColor:tc+'22',fill:true,tension:.3,pointRadius:2,borderWidth:2}];}
+  dTlChart=new Chart(document.getElementById('d-timeline'),{type:'line',data:{labels:months,datasets:ds},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}}},scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
+  buildSentChart(curCls,dSelSub);
+}
+function aggDetailTl(cls,lf,mf,sf){
+  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
+  const counts={'_all':{}};if(lf)lf.forEach(l=>counts[l]={});
+  months.forEach(m=>{counts['_all'][m]=0;if(lf)lf.forEach(l=>counts[l][m]=0)});
+  if(sf){const items=ITEMS_CACHE[cls]||[];for(const it of items){if(it[5]!==sf)continue;if(lf&&!lf.includes(it[3]))continue;if(mf&&it[2]!==mf)continue;const mo=it[1].slice(0,7);if(mo in counts['_all'])counts['_all'][mo]++;}}
+  else{for(const month of months){const md=tl[month];if(!md[cls])continue;for(const [lang,ld] of Object.entries(md[cls])){if(lf&&!lf.includes(lang))continue;for(const [med,st] of Object.entries(ld)){if(mf&&med!==mf)continue;counts['_all'][month]=(counts['_all'][month]||0)+st.n;if(lf&&counts[lang])counts[lang][month]=(counts[lang][month]||0)+st.n;}}}}
+  return{months,counts};
+}
+function buildSentChart(cls,sf){
+  const stats=PREPROC.topicStats[cls];
+  const subs=Object.entries(stats.subtopics).filter(([s])=>!sf||s===sf).sort((a,b)=>b[1].n-a[1].n).slice(0,12);
+  const labels=subs.map(([s])=>s.length>20?s.slice(0,18)+'...':s);
+  const pos=subs.map(([,d])=>d.n>0?+(d.p/d.n*100).toFixed(1):0);
+  const neu=subs.map(([,d])=>d.n>0?+(d.u/d.n*100).toFixed(1):0);
+  const neg=subs.map(([,d])=>d.n>0?+(d.g/d.n*100).toFixed(1):0);
+  if(dSentChart)dSentChart.destroy();
+  dSentChart=new Chart(document.getElementById('d-sentiment'),{type:'bar',data:{labels,datasets:[{label:'Positive',data:pos,backgroundColor:'#28a74588',borderRadius:3},{label:'Neutral',data:neu,backgroundColor:'#6c757d55',borderRadius:3},{label:'Negative',data:neg,backgroundColor:'#dc354588',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+}
+function makeBulletBlock(sub,points,isSup){return`<div class="sd-block ${isSup?'sup-block':'den-block'}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;}
+function renderSupDen(sub){
+  const supEl=document.getElementById('sup-content'),denEl=document.getElementById('den-content');
+  const sd=SUMS.subtopics||{};
+  if(sub){const sm=sd[curCls+'|||'+sub];if(sm){supEl.innerHTML=makeBulletBlock(sub,sm.sup,true);denEl.innerHTML=makeBulletBlock(sub,sm.den,false);}else{supEl.innerHTML=denEl.innerHTML='<p style="color:#aaa;font-size:12px;padding:8px">No data.</p>';}}
+  else{const subs=Object.keys(PREPROC.topicStats[curCls].subtopics).sort();let sh='',dh='';for(const s of subs){const sm=sd[curCls+'|||'+s];if(sm){sh+=makeBulletBlock(s,sm.sup,true);dh+=makeBulletBlock(s,sm.den,false);}}supEl.innerHTML=sh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';denEl.innerHTML=dh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';}
+}
+function filterTable(){
+  const q=document.getElementById('tbl-search').value.toLowerCase();
+  const lf=document.getElementById('tbl-lang').value,mf=document.getElementById('tbl-medium').value;
+  const sf=document.getElementById('tbl-sub').value,sentf=document.getElementById('tbl-sent').value;
+  tblFiltered=tblData.filter(it=>{if(lf&&it.language!==lf)return false;if(mf&&it.medium_code!==mf)return false;if(sf&&it.subtopic!==sf)return false;if(sentf&&it.sentiment!==sentf)return false;if(q&&!it.head.toLowerCase().includes(q)&&!it.summary.toLowerCase().includes(q))return false;return true;});
+  tblFiltered.sort((a,b)=>{let av=a[sortKey]||'',bv=b[sortKey]||'';return sortDir*(av<bv?-1:av>bv?1:0);});
+  curPage=1;renderTable();
+}
+function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}tblFiltered.sort((a,b)=>{let av=a[k]||'',bv=b[k]||'';return sortDir*(av<bv?-1:av>bv?1:0);});renderTable();}
+function renderTable(){
+  const tot=tblFiltered.length,start=(curPage-1)*PZ,pg=tblFiltered.slice(start,start+PZ);
+  document.getElementById('tbl-info').textContent='('+tot.toLocaleString()+' articles'+(tot<tblData.length?', filtered':'')+')';
+  const sb=s=>`<span class="sent-badge sent-${s}">${s}</span>`;
+  document.getElementById('tbl-body').innerHTML=pg.map(it=>`<tr><td style="font-family:monospace;color:var(--text2);font-size:10px">${it.id}</td><td style="white-space:nowrap;font-size:11px">${it.pubtime.slice(0,10)}</td><td style="font-weight:600;font-size:11px">${it.medium_code}</td><td style="font-size:11px">${it.language}</td><td style="max-width:130px;font-size:10px;color:var(--text2)">${it.subtopic}</td><td>${sb(it.sentiment||'neutral')}</td><td style="max-width:240px;font-weight:500;font-size:11px">${it.head}</td><td style="max-width:280px;font-size:10px;color:var(--text2)">${it.summary}</td></tr>`).join('');
+  const tp=Math.ceil(tot/PZ),pgEl=document.getElementById('pg');
+  if(tp<=1){pgEl.innerHTML='';return;}
+  let ps=[1];if(curPage>3)ps.push('...');
+  for(let i=Math.max(2,curPage-1);i<=Math.min(tp-1,curPage+1);i++)ps.push(i);
+  if(curPage<tp-2)ps.push('...');if(tp>1)ps.push(tp);
+  pgEl.innerHTML=`<button class="pb" onclick="gp(${curPage-1})" ${curPage===1?'disabled':''}>&#8249;</button>${ps.map(p=>p==='...'?'<span class="pi">...</span>':`<button class="pb ${p===curPage?'active':''}" onclick="gp(${p})">${p}</button>`).join('')}<button class="pb" onclick="gp(${curPage+1})" ${curPage===tp?'disabled':''}>&#8250;</button><span class="pi">${start+1}-${Math.min(start+PZ,tot)} of ${tot.toLocaleString()}</span>`;
+}
+function gp(p){const tp=Math.ceil(tblFiltered.length/PZ);if(p<1||p>tp)return;curPage=p;renderTable();}
 
-const TYPE_LABELS = ['Deutsch (DE)', 'Français (FR)', 'Italiano (IT)'];
-const TYPE_DATA   = [17724, 23516, 1221];
-const TYPE_COLORS = ['#b5122a', '#1a5fa8', '#1a8a3a'];
-
-new Chart(document.getElementById('typeChart'), {
-  type: 'doughnut',
-  data: {
-    labels: TYPE_LABELS,
-    datasets: [{
-      data: TYPE_DATA,
-      backgroundColor: TYPE_COLORS,
-      borderWidth: 2,
-      borderColor: '#f7f5f0',
-      hoverOffset: 4,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '60%',
-    plugins: { legend: { display: false } }
-  }
-});
-
-const total = TYPE_DATA.reduce((a, b) => a + b, 0);
-const legendEl = document.getElementById('type-legend');
-TYPE_LABELS.forEach((label, i) => {
-  const pct = Math.round(TYPE_DATA[i] / total * 100);
-  const row = document.createElement('div');
-  row.className = 'type-legend-row';
-  row.innerHTML = `
-    <span class="type-legend-sq" style="background:${TYPE_COLORS[i]}"></span>
-    <span class="type-legend-name">${label}</span>
-    <span class="type-legend-count">${TYPE_DATA[i].toLocaleString()}</span>
-    <span class="type-legend-pct">${pct}%</span>`;
-  legendEl.appendChild(row);
-});
+// Boot
+loadDashData();
 </script>
 </body>
 </html>
