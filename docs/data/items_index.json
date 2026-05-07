@@ -1,0 +1,13 @@
+{
+  "Healthcare, Social Welfare & Education": "data/items_healthcare_social_welfare_education.json",
+  "Swiss-EU Relations & Bilateral Agreements": "data/items_swiss_eu_relations_bilateral_agreements.json",
+  "Swiss Domestic Politics & Governance": "data/items_swiss_domestic_politics_governance.json",
+  "Environment, Energy & Infrastructure": "data/items_environment_energy_infrastructure.json",
+  "Defense, Security & Military": "data/items_defense_security_military.json",
+  "Economy, Labor & Finance": "data/items_economy_labor_finance.json",
+  "Demographic Change & Population": "data/items_demographic_change_population.json",
+  "Immigration & Asylum Policy": "data/items_immigration_asylum_policy.json",
+  "Refugee & Migrant Integration": "data/items_refugee_migrant_integration.json",
+  "International Relations & Geopolitics": "data/items_international_relations_geopolitics.json",
+  "Others": "data/items_others.json"
+}
