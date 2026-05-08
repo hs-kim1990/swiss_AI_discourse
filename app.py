@@ -83,17 +83,17 @@ def parse_date(pubtime):
     if not pubtime:
         return None, ''
     try:
-        dt_str = pubtime.strip()
-        if '+' in dt_str:
-            parts = dt_str.rsplit('+', 1)
-            tz = parts[1]
-            if ':' not in tz:
-                tz = tz + ':00'
-            dt_str = parts[0] + '+' + tz
+        dt_str = str(pubtime).strip()
+        # Normalise timezone: +01 → +01:00, handle both + and - offsets
+        import re
+        dt_str = re.sub(r'([+-])(\d{2})$', r'\1\2:00', dt_str)
         dt = datetime.fromisoformat(dt_str)
         return dt.year, dt.strftime('%d.%m.%Y')
     except Exception:
-        return None, str(pubtime)[:10]
+        try:
+            return int(str(pubtime)[:4]), str(pubtime)[:10]
+        except Exception:
+            return None, ''
 
 for lang, filename in DATA_FILES.items():
     filepath = os.path.join(DATA_DIR, filename)
@@ -102,6 +102,7 @@ for lang, filename in DATA_FILES.items():
         continue
     with open(filepath, 'r', encoding='utf-8') as f:
         records = json.load(f)
+    count = 0
     for item in records:
         classification = (item.get('classification') or '').strip()
         if classification.upper() in ('NOT TOPIC', 'NONE', ''):
@@ -122,8 +123,13 @@ for lang, filename in DATA_FILES.items():
             'year':           year,
             'date':           date_str,
         })
+        count += 1
+    print(f'  ✓ {lang}: {count:,} topic articles loaded from {filename}')
 
-print(f'Loaded {len(ALL_ARTICLES):,} topic articles across {len(DATA_FILES)} languages')
+print(f'\nTotal loaded: {len(ALL_ARTICLES):,} topic articles across {len(DATA_FILES)} languages')
+print(f'Data directory: {DATA_DIR}')
+if len(ALL_ARTICLES) == 0:
+    print('ERROR: No articles loaded — check that data files exist in the data/ folder')
 
 
 # ── Routes ─────────────────────────────────────────────────────────────────
@@ -131,10 +137,6 @@ print(f'Loaded {len(ALL_ARTICLES):,} topic articles across {len(DATA_FILES)} lan
 @app.route('/')
 def index():
     return send_from_directory('frontend', 'index.html')
-
-@app.route('/<path:filename>')
-def static_files(filename):
-    return send_from_directory('frontend', filename)
 
 
 # ── Dashboard data routes ───────────────────────────────────────────────────
@@ -278,6 +280,11 @@ def api_sources():
                 'count': count,
             })
     return jsonify(result)
+
+
+@app.route('/<path:filename>')
+def static_files(filename):
+    return send_from_directory('frontend', filename)
 
 
 if __name__ == '__main__':

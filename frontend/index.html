@@ -100,6 +100,15 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   border: 0.5px solid var(--ink-faint); border-radius: 3px;
   background: var(--paper-tinted); color: var(--ink); cursor: pointer;
 }
+.lang-toggle {
+  display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:11px;
+  padding:4px 11px;border-radius:3px;cursor:pointer;border:1px solid var(--ink-faint);
+  background:var(--paper-tinted);color:var(--ink-mid);transition:all 0.15s;user-select:none;
+}
+.lang-toggle:hover{border-color:var(--ink-mid);}
+.lang-toggle.active-de{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+.lang-toggle.active-fr{background:#e3edf8;border-color:#1a5fa8;color:#1a5fa8;}
+.lang-toggle.active-it{background:#e3f5e8;border-color:#1a8a3a;color:#1a8a3a;}
 .results-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); margin-bottom: 16px; padding-bottom: 10px; border-bottom: var(--rule); }
 .results-count span { color: var(--accent); }
 
@@ -450,38 +459,60 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 <div class="page" id="page-search">
   <div class="overview-header">
     <div class="page-eyebrow">Article search</div>
-    <h1 class="page-title">Search the corpus</h1>
-    <p class="page-subtitle">Full-text search across headlines and subtitles of all 13,026 articles</p>
+    <h1 class="page-title">Search across DE · FR · IT</h1>
+    <p class="page-subtitle">Search headlines, summaries, and topic classifications across all three language corpora</p>
   </div>
-  <label class="search-label" for="searchInput">Search headlines &amp; subtitles</label>
+
+  <label class="search-label" for="searchInput">Search term</label>
   <div class="search-row">
-    <input class="search-input" id="searchInput" type="text" placeholder='e.g. ChatGPT, Regulierung, Datenschutz…' autocomplete="off">
-    <button class="search-btn" onclick="doSearch()">Search</button>
+    <input class="search-input" id="searchInput" type="text"
+           placeholder="e.g. Asylpolitik, immigration, integrazione, NZZ…" autocomplete="off">
+    <button class="search-btn" onclick="doSearch(true)">Search</button>
   </div>
+
   <div class="filters-row">
-    <span class="filter-label">Filter:</span>
-    <select class="filter-select" id="yearFilter">
-      <option value="">All years</option>
-      <option value="2022">2022</option><option value="2023">2023</option>
-      <option value="2024">2024</option><option value="2025">2025</option>
-    </select>
-    <select class="filter-select" id="sourceFilter"><option value="">All outlets</option></select>
-    <select class="filter-select" id="limitFilter">
-      <option value="50">50 results</option><option value="100">100 results</option>
-      <option value="200">200 results</option><option value="500">500 results</option>
-    </select>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="filter-label">Language:</span>
+      <span class="lang-toggle active-de" id="stoggle-de" onclick="searchToggleLang('de')">🇩🇪 DE</span>
+      <span class="lang-toggle active-fr" id="stoggle-fr" onclick="searchToggleLang('fr')">🇫🇷 FR</span>
+      <span class="lang-toggle active-it" id="stoggle-it" onclick="searchToggleLang('it')">🇮🇹 IT</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="filter-label">Year:</span>
+      <select class="filter-select" id="yearFilter" onchange="doSearch(true)">
+        <option value="">All years</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="filter-label">Outlet:</span>
+      <select class="filter-select" id="sourceFilter" onchange="doSearch(true)">
+        <option value="">All outlets</option>
+      </select>
+    </div>
   </div>
+
   <div id="searchStatus" class="results-count" style="display:none;"></div>
   <div id="articleList"></div>
+
+  <div id="searchPagination" style="display:none;text-align:center;margin-top:24px;padding-top:16px;border-top:var(--rule);">
+    <button class="search-btn" id="sprevBtn" onclick="searchChangePage(-1)" style="margin-right:8px;">← Prev</button>
+    <span id="spageInfo" style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin:0 8px;"></span>
+    <button class="search-btn" id="snextBtn" onclick="searchChangePage(1)" style="margin-left:8px;">Next →</button>
+  </div>
+
   <div id="searchHint" class="search-hint">
     <div class="hint-title">Enter a search term above</div>
     <div style="font-size:13px;">
       Try:
-      <span class="quick-link" onclick="quickSearch('ChatGPT')">ChatGPT</span> ·
-      <span class="quick-link" onclick="quickSearch('Regulierung')">Regulierung</span> ·
-      <span class="quick-link" onclick="quickSearch('Deepfake')">Deepfake</span> ·
-      <span class="quick-link" onclick="quickSearch('OpenAI')">OpenAI</span> ·
-      <span class="quick-link" onclick="quickSearch('Datenschutz')">Datenschutz</span>
+      <span class="quick-link" onclick="quickSearch('Asylpolitik')">Asylpolitik</span> ·
+      <span class="quick-link" onclick="quickSearch('immigration')">immigration</span> ·
+      <span class="quick-link" onclick="quickSearch('integrazione')">integrazione</span> ·
+      <span class="quick-link" onclick="quickSearch('EU')">EU Relations</span> ·
+      <span class="quick-link" onclick="quickSearch('NZZ')">NZZ</span>
     </div>
   </div>
 </div>
@@ -544,7 +575,7 @@ function showPage(id) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('nav-' + id).classList.add('active');
-  if (id === 'search' && !searchDataLoaded) loadSearchData();
+  if (id === 'search') loadSearchData();
   if (id === 'detail') loadDetailView();
 }
 
@@ -563,54 +594,123 @@ const SOURCE_NAMES = {
   AZO:'Aargauer Zeitung Online',BEOL:'Berner Zeitung',WOZ:'WOZ',NZZM:'NZZ am Sonntag',
 };
 
-// ── Search ────────────────────────────────────────────────────────
-let SEARCH_ARTICLES = [], searchDataLoaded = false;
+// ── Search (server-side via API) ──────────────────────────────────
+const SEARCH_LIMIT = 50;
+let searchOffset = 0;
+let searchActiveLangs = new Set(['de', 'fr', 'it']);
+let searchDataLoaded = false;
+
+function searchToggleLang(lang) {
+  const btn = document.getElementById('stoggle-' + lang);
+  if (searchActiveLangs.has(lang)) {
+    if (searchActiveLangs.size === 1) return;
+    searchActiveLangs.delete(lang);
+    btn.className = 'lang-toggle';
+  } else {
+    searchActiveLangs.add(lang);
+    btn.className = `lang-toggle active-${lang}`;
+  }
+  doSearch(true);
+}
 
 async function loadSearchData() {
+  if (searchDataLoaded) return;
   try {
-    const res = await fetch('/api/articles?limit=5000');
-    if (!res.ok) throw new Error('API not available');
-    SEARCH_ARTICLES = await res.json();
-    searchDataLoaded = true;
-    const codes = [...new Set(SEARCH_ARTICLES.map(a => a.source))].sort();
+    const res = await fetch('/api/sources');
+    const data = await res.json();
     const sel = document.getElementById('sourceFilter');
-    codes.forEach(code => { const o = document.createElement('option'); o.value = code; o.textContent = SOURCE_NAMES[code] || code; sel.appendChild(o); });
-  } catch (e) {
-    document.getElementById('searchHint').innerHTML = `<div style="color:var(--ink-light);font-size:13px;padding:32px 0;text-align:center;"><div style="font-family:var(--font-display);font-size:16px;color:var(--ink-mid);margin-bottom:10px;">Connect to the Flask API to enable live search</div>Run <code style="background:var(--paper-tinted);padding:2px 7px;border-radius:2px;">python app.py</code> and open at <code style="background:var(--paper-tinted);padding:2px 7px;border-radius:2px;">localhost:5000</code></div>`;
+    data.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.id;
+      o.textContent = `${s.name} (${s.count})`;
+      sel.appendChild(o);
+    });
+    searchDataLoaded = true;
+  } catch(e) {}
+}
+
+function quickSearch(term) {
+  document.getElementById('searchInput').value = term;
+  doSearch(true);
+}
+
+async function doSearch(resetPage) {
+  if (resetPage) searchOffset = 0;
+  const q      = document.getElementById('searchInput').value.trim();
+  const year   = document.getElementById('yearFilter').value;
+  const source = document.getElementById('sourceFilter').value;
+
+  document.getElementById('searchHint').style.display = 'none';
+  document.getElementById('searchStatus').style.display = 'block';
+  document.getElementById('searchStatus').innerHTML = 'Searching…';
+  document.getElementById('articleList').innerHTML = '';
+  document.getElementById('searchPagination').style.display = 'none';
+
+  const params = new URLSearchParams({ limit: SEARCH_LIMIT, offset: searchOffset });
+  if (q)      params.set('q', q);
+  if (year)   params.set('year', year);
+  if (source) params.set('source', source);
+  if (searchActiveLangs.size < 3) params.set('lang', [...searchActiveLangs].join(','));
+
+  try {
+    const res   = await fetch('/api/articles?' + params.toString());
+    const data  = await res.json();
+    const total = data.total;
+    const articles = data.articles;
+    const curPage  = Math.floor(searchOffset / SEARCH_LIMIT) + 1;
+    const totalPages = Math.ceil(total / SEARCH_LIMIT);
+
+    document.getElementById('searchStatus').innerHTML =
+      `<span style="color:var(--accent)">${total.toLocaleString()}</span> result${total !== 1 ? 's' : ''}` +
+      (q ? ` for "<em>${escHtml(q)}</em>"` : '');
+
+    if (articles.length === 0) {
+      document.getElementById('articleList').innerHTML =
+        `<div class="no-results"><span class="em">Keine Ergebnisse</span>No articles match your query.</div>`;
+      return;
+    }
+
+    const langColors = {de:'#b5122a', fr:'#1a5fa8', it:'#1a8a3a'};
+    document.getElementById('articleList').innerHTML = articles.map(a => {
+      const lc = langColors[a.language] || '#888';
+      const hasSummary = a.summary && a.summary.length > 20;
+      return `<div class="article-item" style="display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start;">
+        <div style="padding-top:3px;">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">
+            <span class="source-dot" style="background:${a.color}"></span>
+            <span class="article-outlet">${escHtml(a.outlet || a.source)}</span>
+          </div>
+          <div class="article-date" style="margin-bottom:6px;">${a.date || ''}</div>
+          <span style="font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:2px;background:${lc}22;color:${lc};border:0.5px solid ${lc};display:inline-block;margin-bottom:4px;">${a.language.toUpperCase()}</span>
+          ${a.classification ? `<div style="margin-top:5px;font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:2px;background:var(--paper-tinted);border:0.5px solid var(--ink-faint);color:var(--ink-mid);display:inline-block;line-height:1.4;">${escHtml(a.classification)}</div>` : ''}
+        </div>
+        <div>
+          <div class="article-headline" style="margin-bottom:${hasSummary?'6px':'0'};">${escHtml(a.headline || '(no headline)')}</div>
+          ${hasSummary ? `<div class="article-subtitle">${escHtml(a.summary.slice(0,240))}${a.summary.length>240?'…':''}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    if (total > SEARCH_LIMIT) {
+      document.getElementById('searchPagination').style.display = 'block';
+      document.getElementById('spageInfo').textContent = `Page ${curPage} of ${totalPages}`;
+      document.getElementById('sprevBtn').disabled = searchOffset === 0;
+      document.getElementById('snextBtn').disabled = searchOffset + SEARCH_LIMIT >= total;
+    }
+  } catch(e) {
+    document.getElementById('searchStatus').innerHTML = 'Error reaching API — is app.py running?';
   }
 }
 
-function quickSearch(term) { document.getElementById('searchInput').value = term; doSearch(); }
-
-function doSearch() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const year = document.getElementById('yearFilter').value;
-  const source = document.getElementById('sourceFilter').value;
-  const limit = parseInt(document.getElementById('limitFilter').value);
-  document.getElementById('searchHint').style.display = 'none';
-  document.getElementById('searchStatus').style.display = 'block';
-  if (!searchDataLoaded) { document.getElementById('searchStatus').innerHTML = 'Loading data…'; loadSearchData().then(doSearch); return; }
-  const results = SEARCH_ARTICLES.filter(a => {
-    const text = ((a.headline||'')+' '+(a.subtitle||'')).toLowerCase();
-    if (q && !text.includes(q)) return false;
-    if (year && !(a.date||'').includes(year)) return false;
-    if (source && a.source !== source) return false;
-    return true;
-  }).slice(0, limit);
-  document.getElementById('searchStatus').innerHTML = `Showing <span>${results.length.toLocaleString()}</span> result${results.length!==1?'s':''} for "${q||'all articles'}"`;
-  const list = document.getElementById('articleList');
-  if (results.length === 0) { list.innerHTML = `<div class="no-results"><span class="em">Keine Ergebnisse</span>No articles match your query.</div>`; return; }
-  list.innerHTML = results.map(a => {
-    const color = SOURCE_COLORS[a.source]||'#888';
-    const name = SOURCE_NAMES[a.source]||a.outlet||a.source;
-    const title = a.headline||a.title_full||'(no headline)';
-    const link = a.url ? `<a href="${a.url}" target="_blank" rel="noopener">${escHtml(title)}</a>` : escHtml(title);
-    return `<div class="article-item"><div><div class="article-headline">${link}</div>${a.subtitle?`<div class="article-subtitle">${escHtml(a.subtitle)}</div>`:''}<div class="article-meta"><span class="source-dot" style="background:${color}"></span><span class="article-outlet">${escHtml(name)}</span><span class="article-date">${a.date||''}</span></div></div></div>`;
-  }).join('');
+function searchChangePage(dir) {
+  searchOffset = Math.max(0, searchOffset + dir * SEARCH_LIMIT);
+  doSearch(false);
+  document.getElementById('page-search').scrollIntoView({behavior:'smooth'});
 }
 
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(true); });
+
 
 // ── Overview bar charts ───────────────────────────────────────────
 const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
