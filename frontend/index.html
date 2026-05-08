@@ -243,12 +243,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 .pb:hover:not(.active){border-color:var(--daccent)}
 .pi{font-size:11px;color:var(--text2)}
 
-/* ── Dashboard inner tabs ── */
-.dash-tabs{display:flex;gap:0;border-bottom:var(--rule);margin-bottom:20px}
-.dash-tab-btn{font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;padding:10px 18px;background:none;border:none;border-bottom:3px solid transparent;color:var(--ink-light);cursor:pointer;transition:color 0.15s,border-color 0.15s}
-.dash-tab-btn.active{color:var(--ink);border-bottom-color:var(--accent)}
-.dash-tab-content{display:none}
-.dash-tab-content.active{display:block}
+
 
 @media(max-width:900px){.charts-row-d,.supden-row{grid-template-columns:1fr}}
 </style>
@@ -260,7 +255,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   <div class="masthead-inner">
     <div class="masthead-top">
       <div class="masthead-title">Abstimmungsexplorer: <span>Exploring Discourse</span> in Swiss Media</div>
-      <div class="masthead-meta">5,545 topic articles · DE · IT · FR · 2023–2026</div>
+      <div class="masthead-meta">7,969 topic articles · DE · FR · IT · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
   </div>
@@ -269,9 +264,10 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
 <!-- ══ NAV ══ -->
 <div class="nav-bar">
   <div class="nav-inner">
-    <a class="nav-btn active" href="index.html">Overview</a>
-    <a class="nav-btn" href="search.html">Search</a>
-    <a class="nav-btn" href="pipeline.html">Data Pipeline</a>
+    <button class="nav-btn active" id="nav-overview" onclick="showPage('overview')">Overview</button>
+    <button class="nav-btn" id="nav-detail" onclick="showPage('detail')">Topic Detail</button>
+    <button class="nav-btn" id="nav-search" onclick="showPage('search')">Search</button>
+    <button class="nav-btn" id="nav-pipeline" onclick="showPage('pipeline')">Data Pipeline</button>
   </div>
 </div>
 
@@ -287,9 +283,9 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="label">Topic articles</div><div class="value">5,545</div><div class="sub">After NOT TOPIC filtering</div></div>
+    <div class="stat-card"><div class="label">Topic articles</div><div class="value">7,969</div><div class="sub">After NOT TOPIC filtering</div></div>
     <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
-    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">2,403 topic articles</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value">2024</div><div class="sub">Highest article volume</div></div>
     <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
   </div>
 
@@ -301,8 +297,8 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     </div>
     <div class="stat-card" style="border-left:3px solid #1a5fa8;">
       <div class="label" style="color:#1a5fa8;">Français (FR)</div>
-      <div class="value">—</div>
-      <div class="sub">File pending upload</div>
+      <div class="value">2,424</div>
+      <div class="sub">Le Temps · Tribune de Genève · 24 Heures</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a8a3a;">
       <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
@@ -311,137 +307,142 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     </div>
   </div>
 
-  <div class="section-head">Topic articles per year — DE + IT combined (2023–2026)</div>
+  <div class="section-head">Topic articles per year — DE + FR + IT combined (2023–2026)</div>
   <div class="chart-wrap" style="height:220px; margin-bottom:32px;">
     <canvas id="yearChart"></canvas>
   </div>
 
   <div class="section-head">Outlets by topic article count</div>
-  <div class="chart-wrap" style="height:260px; margin-bottom:32px;">
+  <div class="chart-wrap" style="height:320px; margin-bottom:32px;">
     <canvas id="sourceChart"></canvas>
   </div>
 
-  <!-- ══ DASHBOARD replaces Schlüsselbegriffe section onwards ══ -->
+  <!-- ══ DASHBOARD: Overview content ══ -->
   <div class="section-head">Schlüsselbegriffe zur 10-Millionen-Initiative — Erwähnungen im Korpus</div>
 
-  <div class="dash-tabs">
-    <button class="dash-tab-btn active" onclick="switchDashTab('overview')">Overview</button>
-    <button class="dash-tab-btn" onclick="switchDashTab('detail')">Topic Detail</button>
-  </div>
-
-  <!-- ── DASH: Overview tab ── -->
-  <div id="dash-tab-overview" class="dash-tab-content active">
-    <div class="ai-summary"><p id="ov-ai"></p></div>
-    <div class="filter-bar">
-      <div class="filter-group"><label>Language</label>
-        <div class="filter-row-d" id="lang-filters">
-          <button class="chip active" data-lang="all" onclick="toggleLang(this,'all')">All</button>
-          <button class="chip" data-lang="de" onclick="toggleLang(this,'de')">🇩🇪 German</button>
-          <button class="chip" data-lang="fr" onclick="toggleLang(this,'fr')">🇫🇷 French</button>
-          <button class="chip" data-lang="it" onclick="toggleLang(this,'it')">🇮🇹 Italian</button>
-        </div>
-      </div>
-      <div class="filter-group"><label>Medium</label>
-        <select class="sel" id="medium-filter" onchange="updateCharts()" style="min-width:140px">
-          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
-        </select>
-      </div>
-      <div class="filter-group"><label>Group By</label>
-        <div class="filter-row-d">
-          <button class="chip active" id="gb-class" onclick="setGroupBy('classification')">Topic</button>
-          <button class="chip" id="gb-lang" onclick="setGroupBy('language')">Language</button>
-          <button class="chip" id="gb-sent" onclick="setGroupBy('sentiment')">Sentiment</button>
-        </div>
+  <div class="ai-summary"><p id="ov-ai"></p></div>
+  <div class="filter-bar">
+    <div class="filter-group"><label>Language</label>
+      <div class="filter-row-d" id="lang-filters">
+        <button class="chip active" data-lang="all" onclick="toggleLang(this,'all')">All</button>
+        <button class="chip" data-lang="de" onclick="toggleLang(this,'de')">🇩🇪 German</button>
+        <button class="chip" data-lang="fr" onclick="toggleLang(this,'fr')">🇫🇷 French</button>
+        <button class="chip" data-lang="it" onclick="toggleLang(this,'it')">🇮🇹 Italian</button>
       </div>
     </div>
-    <div class="sec-title-d">Topic Overview <span>Click a card to expand subtopics</span></div>
-    <div class="cards-grid" id="topic-cards"></div>
-    <div class="charts-row-d">
-      <div class="chart-card-d"><div class="sec-title-d">Timeline <span id="tl-sub"></span></div><canvas id="timeline-chart"></canvas></div>
-      <div class="chart-card-d"><div class="sec-title-d">Topics by Volume</div><canvas id="bar-chart"></canvas></div>
-    </div>
-  </div>
-
-  <!-- ── DASH: Detail tab ── -->
-  <div id="dash-tab-detail" class="dash-tab-content">
-    <div class="detail-bar">
-      <label>Select Topic:</label>
-      <select class="detail-sel" id="detail-cls" onchange="loadDetailView()">
-        <option value="Immigration & Asylum Policy">Immigration &amp; Asylum Policy</option>
-        <option value="Swiss-EU Relations & Bilateral Agreements">Swiss-EU Relations &amp; Bilateral Agreements</option>
-        <option value="Refugee & Migrant Integration">Refugee &amp; Migrant Integration</option>
-        <option value="Swiss Domestic Politics & Governance">Swiss Domestic Politics &amp; Governance</option>
-        <option value="Economy, Labor & Finance">Economy, Labor &amp; Finance</option>
-        <option value="Defense, Security & Military">Defense, Security &amp; Military</option>
-        <option value="Healthcare, Social Welfare & Education">Healthcare, Social Welfare &amp; Education</option>
-        <option value="Environment, Energy & Infrastructure">Environment, Energy &amp; Infrastructure</option>
-        <option value="International Relations & Geopolitics">International Relations &amp; Geopolitics</option>
-        <option value="Demographic Change & Population">Demographic Change &amp; Population</option>
+    <div class="filter-group"><label>Topic</label>
+      <select class="sel" id="ov-topic-filter" onchange="updateCharts();" style="min-width:190px">
+        <option value="">All Topics</option>
       </select>
-      <span id="topic-load-status" style="font-size:11px;color:var(--text2);margin-left:8px"></span>
     </div>
-    <div class="ai-summary"><p id="topic-ai"></p></div>
-    <div class="stats-row" id="detail-stats"></div>
-    <div class="filter-bar" style="margin-bottom:14px">
-      <div class="filter-group"><label>Language</label>
-        <div class="filter-row-d" id="dl-filters">
-          <button class="chip active" data-lang="all" onclick="toggleDLang(this,'all')">All</button>
-          <button class="chip" data-lang="de" onclick="toggleDLang(this,'de')">🇩🇪 German</button>
-          <button class="chip" data-lang="fr" onclick="toggleDLang(this,'fr')">🇫🇷 French</button>
-          <button class="chip" data-lang="it" onclick="toggleDLang(this,'it')">🇮🇹 Italian</button>
-        </div>
-      </div>
-      <div class="filter-group"><label>Medium</label>
-        <select class="sel" id="d-medium" onchange="updateDetailCharts()" style="min-width:130px">
-          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
-        </select>
-      </div>
-      <div class="filter-group"><label>Subtopic</label>
-        <select class="sel" id="d-subtopic" onchange="updateDetailCharts()" style="min-width:170px">
-          <option value="">All Subtopics</option>
-        </select>
-      </div>
-    </div>
-    <div class="charts-row-d" style="margin-bottom:14px">
-      <div class="chart-card-d"><div class="sec-title-d">Timeline</div><canvas id="d-timeline"></canvas></div>
-      <div class="chart-card-d"><div class="sec-title-d">Sentiment by Subtopic</div><canvas id="d-sentiment"></canvas></div>
-    </div>
-    <div class="sec-title-d">Supporting &amp; Opposing Arguments <span>Select a subtopic to filter</span></div>
-    <div class="sub-nav" id="sub-nav"></div>
-    <div class="supden-row">
-      <div class="supden-card"><h3 class="sup-title">✓ Supporting the 10M Initiative</h3><div id="sup-content"></div></div>
-      <div class="supden-card"><h3 class="den-title">✗ Opposing the 10M Initiative</h3><div id="den-content"></div></div>
-    </div>
-    <div class="sec-title-d">Articles <span id="tbl-info"></span></div>
-    <div class="table-card">
-      <div class="tf-row">
-        <input class="tf-search" id="tbl-search" placeholder="Search headline or summary..." oninput="filterTable()">
-        <select class="tf-sel" id="tbl-lang" onchange="filterTable()">
-          <option value="">All Languages</option>
-          <option value="de">German</option><option value="fr">French</option><option value="it">Italian</option>
-        </select>
-        <select class="tf-sel" id="tbl-medium" onchange="filterTable()">
-          <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
-        </select>
-        <select class="tf-sel" id="tbl-sub" onchange="filterTable()"><option value="">All Subtopics</option></select>
-        <select class="tf-sel" id="tbl-sent" onchange="filterTable()">
-          <option value="">All Sentiments</option>
-          <option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option>
-        </select>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="dt"><thead><tr>
-          <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
-          <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
-          <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
-          <th>Headline</th><th>Summary</th>
-        </tr></thead><tbody id="tbl-body"></tbody></table>
-      </div>
-      <div class="pg" id="pg"></div>
+    <div class="filter-group"><label>Medium</label>
+      <select class="sel" id="medium-filter" onchange="updateCharts()" style="min-width:140px">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
     </div>
   </div>
+
+  <div class="chart-card-d" style="margin-bottom:20px;">
+    <div class="sec-title-d">Sentiment Timeline <span id="tl-sub"></span></div>
+    <canvas id="sentiment-overview-chart" style="max-height:360px;"></canvas>
+  </div>
+
+  <div class="sec-title-d">Topic Overview <span>Click a card to expand subtopics</span></div>
+  <div class="cards-grid" id="topic-cards"></div>
 
 </div><!-- end page-overview -->
+
+<!-- ══════════════════════════════════════════
+     PAGE: TOPIC DETAIL
+══════════════════════════════════════════ -->
+<div class="page" id="page-detail">
+  <div class="overview-header">
+    <div class="page-eyebrow">Topic Explorer</div>
+    <h1 class="page-title">Topic Detail</h1>
+    <p class="page-subtitle">Explore subtopics, sentiment, supporting &amp; opposing arguments, and individual articles by topic</p>
+  </div>
+
+  <div class="detail-bar">
+    <label>Select Topic:</label>
+    <select class="detail-sel" id="detail-cls" onchange="loadDetailView()">
+      <option value="Immigration & Asylum Policy">Immigration &amp; Asylum Policy</option>
+      <option value="Swiss-EU Relations & Bilateral Agreements">Swiss-EU Relations &amp; Bilateral Agreements</option>
+      <option value="Refugee & Migrant Integration">Refugee &amp; Migrant Integration</option>
+      <option value="Swiss Domestic Politics & Governance">Swiss Domestic Politics &amp; Governance</option>
+      <option value="Economy, Labor & Finance">Economy, Labor &amp; Finance</option>
+      <option value="Defense, Security & Military">Defense, Security &amp; Military</option>
+      <option value="Healthcare, Social Welfare & Education">Healthcare, Social Welfare &amp; Education</option>
+      <option value="Environment, Energy & Infrastructure">Environment, Energy &amp; Infrastructure</option>
+      <option value="International Relations & Geopolitics">International Relations &amp; Geopolitics</option>
+      <option value="Demographic Change & Population">Demographic Change &amp; Population</option>
+    </select>
+    <span id="topic-load-status" style="font-size:11px;color:var(--text2);margin-left:8px"></span>
+  </div>
+
+  <div class="ai-summary"><p id="topic-ai"></p></div>
+  <div class="stats-row" id="detail-stats"></div>
+
+  <div class="filter-bar" style="margin-bottom:14px">
+    <div class="filter-group"><label>Language</label>
+      <div class="filter-row-d" id="dl-filters">
+        <button class="chip active" data-lang="all" onclick="toggleDLang(this,'all')">All</button>
+        <button class="chip" data-lang="de" onclick="toggleDLang(this,'de')">🇩🇪 German</button>
+        <button class="chip" data-lang="fr" onclick="toggleDLang(this,'fr')">🇫🇷 French</button>
+        <button class="chip" data-lang="it" onclick="toggleDLang(this,'it')">🇮🇹 Italian</button>
+      </div>
+    </div>
+    <div class="filter-group"><label>Medium</label>
+      <select class="sel" id="d-medium" onchange="updateDetailCharts()" style="min-width:130px">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
+    </div>
+    <div class="filter-group"><label>Subtopic</label>
+      <select class="sel" id="d-subtopic" onchange="updateDetailCharts()" style="min-width:170px">
+        <option value="">All Subtopics</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="charts-row-d" style="margin-bottom:14px">
+    <div class="chart-card-d"><div class="sec-title-d">Timeline</div><canvas id="d-timeline"></canvas></div>
+    <div class="chart-card-d"><div class="sec-title-d">Sentiment by Subtopic</div><canvas id="d-sentiment"></canvas></div>
+  </div>
+
+  <div class="sec-title-d">Supporting &amp; Opposing Arguments <span>Select a subtopic to filter</span></div>
+  <div class="sub-nav" id="sub-nav"></div>
+  <div class="supden-row">
+    <div class="supden-card"><h3 class="sup-title">✓ Supporting the 10M Initiative</h3><div id="sup-content"></div></div>
+    <div class="supden-card"><h3 class="den-title">✗ Opposing the 10M Initiative</h3><div id="den-content"></div></div>
+  </div>
+
+  <div class="sec-title-d">Articles <span id="tbl-info"></span></div>
+  <div class="table-card">
+    <div class="tf-row">
+      <input class="tf-search" id="tbl-search" placeholder="Search headline or summary..." oninput="filterTable()">
+      <select class="tf-sel" id="tbl-lang" onchange="filterTable()">
+        <option value="">All Languages</option>
+        <option value="de">German</option><option value="fr">French</option><option value="it">Italian</option>
+      </select>
+      <select class="tf-sel" id="tbl-medium" onchange="filterTable()">
+        <option value="">All Media</option><option value="APPZ">APPZ</option><option value="BAZ">BAZ</option><option value="BILA">BILA</option><option value="BLI">BLI</option><option value="BU">BU</option><option value="FUW">FUW</option><option value="LB">LB</option><option value="LTZ">LTZ</option><option value="LTZO">LTZO</option><option value="LUZ">LUZ</option><option value="NIW">NIW</option><option value="NNHEU">NNHEU</option><option value="NNTLM">NNTLM</option><option value="NZZ">NZZ</option><option value="PME">PME</option><option value="RSI">RSI</option><option value="SGT">SGT</option><option value="SHZ">SHZ</option><option value="TA">TA</option><option value="TAS">TAS</option><option value="TPS">TPS</option><option value="TPSO">TPSO</option><option value="TZ">TZ</option><option value="WOZ">WOZ</option><option value="ZHUL">ZHUL</option><option value="ZSZ">ZSZ</option><option value="ZUGZ">ZUGZ</option><option value="ZWA">ZWA</option><option value="ZWSO">ZWSO</option>
+      </select>
+      <select class="tf-sel" id="tbl-sub" onchange="filterTable()"><option value="">All Subtopics</option></select>
+      <select class="tf-sel" id="tbl-sent" onchange="filterTable()">
+        <option value="">All Sentiments</option>
+        <option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="dt"><thead><tr>
+        <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
+        <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
+        <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
+        <th>Headline</th><th>Summary</th>
+      </tr></thead><tbody id="tbl-body"></tbody></table>
+    </div>
+    <div class="pg" id="pg"></div>
+  </div>
+</div><!-- end page-detail -->
 
 <!-- ══════════════════════════════════════════
      PAGE: SEARCH
@@ -542,7 +543,9 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
   if (id === 'search' && !searchDataLoaded) loadSearchData();
+  if (id === 'detail') loadDetailView();
 }
 
 // ── Source metadata ───────────────────────────────────────────────
@@ -610,26 +613,20 @@ function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 
 // ── Overview bar charts ───────────────────────────────────────────
-const YEAR_LABELS = ['2023','2024','2025','2026*'];
-const YEAR_DATA   = [542, 2403, 2223, 377];
+const YEAR_LABELS = ['2023', '2024', '2025', '2026*'];
+const YEAR_DATA   = [825, 3450, 3156, 538];
 new Chart(document.getElementById('yearChart'), {
   type:'bar', data:{ labels:YEAR_LABELS, datasets:[{ data:YEAR_DATA, backgroundColor:YEAR_DATA.map((_,i)=>i===1?'#B5122A':'#c8c6c0'), borderWidth:0, borderRadius:2 }] },
   options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toLocaleString()+' articles'}} },
     scales:{ x:{grid:{display:false},ticks:{font:{family:'DM Mono',size:11},color:'#8a8880'}}, y:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}} } }
 });
 new Chart(document.getElementById('sourceChart'), {
-  type:'bar', data:{ labels:['SRF','Tages-Anzeiger','RSI','NZZ','Blick','Zentralschweiz','Tages-Anzeiger Schweiz'], datasets:[{ data:[1233,951,948,788,733,728,164], backgroundColor:['#c06030','#3a5a8a','#1a8a3a','#7a6ab8','#D45B5B','#8a6a2a','#5a7aaa'], borderWidth:0, borderRadius:2 }] },
+  type:'bar', data:{ labels:['SRF','Tages-Anzeiger','RSI','NZZ','Blick','Zentralschweiz Online','Zentralschweiz','Neue Helvetische Gesellschaft','TPS Online','TPS'], datasets:[{ data:[1233,951,948,788,733,728,622,509,507,488], backgroundColor:['#c06030','#3a5a8a','#1a8a3a','#7a6ab8','#D45B5B','#8a6a2a','#5a7aaa','#9a6a3a','#4a8a7a','#6a7a4a'], borderWidth:0, borderRadius:2 }] },
   options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()+' articles'}} },
     scales:{ x:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}}, y:{grid:{display:false},ticks:{font:{size:12},color:'#4a4844'}} } }
 });
 
-// ── Dashboard tab switching ───────────────────────────────────────
-function switchDashTab(t) {
-  document.querySelectorAll('.dash-tab-btn').forEach((b,i)=>b.classList.toggle('active',(t==='overview'&&i===0)||(t==='detail'&&i===1)));
-  document.querySelectorAll('.dash-tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('dash-tab-'+t).classList.add('active');
-  if (t==='detail') loadDetailView();
-}
+// ── Dashboard tab switching (removed — detail is now a top-level page) ──
 
 // ── Dashboard STATE ───────────────────────────────────────────────
 let PREPROC, SUMS, ITEMS_INDEX;
@@ -652,7 +649,7 @@ async function loadDashData() {
     for(const [url] of steps){ const r=await fetch(url); if(!r.ok) throw new Error('Failed: '+url); results.push(await r.json()); }
     [PREPROC,SUMS,ITEMS_INDEX]=results;
     document.getElementById('ov-ai').textContent=(SUMS.overview)||'';
-    buildCards(); updateCharts();
+    populateOvTopics(); buildCards(); updateCharts();
   } catch(e) {
     document.getElementById('ov-ai').textContent='Dashboard data unavailable: '+e.message;
   }
@@ -666,6 +663,55 @@ async function getItems(cls){
   const data=await r.json(); ITEMS_CACHE[cls]=data;
   document.getElementById('topic-load-status').textContent='';
   return data;
+}
+
+function buildCards(){
+  if(!PREPROC) return;
+  const stats=PREPROC.topicStats,total=Object.values(stats).reduce((s,v)=>s+v.total,0);
+  const cont=document.getElementById('topic-cards');cont.innerHTML='';
+  Object.entries(stats).filter(([c])=>c!=='Others').sort((a,b)=>b[1].total-a[1].total).forEach(([cls,data])=>{
+    const pct=((data.total/total)*100).toFixed(1),color=TC[cls]||'#999';
+    const subs=Object.entries(data.subtopics).sort((a,b)=>b[1].n-a[1].n);
+    const subHtml=subs.slice(0,8).map(([sn,sd])=>{
+      const n=sd.n||1;
+      const pp=+(sd.p/n*100).toFixed(0),pu=+(sd.u/n*100).toFixed(0),pg=+(sd.g/n*100).toFixed(0);
+      return `<div class="sub-row">
+        <div class="sn">${sn}</div>
+        <div class="sw" title="Positive: ${pp}% · Neutral: ${pu}% · Negative: ${pg}%">
+          <div style="display:flex;height:5px;border-radius:3px;overflow:hidden;width:100%">
+            <div style="width:${pp}%;background:#28a745cc"></div>
+            <div style="width:${pu}%;background:#6c757d66"></div>
+            <div style="width:${pg}%;background:#dc3545cc"></div>
+          </div>
+        </div>
+        <div class="sc">${sd.n}</div>
+      </div>`;
+    }).join('');
+    const safeClsAttr=cls.replace(/"/g,'&quot;');
+    const card=document.createElement('div');card.className='topic-card';card.style.borderLeftColor=color;
+    card.innerHTML=`
+      <div class="t-name">${cls}</div>
+      <div class="t-stats"><span class="dot" style="background:${color}"></span>${data.total.toLocaleString()} articles &middot; ${pct}%</div>
+      <div class="expand-hint">▼ Subtopics &amp; sentiment</div>
+      <div class="subtopics-list">${subHtml}
+        <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border);">
+          <button data-cls="${safeClsAttr}" class="explore-btn" style="font-size:10px;padding:3px 10px;border:1px solid var(--daccent);border-radius:12px;background:#eef2ff;color:var(--daccent);cursor:pointer;font-weight:600;">
+            Explore topic →
+          </button>
+        </div>
+      </div>`;
+    card.querySelector('.explore-btn').addEventListener('click', e=>{
+      e.stopPropagation();
+      goToDetail(cls);
+    });
+    card.onclick=()=>{card.classList.toggle('expanded');card.querySelector('.expand-hint').textContent=card.classList.contains('expanded')?'▲ Collapse':'▼ Subtopics & sentiment';};
+    cont.appendChild(card);
+  });
+}
+
+function goToDetail(cls){
+  document.getElementById('detail-cls').value=cls;
+  showPage('detail');
 }
 
 function toggleLang(btn,lang){
@@ -683,67 +729,97 @@ function toggleDLang(btn,lang){
   }updateDetailCharts();
 }
 function setGroupBy(g){
-  groupBy=g;['class','lang','sent'].forEach(k=>document.getElementById('gb-'+k).classList.remove('active'));
-  document.getElementById('gb-'+(g==='classification'?'class':g==='language'?'lang':'sent')).classList.add('active');
+  groupBy=g;['class','lang','sent'].forEach(k=>{const el=document.getElementById('gb-'+k);if(el)el.classList.remove('active');});
+  const map={classification:'class',language:'lang',sentiment:'sent'};
+  const el=document.getElementById('gb-'+map[g]);if(el)el.classList.add('active');
   updateCharts();
 }
-function aggTimeline(langF,medF,clsF){
-  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
-  let gkeys=new Set();
-  if(groupBy==='classification') Object.keys(PREPROC.topicStats).forEach(c=>gkeys.add(c));
-  else if(groupBy==='language') gkeys=new Set(['de','fr','it']);
-  else gkeys=new Set(['positive','neutral','negative']);
-  const counts={};gkeys.forEach(k=>{counts[k]={};months.forEach(m=>counts[k][m]=0)});
-  for(const month of months){const md=tl[month];
-    for(const [cls,cd] of Object.entries(md)){if(clsF&&cls!==clsF)continue;
-      for(const [lang,ld] of Object.entries(cd)){if(langF&&!langF.includes(lang))continue;
-        for(const [med,st] of Object.entries(ld)){if(medF&&med!==medF)continue;
-          if(groupBy==='classification'){if(counts[cls])counts[cls][month]=(counts[cls][month]||0)+st.n;}
-          else if(groupBy==='language'){counts[lang][month]=(counts[lang][month]||0)+st.n;}
-          else{counts['positive'][month]=(counts['positive'][month]||0)+st.p;counts['negative'][month]=(counts['negative'][month]||0)+st.g;counts['neutral'][month]=(counts['neutral'][month]||0)+st.u;}
-        }
-      }
-    }
-  }
-  return{months,counts,gkeys:[...gkeys]};
-}
-function buildCards(){
+
+let sentOverviewChart=null;
+
+// Populate topic dropdown once PREPROC is loaded
+function populateOvTopics(){
   if(!PREPROC) return;
-  const stats=PREPROC.topicStats,total=Object.values(stats).reduce((s,v)=>s+v.total,0);
-  const cont=document.getElementById('topic-cards');cont.innerHTML='';
-  Object.entries(stats).filter(([c])=>c!=='Others').sort((a,b)=>b[1].total-a[1].total).forEach(([cls,data])=>{
-    const pct=((data.total/total)*100).toFixed(1),color=TC[cls]||'#999';
-    const subs=Object.entries(data.subtopics).sort((a,b)=>b[1].n-a[1].n);
-    const maxS=subs.length>0?Math.max(...subs.map(s=>s[1].n)):1;
-    const subHtml=subs.slice(0,8).map(([sn,sd])=>`<div class="sub-row"><div class="sn">${sn}</div><div class="sw"><div class="sb" style="width:${(sd.n/maxS*100).toFixed(1)}%;background:${color}88"></div></div><div class="sc">${sd.n}</div></div>`).join('');
-    const card=document.createElement('div');card.className='topic-card';card.style.borderLeftColor=color;
-    card.innerHTML=`<div class="t-name">${cls}</div><div class="t-stats"><span class="dot" style="background:${color}"></span>${data.total.toLocaleString()} articles &middot; ${pct}%</div><div class="expand-hint">▼ Click to expand</div><div class="subtopics-list">${subHtml}</div>`;
-    card.onclick=()=>{card.classList.toggle('expanded');card.querySelector('.expand-hint').textContent=card.classList.contains('expanded')?'▲ Collapse':'▼ Click to expand';};
-    cont.appendChild(card);
+  const sel=document.getElementById('ov-topic-filter');
+  sel.innerHTML='<option value="">All Topics</option>';
+  Object.keys(PREPROC.topicStats).filter(c=>c!=='Others').sort().forEach(cls=>{
+    const o=document.createElement('option');o.value=cls;o.textContent=cls;sel.appendChild(o);
   });
 }
+
+// When topic changes, repopulate subtopics
+function updateOvSubtopics(){
+  if(!PREPROC) return;
+  const cls=document.getElementById('ov-topic-filter').value;
+  const sel=document.getElementById('ov-subtopic-filter');
+  sel.innerHTML='<option value="">All Subtopics</option>';
+  if(cls && PREPROC.topicStats[cls]){
+    Object.keys(PREPROC.topicStats[cls].subtopics).sort().forEach(s=>{
+      const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);
+    });
+  }
+}
+
 function updateCharts(){
   if(!PREPROC) return;
   selMed=document.getElementById('medium-filter').value;
   const langF=selLangs.has('all')?null:[...selLangs];
-  const {months,counts,gkeys}=aggTimeline(langF,selMed,null);
-  document.getElementById('tl-sub').textContent='by '+groupBy+' · '+(selLangs.has('all')?'All langs':[...selLangs].join(','))+(selMed?' · '+selMed:'');
-  const tDs=gkeys.filter(k=>counts[k]&&Object.values(counts[k]).some(v=>v>0)).map(k=>{
-    const c=groupBy==='classification'?(TC[k]||'#999'):groupBy==='language'?LC[k]:SC[k];
-    return{label:k,data:months.map(m=>counts[k][m]||0),borderColor:c,backgroundColor:c+'22',fill:false,tension:.3,pointRadius:2,borderWidth:2};
-  });
-  if(tlChart)tlChart.destroy();
-  tlChart=new Chart(document.getElementById('timeline-chart'),{type:'line',data:{labels:months,datasets:tDs},options:{responsive:true,maintainAspectRatio:true,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:9}}}},scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
-  let tCnts={};
-  for(const [cls] of Object.entries(PREPROC.topicStats).filter(([c])=>c!=='Others')){
-    let cnt=0;
-    for(const md of Object.values(PREPROC.timeline)){if(!md[cls])continue;for(const [lang,ld] of Object.entries(md[cls])){if(langF&&!langF.includes(lang))continue;for(const [med,st] of Object.entries(ld)){if(selMed&&med!==selMed)continue;cnt+=st.n;}}}
-    tCnts[cls]=cnt;
+  const clsF=document.getElementById('ov-topic-filter').value||null;
+
+  const tl=PREPROC.timeline;
+  const months=Object.keys(tl).sort();
+
+  const pos={},neu={},neg={};
+  months.forEach(m=>{pos[m]=0;neu[m]=0;neg[m]=0;});
+
+  for(const month of months){
+    const md=tl[month];
+    for(const [cls,cd] of Object.entries(md)){
+      if(clsF&&cls!==clsF) continue;
+      for(const [lang,ld] of Object.entries(cd)){
+        if(langF&&!langF.includes(lang)) continue;
+        for(const [med,st] of Object.entries(ld)){
+          if(selMed&&med!==selMed) continue;
+          pos[month]+=st.p; neu[month]+=st.u; neg[month]+=st.g;
+        }
+      }
+    }
   }
-  const sT=Object.entries(tCnts).sort((a,b)=>a[1]-b[1]);
-  if(barChart)barChart.destroy();
-  barChart=new Chart(document.getElementById('bar-chart'),{type:'bar',data:{labels:sT.map(([c])=>c.length>22?c.slice(0,20)+'...':c),datasets:[{label:'Articles',data:sT.map(([,n])=>n),backgroundColor:sT.map(([c])=>TC[c]||'#999'),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  const parts=[];
+  if(!selLangs.has('all')) parts.push([...selLangs].join(', '));
+  else parts.push('de, fr, it');
+  if(clsF) parts.push(clsF);
+  if(selMed) parts.push(selMed);
+  document.getElementById('tl-sub').textContent='by sentiment · '+parts.join(' · ');
+
+  if(sentOverviewChart) sentOverviewChart.destroy();
+  sentOverviewChart=new Chart(document.getElementById('sentiment-overview-chart'),{
+    type:'line',
+    data:{
+      labels:months,
+      datasets:[
+        {label:'positive', data:months.map(m=>pos[m]||0), borderColor:'#28a745', backgroundColor:'#28a74522', fill:false, tension:.3, pointRadius:2, borderWidth:2},
+        {label:'neutral',  data:months.map(m=>neu[m]||0), borderColor:'#6c757d', backgroundColor:'#6c757d22', fill:false, tension:.3, pointRadius:2, borderWidth:2},
+        {label:'negative', data:months.map(m=>neg[m]||0), borderColor:'#dc3545', backgroundColor:'#dc354522', fill:false, tension:.3, pointRadius:2, borderWidth:2},
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{position:'bottom',labels:{boxWidth:12,font:{size:11},padding:16}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`}}
+      },
+      scales:{
+        x:{grid:{color:'#e8e6e0'},ticks:{maxRotation:45,font:{size:10},color:'#8a8880',maxTicksLimit:20}},
+        y:{beginAtZero:true,grid:{color:'#e8e6e0'},ticks:{font:{size:10},color:'#8a8880',callback:v=>v.toLocaleString()}}
+      }
+    }
+  });
 }
+
 async function loadDetailView(){
   if(!PREPROC) return;
   curCls=document.getElementById('detail-cls').value;

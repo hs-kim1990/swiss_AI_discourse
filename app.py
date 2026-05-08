@@ -103,8 +103,8 @@ for lang, filename in DATA_FILES.items():
     with open(filepath, 'r', encoding='utf-8') as f:
         records = json.load(f)
     for item in records:
-        classification = item.get('classification') or ''
-        if classification.upper() == 'NOT TOPIC':
+        classification = (item.get('classification') or '').strip()
+        if classification.upper() in ('NOT TOPIC', 'NONE', ''):
             continue
         year, date_str = parse_date(item.get('pubtime'))
         ALL_ARTICLES.append({
