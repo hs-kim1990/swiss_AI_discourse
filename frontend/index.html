@@ -352,8 +352,31 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   </div>
 
   <div class="chart-card-d" style="margin-bottom:20px;">
-    <div class="sec-title-d">Sentiment Timeline <span id="tl-sub"></span></div>
-    <canvas id="sentiment-overview-chart" style="max-height:360px;"></canvas>
+    <div class="sec-title-d" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <div>Sentiment Timeline <span id="tl-sub" style="font-weight:400;font-size:11px;color:var(--text2);"></span></div>
+      <div style="display:flex;gap:4px;">
+        <button class="gran-btn" id="gran-3m" onclick="setGranularity('3m')" style="font-family:var(--font-mono);font-size:10px;padding:3px 10px;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:var(--text2);cursor:pointer;">3M</button>
+        <button class="gran-btn active" id="gran-6m" onclick="setGranularity('6m')" style="font-family:var(--font-mono);font-size:10px;padding:3px 10px;border:1.5px solid var(--daccent);border-radius:12px;background:#eef2ff;color:var(--daccent);cursor:pointer;">6M</button>
+        <button class="gran-btn" id="gran-1y" onclick="setGranularity('1y')" style="font-family:var(--font-mono);font-size:10px;padding:3px 10px;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:var(--text2);cursor:pointer;">1Y</button>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--text2);font-family:var(--font-mono);margin-bottom:10px;">Click a point on the chart to browse articles from that period</p>
+    <canvas id="sentiment-overview-chart" style="max-height:360px;cursor:pointer;"></canvas>
+  </div>
+
+  <!-- Article drill-down panel -->
+  <div id="chart-drill-panel" style="display:none;margin-bottom:28px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:var(--rule);">
+      <div id="chart-drill-title" class="sec-title-d" style="margin:0;border:none;padding:0;"></div>
+      <button onclick="document.getElementById('chart-drill-panel').style.display='none';" style="font-family:var(--font-mono);font-size:10px;padding:3px 10px;border:1px solid var(--ink-faint);border-radius:12px;background:var(--paper-tinted);color:var(--ink-mid);cursor:pointer;">✕ Close</button>
+    </div>
+    <div id="chart-drill-status" style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:12px;"></div>
+    <div id="chart-drill-list"></div>
+    <div id="chart-drill-pagination" style="display:none;text-align:center;margin-top:16px;padding-top:14px;border-top:var(--rule);">
+      <button class="search-btn" id="drill-prev" onclick="drillChangePage(-1)" style="margin-right:8px;">← Prev</button>
+      <span id="drill-page-info" style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin:0 8px;"></span>
+      <button class="search-btn" id="drill-next" onclick="drillChangePage(1)">Next →</button>
+    </div>
   </div>
 
   <div class="sec-title-d">Topic Overview <span>Click a card to expand subtopics</span></div>
@@ -836,6 +859,152 @@ function setGroupBy(g){
 }
 
 let sentOverviewChart=null;
+let chartGranularity='6m'; // '3m' | '6m' | '1y'
+
+function setGranularity(g){
+  chartGranularity=g;
+  document.querySelectorAll('.gran-btn').forEach(b=>{
+    const isActive=b.id==='gran-'+g;
+    b.style.borderColor=isActive?'var(--daccent)':'var(--border)';
+    b.style.background=isActive?'#eef2ff':'#fff';
+    b.style.color=isActive?'var(--daccent)':'var(--text2)';
+  });
+  updateCharts();
+}
+
+// ── Chart drill-down state ────────────────────────────────────────
+let drillOffset=0;
+const DRILL_LIMIT=20;
+let drillParams={};
+
+async function drillFetch(offset){
+  drillOffset=offset;
+  const p=new URLSearchParams({limit:DRILL_LIMIT, offset});
+  if(drillParams.yearFrom) p.set('year_from', drillParams.yearFrom);
+  if(drillParams.yearTo)   p.set('year_to',   drillParams.yearTo);
+  if(drillParams.lang)     p.set('lang', drillParams.lang);
+  if(drillParams.cls)      p.set('classification', drillParams.cls);
+
+  document.getElementById('chart-drill-status').textContent='Loading…';
+  document.getElementById('chart-drill-list').innerHTML='';
+
+  try {
+    const res=await fetch('/api/articles?'+p.toString());
+    const data=await res.json();
+    const total=data.total, articles=data.articles;
+    const curPage=Math.floor(drillOffset/DRILL_LIMIT)+1;
+    const totalPages=Math.ceil(total/DRILL_LIMIT);
+
+    document.getElementById('chart-drill-status').innerHTML=
+      `<span style="color:var(--accent)">${total.toLocaleString()}</span> articles`;
+
+    const langColors={de:'#b5122a',fr:'#1a5fa8',it:'#1a8a3a'};
+    document.getElementById('chart-drill-list').innerHTML=articles.map(a=>{
+      const lc=langColors[a.language]||'#888';
+      const hasSummary=a.summary&&a.summary.length>20;
+      return `<div class="article-item" style="display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start;">
+        <div style="padding-top:3px;">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">
+            <span class="source-dot" style="background:${a.color}"></span>
+            <span class="article-outlet">${escHtml(a.outlet||a.source)}</span>
+          </div>
+          <div class="article-date" style="margin-bottom:6px;">${a.date||''}</div>
+          <span style="font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:2px;background:${lc}22;color:${lc};border:0.5px solid ${lc};display:inline-block;margin-bottom:4px;">${a.language.toUpperCase()}</span>
+          ${a.classification?`<div style="margin-top:5px;font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:2px;background:var(--paper-tinted);border:0.5px solid var(--ink-faint);color:var(--ink-mid);display:inline-block;">${escHtml(a.classification)}</div>`:''}
+        </div>
+        <div>
+          <div class="article-headline" style="margin-bottom:${hasSummary?'6px':'0'};">${escHtml(a.headline||'(no headline)')}</div>
+          ${hasSummary?`<div class="article-subtitle">${escHtml(a.summary.slice(0,240))}${a.summary.length>240?'…':''}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+
+    const pgn=document.getElementById('chart-drill-pagination');
+    if(total>DRILL_LIMIT){
+      pgn.style.display='block';
+      document.getElementById('drill-page-info').textContent=`Page ${curPage} of ${totalPages}`;
+      document.getElementById('drill-prev').disabled=drillOffset===0;
+      document.getElementById('drill-next').disabled=drillOffset+DRILL_LIMIT>=total;
+    } else {
+      pgn.style.display='none';
+    }
+  } catch(e){
+    document.getElementById('chart-drill-status').textContent='Error loading articles.';
+  }
+}
+
+function drillChangePage(dir){
+  drillOffset=Math.max(0,drillOffset+dir*DRILL_LIMIT);
+  drillFetch(drillOffset);
+  document.getElementById('chart-drill-panel').scrollIntoView({behavior:'smooth'});
+}
+
+function openDrillPanel(bucketKey, datasetLabel, bKeys){
+  let yearFrom, yearTo;
+  if(bucketKey.includes('-Q')){
+    // e.g. 2024-Q1 → months Jan-Mar 2024
+    const [y,q]=bucketKey.split('-Q');
+    yearFrom=parseInt(y); yearTo=yearFrom;
+  } else if(bucketKey.includes('-H')){
+    // e.g. 2024-H1 or 2024-H2
+    const [y]=bucketKey.split('-H');
+    yearFrom=parseInt(y); yearTo=yearFrom;
+  } else {
+    // e.g. 2024
+    yearFrom=parseInt(bucketKey); yearTo=yearFrom;
+  }
+
+  const clsF=document.getElementById('ov-topic-filter').value||null;
+  const langF=selLangs.has('all')?null:[...selLangs].join(',');
+
+  drillParams={yearFrom, yearTo, lang:langF, cls:clsF};
+
+  const sentColor={Positive:'#28a745',Neutral:'#6c757d',Negative:'#dc3545'}[datasetLabel]||'#888';
+  document.getElementById('chart-drill-title').innerHTML=
+    `Articles from <strong>${bucketKey}</strong> &nbsp;·&nbsp; <span style="color:${sentColor};font-weight:600;">${datasetLabel}</span>${clsF?` &nbsp;·&nbsp; ${clsF}`:''}`;
+  document.getElementById('chart-drill-panel').style.display='block';
+  document.getElementById('chart-drill-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  drillFetch(0);
+}
+function bucketData(months, pos, neu, neg){
+  if(chartGranularity==='3m'){
+    // every 3 months → group into quarters
+    const buckets={};
+    months.forEach(m=>{
+      const [y,mo]=m.split('-').map(Number);
+      const q=Math.floor((mo-1)/3);
+      const key=`${y}-Q${q+1}`;
+      if(!buckets[key]){buckets[key]={p:0,u:0,g:0};}
+      buckets[key].p+=pos[m]||0;
+      buckets[key].u+=neu[m]||0;
+      buckets[key].g+=neg[m]||0;
+    });
+    return buckets;
+  } else if(chartGranularity==='6m'){
+    const buckets={};
+    months.forEach(m=>{
+      const [y,mo]=m.split('-').map(Number);
+      const half=mo<=6?'H1':'H2';
+      const key=`${y}-${half}`;
+      if(!buckets[key]){buckets[key]={p:0,u:0,g:0};}
+      buckets[key].p+=pos[m]||0;
+      buckets[key].u+=neu[m]||0;
+      buckets[key].g+=neg[m]||0;
+    });
+    return buckets;
+  } else {
+    // 1y
+    const buckets={};
+    months.forEach(m=>{
+      const y=m.slice(0,4);
+      if(!buckets[y]){buckets[y]={p:0,u:0,g:0};}
+      buckets[y].p+=pos[m]||0;
+      buckets[y].u+=neu[m]||0;
+      buckets[y].g+=neg[m]||0;
+    });
+    return buckets;
+  }
+}
 
 // Populate topic dropdown once PREPROC is loaded
 function populateOvTopics(){
@@ -893,28 +1062,71 @@ function updateCharts(){
   if(selMed) parts.push(selMed);
   document.getElementById('tl-sub').textContent='by sentiment · '+parts.join(' · ');
 
+  // Bucket data by granularity
+  const bucketed=bucketData(months,pos,neu,neg);
+  const bKeys=Object.keys(bucketed).sort();
+  const bPos=bKeys.map(k=>bucketed[k].p);
+  const bNeu=bKeys.map(k=>bucketed[k].u);
+  const bNeg=bKeys.map(k=>bucketed[k].g);
+
   if(sentOverviewChart) sentOverviewChart.destroy();
   sentOverviewChart=new Chart(document.getElementById('sentiment-overview-chart'),{
     type:'line',
     data:{
-      labels:months,
+      labels:bKeys,
       datasets:[
-        {label:'positive', data:months.map(m=>pos[m]||0), borderColor:'#28a745', backgroundColor:'#28a74522', fill:false, tension:.3, pointRadius:2, borderWidth:2},
-        {label:'neutral',  data:months.map(m=>neu[m]||0), borderColor:'#6c757d', backgroundColor:'#6c757d22', fill:false, tension:.3, pointRadius:2, borderWidth:2},
-        {label:'negative', data:months.map(m=>neg[m]||0), borderColor:'#dc3545', backgroundColor:'#dc354522', fill:false, tension:.3, pointRadius:2, borderWidth:2},
+        {
+          label:'Positive',
+          data:bKeys.map((_,i)=>{const t=bPos[i]+bNeu[i]+bNeg[i];return t?+(bPos[i]/t*100).toFixed(1):null;}),
+          borderColor:'#28a745', backgroundColor:'#28a74555',
+          fill:true, tension:.4, pointRadius:3, pointHoverRadius:5, borderWidth:2, spanGaps:true, order:3
+        },
+        {
+          label:'Neutral',
+          data:bKeys.map((_,i)=>{const t=bPos[i]+bNeu[i]+bNeg[i];return t?+(bNeu[i]/t*100).toFixed(1):null;}),
+          borderColor:'#6c757d', backgroundColor:'#6c757d44',
+          fill:true, tension:.4, pointRadius:3, pointHoverRadius:5, borderWidth:2, spanGaps:true, order:2
+        },
+        {
+          label:'Negative',
+          data:bKeys.map((_,i)=>{const t=bPos[i]+bNeu[i]+bNeg[i];return t?+(bNeg[i]/t*100).toFixed(1):null;}),
+          borderColor:'#dc3545', backgroundColor:'#dc354555',
+          fill:true, tension:.4, pointRadius:3, pointHoverRadius:5, borderWidth:2, spanGaps:true, order:1
+        },
       ]
     },
     options:{
       responsive:true,
       maintainAspectRatio:true,
       interaction:{mode:'index',intersect:false},
+      onClick:(evt,elements)=>{
+        if(!elements||elements.length===0) return;
+        const el=elements[0];
+        const bucketKey=bKeys[el.index];
+        const datasetLabel=['Positive','Neutral','Negative'][el.datasetIndex]||'Positive';
+        openDrillPanel(bucketKey, datasetLabel, bKeys);
+      },
       plugins:{
-        legend:{position:'bottom',labels:{boxWidth:12,font:{size:11},padding:16}},
-        tooltip:{callbacks:{label:ctx=>` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`}}
+        legend:{position:'bottom',labels:{boxWidth:12,font:{size:11},padding:20}},
+        tooltip:{
+          callbacks:{
+            title:ctx=>`${ctx[0].label}`,
+            label:ctx=>{
+              const i=ctx.dataIndex;
+              const total=bPos[i]+bNeu[i]+bNeg[i];
+              const count=ctx.dataset.label==='Positive'?bPos[i]:ctx.dataset.label==='Neutral'?bNeu[i]:bNeg[i];
+              return ` ${ctx.dataset.label}: ${ctx.raw}%  (${count.toLocaleString()} articles)`;
+            },
+            footer:ctx=>{
+              const i=ctx[0].dataIndex;
+              return `Total: ${(bPos[i]+bNeu[i]+bNeg[i]).toLocaleString()} articles`;
+            }
+          }
+        }
       },
       scales:{
-        x:{grid:{color:'#e8e6e0'},ticks:{maxRotation:45,font:{size:10},color:'#8a8880',maxTicksLimit:20}},
-        y:{beginAtZero:true,grid:{color:'#e8e6e0'},ticks:{font:{size:10},color:'#8a8880',callback:v=>v.toLocaleString()}}
+        x:{grid:{color:'#e8e6e0'}, ticks:{font:{size:10},color:'#8a8880',maxRotation:45}},
+        y:{min:0, max:100, grid:{color:'#e8e6e0'}, ticks:{callback:v=>v+'%',font:{size:10},color:'#8a8880',stepSize:20}}
       }
     }
   });
@@ -931,15 +1143,21 @@ async function loadDetailView(){
     sel.innerHTML='<option value="">All Subtopics</option>'+subs.map(s=>`<option value="${s}">${s}</option>`).join('');
     if(subs.includes(prev))sel.value=prev;
   });
-  buildSubNav(subs);updateDetailStats();updateDetailCharts();renderSupDen('');
+  buildSubNav(subs);updateDetailStats();updateDetailCharts();
   const items=await getItems(curCls);
   tblData=items.map(it=>({id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7]}));
   sortKey='pubtime';sortDir=-1;curPage=1;filterTable();
+  renderSupDen('');
 }
 function buildSubNav(subs){
   document.getElementById('sub-nav').innerHTML=`<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>`+subs.map(s=>`<button class="sub-nav-btn" data-sub="${s}" onclick="selectSubNav(this,this.dataset.sub)">${s}</button>`).join('');
 }
-function selectSubNav(btn,sub){document.querySelectorAll('.sub-nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSupDen(sub);}
+async function selectSubNav(btn,sub){
+  document.querySelectorAll('.sub-nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  await getItems(curCls);
+  renderSupDen(sub);
+}
 function updateDetailStats(){
   if(!PREPROC) return;
   const stats=PREPROC.topicStats[curCls];
@@ -980,12 +1198,93 @@ function buildSentChart(cls,sf){
   if(dSentChart)dSentChart.destroy();
   dSentChart=new Chart(document.getElementById('d-sentiment'),{type:'bar',data:{labels,datasets:[{label:'Positive',data:pos,backgroundColor:'#28a74588',borderRadius:3},{label:'Neutral',data:neu,backgroundColor:'#6c757d55',borderRadius:3},{label:'Negative',data:neg,backgroundColor:'#dc354588',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
 }
-function makeBulletBlock(sub,points,isSup){return`<div class="sd-block ${isSup?'sup-block':'den-block'}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;}
+function makeBulletBlock(sub, points, isSup, articles){
+  const blockClass = isSup ? 'sup-block' : 'den-block';
+  const uid = btoa(unescape(encodeURIComponent((isSup?'sup':'den')+sub))).replace(/[^a-z0-9]/gi,'').slice(0,12);
+  const langColors = {de:'#b5122a', fr:'#1a5fa8', it:'#1a8a3a'};
+
+  const articleHtml = articles && articles.length > 0 ? `
+    <div style="margin-top:10px;border-top:1px solid #e8e6e0;padding-top:8px;">
+      <button onclick="toggleArticles('${uid}')"
+        style="font-family:var(--font-mono);font-size:10px;padding:3px 10px;border:1px solid var(--ink-faint);border-radius:12px;background:var(--paper-tinted);color:var(--ink-mid);cursor:pointer;margin-bottom:8px;">
+        📰 ${articles.length} article${articles.length!==1?'s':''} ▾
+      </button>
+      <div id="art-${uid}" style="display:none;">
+        ${articles.map(a => {
+          const lc = langColors[a.language] || '#888';
+          return `<div style="display:grid;grid-template-columns:110px 1fr;gap:12px;padding:8px 0;border-bottom:0.5px solid #f0f0f0;align-items:start;">
+            <div>
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:${a.color};display:inline-block;flex-shrink:0;"></span>
+                <span style="font-family:var(--font-mono);font-size:9px;color:var(--ink-mid);text-transform:uppercase;">${a.outlet}</span>
+              </div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);margin-bottom:4px;">${a.date}</div>
+              <span style="font-family:var(--font-mono);font-size:8px;padding:1px 5px;border-radius:2px;background:${lc}22;color:${lc};border:0.5px solid ${lc};">${a.language.toUpperCase()}</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:12px;font-weight:600;line-height:1.3;color:var(--ink);margin-bottom:4px;">${escHtml(a.head)}</div>
+              ${a.summary ? `<div style="font-size:11px;color:var(--ink-mid);line-height:1.5;">${escHtml(a.summary.slice(0,160))}${a.summary.length>160?'…':''}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  return `<div class="sd-block ${blockClass}">
+    <div class="sd-sub-label">${sub}</div>
+    <ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul>
+    ${articleHtml}
+  </div>`;
+}
+
+function toggleArticles(uid){
+  const el = document.getElementById('art-'+uid);
+  if(!el) return;
+  const btn = el.previousElementSibling;
+  const isHidden = el.style.display==='none';
+  el.style.display = isHidden ? 'block' : 'none';
+  if(btn) btn.textContent = btn.textContent.replace(isHidden?'▾':'▴', isHidden?'▴':'▾');
+}
+
 function renderSupDen(sub){
-  const supEl=document.getElementById('sup-content'),denEl=document.getElementById('den-content');
+  const supEl=document.getElementById('sup-content'), denEl=document.getElementById('den-content');
   const sd=SUMS.subtopics||{};
-  if(sub){const sm=sd[curCls+'|||'+sub];if(sm){supEl.innerHTML=makeBulletBlock(sub,sm.sup,true);denEl.innerHTML=makeBulletBlock(sub,sm.den,false);}else{supEl.innerHTML=denEl.innerHTML='<p style="color:#aaa;font-size:12px;padding:8px">No data.</p>';}}
-  else{const subs=Object.keys(PREPROC.topicStats[curCls].subtopics).sort();let sh='',dh='';for(const s of subs){const sm=sd[curCls+'|||'+s];if(sm){sh+=makeBulletBlock(s,sm.sup,true);dh+=makeBulletBlock(s,sm.den,false);}}supEl.innerHTML=sh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';denEl.innerHTML=dh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';}
+  const cachedItems = (ITEMS_CACHE[curCls]||[]).map(it=>({
+    id:it[0], date:it[1]?it[1].slice(0,10):'', outlet:it[2]||'',
+    language:it[3]||'', sentiment:it[4]||'', subtopic:it[5]||'',
+    head:it[6]||'', summary:it[7]||'',
+    color: SOURCE_COLORS[it[2]] || '#888',
+  }));
+
+  function articlesForSub(s, sentiment){ 
+    return cachedItems.filter(a => a.subtopic===s && a.sentiment===sentiment); 
+  }
+
+  if(sub){
+    const sm=sd[curCls+'|||'+sub];
+    const supArts=articlesForSub(sub,'positive');
+    const denArts=articlesForSub(sub,'negative');
+    if(sm){
+      supEl.innerHTML=makeBulletBlock(sub,sm.sup,true,supArts);
+      denEl.innerHTML=makeBulletBlock(sub,sm.den,false,denArts);
+    } else {
+      supEl.innerHTML=denEl.innerHTML='<p style="color:#aaa;font-size:12px;padding:8px">No data.</p>';
+    }
+  } else {
+    const subs=Object.keys(PREPROC.topicStats[curCls].subtopics).sort();
+    let sh='', dh='';
+    for(const s of subs){
+      const sm=sd[curCls+'|||'+s];
+      if(sm){
+        const supArts=articlesForSub(s,'positive');
+        const denArts=articlesForSub(s,'negative');
+        sh+=makeBulletBlock(s,sm.sup,true,supArts);
+        dh+=makeBulletBlock(s,sm.den,false,denArts);
+      }
+    }
+    supEl.innerHTML=sh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';
+    denEl.innerHTML=dh||'<p style="color:#aaa;font-size:12px;padding:8px">No summaries.</p>';
+  }
 }
 function filterTable(){
   const q=document.getElementById('tbl-search').value.toLowerCase();

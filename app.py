@@ -76,6 +76,43 @@ def get_source_color(code):
     return SOURCE_COLORS.get(code, '#7A7A8A')
 
 
+# ── Load topic mapping from preproc.json ──────────────────────────────────
+# Maps fine-grained raw classifications → broad topic names used in dashboard
+TOPIC_MAPPING = {}  # raw_classification_lower -> broad_topic
+
+def load_topic_mapping():
+    global TOPIC_MAPPING
+    preproc_path = os.path.join(DOCS_DATA_DIR, 'preproc.json')
+    if not os.path.exists(preproc_path):
+        print('WARNING: preproc.json not found, topic filtering will not work')
+        return
+    with open(preproc_path, 'r', encoding='utf-8') as f:
+        preproc = json.load(f)
+    # preproc.topicStats has broad topics; items files have the raw classifications
+    # Build mapping by scanning items files
+    items_index_path = os.path.join(DOCS_DATA_DIR, 'items_index.json')
+    if not os.path.exists(items_index_path):
+        return
+    with open(items_index_path, 'r', encoding='utf-8') as f:
+        items_index = json.load(f)
+    for broad_topic, url in items_index.items():
+        filename = os.path.basename(url)
+        items_path = os.path.join(DOCS_DATA_DIR, filename)
+        if not os.path.exists(items_path):
+            continue
+        with open(items_path, 'r', encoding='utf-8') as f:
+            items = json.load(f)
+        # Each item is an array: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary]
+        # We need to map article IDs to broad topics
+        for item in items:
+            if isinstance(item, list) and len(item) > 0:
+                article_id = item[0]
+                TOPIC_MAPPING[str(article_id)] = broad_topic
+    print(f'Loaded topic mapping for {len(TOPIC_MAPPING):,} articles from preproc')
+
+load_topic_mapping()
+
+
 # ── Load all data at startup ────────────────────────────────────────────────
 ALL_ARTICLES = []
 
@@ -113,6 +150,7 @@ for lang, filename in DATA_FILES.items():
             'headline':       item.get('head', ''),
             'summary':        item.get('summary', ''),
             'classification': classification,
+            'broad_topic':    TOPIC_MAPPING.get(str(item.get('id')), ''),
             'verification':   item.get('verification', ''),
             'source':         item.get('medium_code', ''),
             'outlet':         get_source_display(item.get('medium_code', '')),
@@ -189,12 +227,15 @@ def dashboard_items(filename):
 
 @app.route('/api/articles')
 def api_articles():
-    q      = request.args.get('q', '').strip().lower()
-    langs  = request.args.get('lang', '').strip()
-    year   = request.args.get('year', type=int)
-    source = request.args.get('source', '').strip()
-    limit  = request.args.get('limit', 100, type=int)
-    offset = request.args.get('offset', 0, type=int)
+    q              = request.args.get('q', '').strip().lower()
+    langs          = request.args.get('lang', '').strip()
+    year           = request.args.get('year', type=int)
+    year_from      = request.args.get('year_from', type=int)
+    year_to        = request.args.get('year_to', type=int)
+    source         = request.args.get('source', '').strip()
+    classification = request.args.get('classification', '').strip().lower()
+    limit          = request.args.get('limit', 100, type=int)
+    offset         = request.args.get('offset', 0, type=int)
 
     lang_list = [l.strip() for l in langs.split(',') if l.strip()] if langs else []
 
@@ -204,7 +245,13 @@ def api_articles():
             continue
         if year and article['year'] != year:
             continue
+        if year_from and (article['year'] or 0) < year_from:
+            continue
+        if year_to and (article['year'] or 0) > year_to:
+            continue
         if source and article['source'] != source:
+            continue
+        if classification and (article.get('broad_topic') or '').lower() != classification:
             continue
         if q:
             searchable = ' '.join([
