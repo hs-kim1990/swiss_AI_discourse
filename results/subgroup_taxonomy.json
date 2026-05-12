@@ -1,0 +1,2300 @@
+{
+  "description": "Three-level taxonomy for the 10-Million Initiative dataset: major category → subgroup → top raw labels",
+  "generated_for": "German_politic_20260503_194531",
+  "taxonomy": {
+    "Immigration & Asylum Policy": {
+      "total": 5626,
+      "subgroups": {
+        "Asylum Procedures & Reform": {
+          "total": 2480,
+          "top_labels": [
+            {
+              "label": "Swiss Asylum Policy",
+              "count": 1332
+            },
+            {
+              "label": "Asylum Policy",
+              "count": 239
+            },
+            {
+              "label": "Asylum Policy Reform",
+              "count": 72
+            },
+            {
+              "label": "Swiss EU Asylum Policy",
+              "count": 67
+            },
+            {
+              "label": "Asylum Housing Policy",
+              "count": 58
+            },
+            {
+              "label": "Asylum Policy",
+              "count": 56
+            },
+            {
+              "label": "Swiss Asylum Policy Reform",
+              "count": 55
+            },
+            {
+              "label": "AsylumPolicyReform",
+              "count": 53
+            },
+            {
+              "label": "Asylum Enforcement",
+              "count": 53
+            },
+            {
+              "label": "Asylum Facilities",
+              "count": 40
+            }
+          ]
+        },
+        "Refugee Housing & Facilities": {
+          "total": 15,
+          "top_labels": [
+            {
+              "label": "Refugee Housing",
+              "count": 6
+            },
+            {
+              "label": "Ausschaffungsgefängnis",
+              "count": 4
+            },
+            {
+              "label": "Refugee Housing",
+              "count": 4
+            },
+            {
+              "label": "Swiss Refugee Housing",
+              "count": 1
+            }
+          ]
+        },
+        "Migration Control & Border Policy": {
+          "total": 359,
+          "top_labels": [
+            {
+              "label": "Swiss Migration Crime Prevention",
+              "count": 70
+            },
+            {
+              "label": "Swiss Migration Crime",
+              "count": 54
+            },
+            {
+              "label": "Swiss Migration Crisis",
+              "count": 36
+            },
+            {
+              "label": "Grenzkontrollen",
+              "count": 22
+            },
+            {
+              "label": "Swiss Immigration Control",
+              "count": 18
+            },
+            {
+              "label": "Swiss Border Security",
+              "count": 17
+            },
+            {
+              "label": "Human Trafficking Prevention",
+              "count": 16
+            },
+            {
+              "label": "Irregular Migration from Maghreb",
+              "count": 16
+            },
+            {
+              "label": "Swiss EU Border Control",
+              "count": 15
+            },
+            {
+              "label": "Irregular Migration",
+              "count": 13
+            }
+          ]
+        },
+        "Swiss Migration Policy": {
+          "total": 2168,
+          "top_labels": [
+            {
+              "label": "Swiss Migration Policy",
+              "count": 1211
+            },
+            {
+              "label": "Swiss Immigration Policy",
+              "count": 669
+            },
+            {
+              "label": "Swiss Migration",
+              "count": 84
+            },
+            {
+              "label": "Swiss Migration Trends",
+              "count": 63
+            },
+            {
+              "label": "Swiss Migration History",
+              "count": 40
+            },
+            {
+              "label": "Swiss Citizenship Policy",
+              "count": 15
+            },
+            {
+              "label": "Swiss Migration Integration",
+              "count": 14
+            },
+            {
+              "label": "Swiss Migration Politics",
+              "count": 9
+            },
+            {
+              "label": "Swiss Migration Stories",
+              "count": 8
+            },
+            {
+              "label": "Swiss Citizenship Policy",
+              "count": 8
+            }
+          ]
+        },
+        "EU & International Asylum Policy": {
+          "total": 456,
+          "top_labels": [
+            {
+              "label": "Swiss EU Migration Policy",
+              "count": 150
+            },
+            {
+              "label": "US Immigration Policy",
+              "count": 106
+            },
+            {
+              "label": "Swiss Ukraine Refugee Policy",
+              "count": 65
+            },
+            {
+              "label": "US Migration Policy",
+              "count": 48
+            },
+            {
+              "label": "Swiss EU Immigration Policy",
+              "count": 25
+            },
+            {
+              "label": "US-Migration Policy",
+              "count": 12
+            },
+            {
+              "label": "EU Migration Policy",
+              "count": 10
+            },
+            {
+              "label": "Swiss Afghan Refugee Policy",
+              "count": 9
+            },
+            {
+              "label": "EU Migration Policy",
+              "count": 8
+            },
+            {
+              "label": "Swiss EU Dublin Agreement Compliance",
+              "count": 5
+            }
+          ]
+        },
+        "Other Migration Topics": {
+          "total": 148,
+          "top_labels": [
+            {
+              "label": "Swiss Refugee Policy",
+              "count": 45
+            },
+            {
+              "label": "Swiss Gaza Refugee Policy",
+              "count": 12
+            },
+            {
+              "label": "Immigration Policy",
+              "count": 10
+            },
+            {
+              "label": "French Immigration Policy",
+              "count": 8
+            },
+            {
+              "label": "Climate Migration Policy",
+              "count": 8
+            },
+            {
+              "label": "Immigration Policy",
+              "count": 7
+            },
+            {
+              "label": "Migration Policy",
+              "count": 7
+            },
+            {
+              "label": "Swiss Syrian Refugee Policy",
+              "count": 7
+            },
+            {
+              "label": "Immigration Statistics",
+              "count": 7
+            },
+            {
+              "label": "Migration Statistics",
+              "count": 6
+            }
+          ]
+        }
+      }
+    },
+    "Swiss-EU Relations & Bilateral Agreements": {
+      "total": 5078,
+      "subgroups": {
+        "Core Switzerland-EU Framework": {
+          "total": 4236,
+          "top_labels": [
+            {
+              "label": "Swiss EU Relations",
+              "count": 3707
+            },
+            {
+              "label": "EU Relations",
+              "count": 243
+            },
+            {
+              "label": "EU Relations",
+              "count": 90
+            },
+            {
+              "label": "US EU Relations",
+              "count": 65
+            },
+            {
+              "label": "Swiss EU Relations",
+              "count": 38
+            },
+            {
+              "label": "Swiss EU Integration Debate",
+              "count": 11
+            },
+            {
+              "label": "US EU Relations is not applicable here, as the article is not about Switzerland or the EU.",
+              "count": 11
+            },
+            {
+              "label": "Swiss EU Relations, EU Relations, Brexit",
+              "count": 11
+            },
+            {
+              "label": "Swiss EU Referendum Policy",
+              "count": 10
+            },
+            {
+              "label": "US EU Relations is not applicable here, as the article is not about Switzerland or the EU.",
+              "count": 10
+            }
+          ]
+        },
+        "Brexit & European Realignment": {
+          "total": 530,
+          "top_labels": [
+            {
+              "label": "Brexit",
+              "count": 516
+            },
+            {
+              "label": "Brexit",
+              "count": 9
+            },
+            {
+              "label": "Brexit Politics",
+              "count": 3
+            },
+            {
+              "label": "Brexit",
+              "count": 1
+            },
+            {
+              "label": "Brexit",
+              "count": 1
+            }
+          ]
+        },
+        "EU Trade & Economic Cooperation": {
+          "total": 225,
+          "top_labels": [
+            {
+              "label": "Swiss EU Trade Policy",
+              "count": 141
+            },
+            {
+              "label": "Swiss EU Trade Negotiations",
+              "count": 72
+            },
+            {
+              "label": "Swiss EU Labor Agreement",
+              "count": 8
+            },
+            {
+              "label": "Swiss EU Education Policy",
+              "count": 2
+            },
+            {
+              "label": "Swiss EU Labor Policy",
+              "count": 1
+            },
+            {
+              "label": "EU Energy Agreement",
+              "count": 1
+            }
+          ]
+        },
+        "EU Security & Defense": {
+          "total": 47,
+          "top_labels": [
+            {
+              "label": "Swiss EU Sanctions Policy",
+              "count": 31
+            },
+            {
+              "label": "EU-Russia Relations",
+              "count": 7
+            },
+            {
+              "label": "EU Security Policy",
+              "count": 4
+            },
+            {
+              "label": "EU Defense Strategy",
+              "count": 3
+            },
+            {
+              "label": "Swiss EU Defense Policy",
+              "count": 2
+            }
+          ]
+        },
+        "EU Institutional Affairs": {
+          "total": 36,
+          "top_labels": [
+            {
+              "label": "EU Commissioners",
+              "count": 19
+            },
+            {
+              "label": "Swiss EU Politics",
+              "count": 6
+            },
+            {
+              "label": "EU Commissioners",
+              "count": 3
+            },
+            {
+              "label": "EU Politics",
+              "count": 2
+            },
+            {
+              "label": "Swiss EU Ukraine Support",
+              "count": 1
+            },
+            {
+              "label": "EU Commission Criticism",
+              "count": 1
+            },
+            {
+              "label": "EU Five-Year Plan",
+              "count": 1
+            },
+            {
+              "label": "EU Commission",
+              "count": 1
+            },
+            {
+              "label": "EU Elections in Switzerland",
+              "count": 1
+            },
+            {
+              "label": "EU Development Cooperation",
+              "count": 1
+            }
+          ]
+        },
+        "Other EU Topics": {
+          "total": 4,
+          "top_labels": [
+            {
+              "label": "Swiss EU Transgender Rights",
+              "count": 2
+            },
+            {
+              "label": "Swiss EU Regulatory Compliance",
+              "count": 1
+            },
+            {
+              "label": "EU-Ukraine Relations",
+              "count": 1
+            }
+          ]
+        }
+      }
+    },
+    "Refugee & Migrant Integration": {
+      "total": 4890,
+      "subgroups": {
+        "Refugee Experiences & Stories": {
+          "total": 4257,
+          "top_labels": [
+            {
+              "label": "Refugee Experiences",
+              "count": 4257
+            }
+          ]
+        },
+        "Integration Programs & Policy": {
+          "total": 313,
+          "top_labels": [
+            {
+              "label": "Swiss Integration Policy",
+              "count": 74
+            },
+            {
+              "label": "Swiss Refugee Integration Policy",
+              "count": 50
+            },
+            {
+              "label": "Swiss Integration Challenges",
+              "count": 41
+            },
+            {
+              "label": "Swiss Integration",
+              "count": 32
+            },
+            {
+              "label": "Swiss Refugee Integration",
+              "count": 22
+            },
+            {
+              "label": "Swiss Ukrainian Integration Policy",
+              "count": 20
+            },
+            {
+              "label": "Swiss Integration of Migrants",
+              "count": 11
+            },
+            {
+              "label": "Swiss Roma Integration Policy",
+              "count": 8
+            },
+            {
+              "label": "Community Integration",
+              "count": 7
+            },
+            {
+              "label": "IntegrationSupport",
+              "count": 7
+            }
+          ]
+        },
+        "Employment & Economic Integration": {
+          "total": 46,
+          "top_labels": [
+            {
+              "label": "Swiss Economic Integration",
+              "count": 16
+            },
+            {
+              "label": "Integration through Employment",
+              "count": 11
+            },
+            {
+              "label": "Economic Integration",
+              "count": 7
+            },
+            {
+              "label": "Integration through Labor",
+              "count": 7
+            },
+            {
+              "label": "Integration through Job Placement",
+              "count": 2
+            },
+            {
+              "label": "Arbeitsmarkt-Integration",
+              "count": 1
+            },
+            {
+              "label": "Labor Market Integration",
+              "count": 1
+            },
+            {
+              "label": "Integration through Labor",
+              "count": 1
+            }
+          ]
+        },
+        "Cultural & Social Integration": {
+          "total": 105,
+          "top_labels": [
+            {
+              "label": "Youth Integration",
+              "count": 13
+            },
+            {
+              "label": "Integration through Social Services",
+              "count": 9
+            },
+            {
+              "label": "Integration through Housing",
+              "count": 9
+            },
+            {
+              "label": "Integration through Cultural Accommodation",
+              "count": 7
+            },
+            {
+              "label": "Swiss Roma Integration",
+              "count": 7
+            },
+            {
+              "label": "Integration through Cultural Accommodation",
+              "count": 7
+            },
+            {
+              "label": "Integration through Hospitality",
+              "count": 7
+            },
+            {
+              "label": "Integration through Referendum",
+              "count": 7
+            },
+            {
+              "label": "Integration through Housing",
+              "count": 6
+            },
+            {
+              "label": "Integration through Local Government",
+              "count": 6
+            }
+          ]
+        },
+        "Education & Youth Integration": {
+          "total": 31,
+          "top_labels": [
+            {
+              "label": "Integration through Education",
+              "count": 20
+            },
+            {
+              "label": "Integration through Education",
+              "count": 10
+            },
+            {
+              "label": "Integration of Young Afghan Migrants",
+              "count": 1
+            }
+          ]
+        },
+        "Other Integration Topics": {
+          "total": 138,
+          "top_labels": [
+            {
+              "label": "Integration",
+              "count": 22
+            },
+            {
+              "label": "Integration through Immigration",
+              "count": 14
+            },
+            {
+              "label": "European Integration",
+              "count": 13
+            },
+            {
+              "label": "Integration through Immigration",
+              "count": 10
+            },
+            {
+              "label": "Integration through Counter-Terrorism",
+              "count": 8
+            },
+            {
+              "label": "Swiss Refugee Athlete",
+              "count": 7
+            },
+            {
+              "label": "Integration of Migrants",
+              "count": 6
+            },
+            {
+              "label": "Integration through Crime Prevention",
+              "count": 5
+            },
+            {
+              "label": "Integration through Religious Accommodation",
+              "count": 4
+            },
+            {
+              "label": "Swiss Expat Integration",
+              "count": 4
+            }
+          ]
+        }
+      }
+    },
+    "Swiss Domestic Politics & Governance": {
+      "total": 11756,
+      "subgroups": {
+        "Government & Parliamentary Affairs": {
+          "total": 3986,
+          "top_labels": [
+            {
+              "label": "Swiss Politics",
+              "count": 2127
+            },
+            {
+              "label": "Government Accountability",
+              "count": 323
+            },
+            {
+              "label": "Swiss Local Politics",
+              "count": 141
+            },
+            {
+              "label": "Swiss Politics",
+              "count": 141
+            },
+            {
+              "label": "Politics",
+              "count": 79
+            },
+            {
+              "label": "Swiss Government Reform",
+              "count": 65
+            },
+            {
+              "label": "Swiss Government Policy",
+              "count": 56
+            },
+            {
+              "label": "Swiss Direct Democracy",
+              "count": 55
+            },
+            {
+              "label": "Swiss Government Appointment",
+              "count": 55
+            },
+            {
+              "label": "Swiss Budget Politics",
+              "count": 52
+            }
+          ]
+        },
+        "Elections & Party Politics": {
+          "total": 131,
+          "top_labels": [
+            {
+              "label": "Swiss Election Policy",
+              "count": 17
+            },
+            {
+              "label": "Swiss Right-Wing Extremism",
+              "count": 17
+            },
+            {
+              "label": "Swiss Green Party Leadership",
+              "count": 14
+            },
+            {
+              "label": "Swiss Election",
+              "count": 8
+            },
+            {
+              "label": "Swiss Election Campaign",
+              "count": 7
+            },
+            {
+              "label": "Swiss Election Error",
+              "count": 7
+            },
+            {
+              "label": "Swiss Election Interference",
+              "count": 7
+            },
+            {
+              "label": "Swiss SVP Event",
+              "count": 6
+            },
+            {
+              "label": "Swiss FDP Leadership",
+              "count": 6
+            },
+            {
+              "label": "Election Fraud",
+              "count": 6
+            }
+          ]
+        },
+        "Media, Transparency & Accountability": {
+          "total": 2572,
+          "top_labels": [
+            {
+              "label": "Transparency",
+              "count": 2035
+            },
+            {
+              "label": "Swiss Media Policy",
+              "count": 187
+            },
+            {
+              "label": "Transparency",
+              "count": 80
+            },
+            {
+              "label": "Swiss Media Regulation",
+              "count": 57
+            },
+            {
+              "label": "Media Reform",
+              "count": 24
+            },
+            {
+              "label": "Media Criticism",
+              "count": 18
+            },
+            {
+              "label": "Swiss Media Representation",
+              "count": 17
+            },
+            {
+              "label": "Swiss Broadcasting Fee Policy",
+              "count": 16
+            },
+            {
+              "label": "Swiss Digital Identity",
+              "count": 13
+            },
+            {
+              "label": "Digital Identity",
+              "count": 13
+            }
+          ]
+        },
+        "Civil Rights, Equality & Justice": {
+          "total": 790,
+          "top_labels": [
+            {
+              "label": "Racism Prevention",
+              "count": 54
+            },
+            {
+              "label": "Antisemitismus",
+              "count": 50
+            },
+            {
+              "label": "Swiss Disability Rights",
+              "count": 46
+            },
+            {
+              "label": "Swiss Antisemitism Policy",
+              "count": 31
+            },
+            {
+              "label": "Memorial",
+              "count": 31
+            },
+            {
+              "label": "Human Rights Violations",
+              "count": 29
+            },
+            {
+              "label": "Swiss Domestic Violence Policy",
+              "count": 24
+            },
+            {
+              "label": "Domestic Violence",
+              "count": 22
+            },
+            {
+              "label": "Swiss LGBTQ+ Rights",
+              "count": 22
+            },
+            {
+              "label": "Domestic Violence",
+              "count": 19
+            }
+          ]
+        },
+        "Culture, Society & Identity": {
+          "total": 1827,
+          "top_labels": [
+            {
+              "label": "Art",
+              "count": 1137
+            },
+            {
+              "label": "Art",
+              "count": 79
+            },
+            {
+              "label": "Swiss History",
+              "count": 50
+            },
+            {
+              "label": "Swiss Adoption Policy",
+              "count": 29
+            },
+            {
+              "label": "Swiss Football",
+              "count": 26
+            },
+            {
+              "label": "Swiss Sports Policy",
+              "count": 22
+            },
+            {
+              "label": "Swiss Women's Football",
+              "count": 20
+            },
+            {
+              "label": "Swiss Art Scene",
+              "count": 19
+            },
+            {
+              "label": "Swiss Culture",
+              "count": 18
+            },
+            {
+              "label": "Swiss National Identity",
+              "count": 15
+            }
+          ]
+        },
+        "Local & Regional Governance": {
+          "total": 2450,
+          "top_labels": [
+            {
+              "label": "Animal Welfare",
+              "count": 65
+            },
+            {
+              "label": "Housing Crisis",
+              "count": 27
+            },
+            {
+              "label": "Swiss Municipal Leadership",
+              "count": 23
+            },
+            {
+              "label": "Swiss Olympic Bid",
+              "count": 23
+            },
+            {
+              "label": "Genozid",
+              "count": 23
+            },
+            {
+              "label": "Swiss E-ID Policy",
+              "count": 22
+            },
+            {
+              "label": "Swiss Charity Regulation",
+              "count": 21
+            },
+            {
+              "label": "Swiss Local Community",
+              "count": 20
+            },
+            {
+              "label": "Agricultural Policy",
+              "count": 19
+            },
+            {
+              "label": "Swiss UNRWA Relations",
+              "count": 18
+            }
+          ]
+        }
+      }
+    },
+    "Economy, Labor & Finance": {
+      "total": 6229,
+      "subgroups": {
+        "Housing & Urban Development": {
+          "total": 1148,
+          "top_labels": [
+            {
+              "label": "Swiss Housing Policy",
+              "count": 255
+            },
+            {
+              "label": "Swiss Infrastructure Development",
+              "count": 184
+            },
+            {
+              "label": "Swiss Urban Planning",
+              "count": 98
+            },
+            {
+              "label": "Infrastructure Development",
+              "count": 84
+            },
+            {
+              "label": "Urban Development",
+              "count": 79
+            },
+            {
+              "label": "Housing Policy",
+              "count": 57
+            },
+            {
+              "label": "Swiss Urban Development",
+              "count": 45
+            },
+            {
+              "label": "Housing Policy",
+              "count": 43
+            },
+            {
+              "label": "Housing Market",
+              "count": 38
+            },
+            {
+              "label": "Urban Planning",
+              "count": 27
+            }
+          ]
+        },
+        "Banking, Finance & Taxation": {
+          "total": 1989,
+          "top_labels": [
+            {
+              "label": "Swiss Pension Reform",
+              "count": 223
+            },
+            {
+              "label": "Swiss Tax Policy",
+              "count": 207
+            },
+            {
+              "label": "Swiss Banking Policy",
+              "count": 159
+            },
+            {
+              "label": "Swiss Banking Regulation",
+              "count": 142
+            },
+            {
+              "label": "Wealth Tax",
+              "count": 104
+            },
+            {
+              "label": "Swiss Banking Industry",
+              "count": 101
+            },
+            {
+              "label": "Swiss AHV Reform",
+              "count": 84
+            },
+            {
+              "label": "Swiss Budget Policy",
+              "count": 80
+            },
+            {
+              "label": "Social Welfare Reform",
+              "count": 74
+            },
+            {
+              "label": "Swiss Tax Reform",
+              "count": 64
+            }
+          ]
+        },
+        "Labor Market & Wages": {
+          "total": 480,
+          "top_labels": [
+            {
+              "label": "Arbeitsmarkt in der Schweiz",
+              "count": 141
+            },
+            {
+              "label": "Swiss Labor Market",
+              "count": 66
+            },
+            {
+              "label": "Swiss Labor Market Reform",
+              "count": 58
+            },
+            {
+              "label": "Swiss Labor Policy",
+              "count": 56
+            },
+            {
+              "label": "Swiss Labor Market Regulation",
+              "count": 50
+            },
+            {
+              "label": "Labor Market",
+              "count": 26
+            },
+            {
+              "label": "Swiss Labor Shortage",
+              "count": 10
+            },
+            {
+              "label": "Workforce Management",
+              "count": 7
+            },
+            {
+              "label": "Labor Law Reform",
+              "count": 7
+            },
+            {
+              "label": "Arbeitsmarkt in der Schweiz",
+              "count": 7
+            }
+          ]
+        },
+        "Trade & International Commerce": {
+          "total": 654,
+          "top_labels": [
+            {
+              "label": "Swiss US Trade Relations",
+              "count": 135
+            },
+            {
+              "label": "Swiss US Relations",
+              "count": 112
+            },
+            {
+              "label": "Trade Agreement",
+              "count": 97
+            },
+            {
+              "label": "Swiss US Trade Policy",
+              "count": 73
+            },
+            {
+              "label": "Swiss Trade Relations",
+              "count": 62
+            },
+            {
+              "label": "US Swiss Trade Relations",
+              "count": 46
+            },
+            {
+              "label": "Swiss Trade Policy",
+              "count": 37
+            },
+            {
+              "label": "Trade Policy",
+              "count": 21
+            },
+            {
+              "label": "Swiss US Relations",
+              "count": 21
+            },
+            {
+              "label": "Trade Agreement",
+              "count": 19
+            }
+          ]
+        },
+        "Agriculture, Industry & Business": {
+          "total": 694,
+          "top_labels": [
+            {
+              "label": "Swiss Agriculture Policy",
+              "count": 98
+            },
+            {
+              "label": "Swiss Industrial Policy",
+              "count": 78
+            },
+            {
+              "label": "Swiss Animal Welfare Policy",
+              "count": 31
+            },
+            {
+              "label": "Swiss Wolf Policy",
+              "count": 26
+            },
+            {
+              "label": "Swiss Tourism Policy",
+              "count": 22
+            },
+            {
+              "label": "Swiss Biodiversity Policy",
+              "count": 21
+            },
+            {
+              "label": "Swiss Business",
+              "count": 21
+            },
+            {
+              "label": "Swiss Business Leadership",
+              "count": 21
+            },
+            {
+              "label": "Swiss Sunday Shopping Policy",
+              "count": 20
+            },
+            {
+              "label": "Gentechnikregulierung",
+              "count": 18
+            }
+          ]
+        },
+        "Social Benefits, Pensions & Welfare": {
+          "total": 127,
+          "top_labels": [
+            {
+              "label": "Social Welfare",
+              "count": 33
+            },
+            {
+              "label": "Swiss Pension Policy",
+              "count": 28
+            },
+            {
+              "label": "Swiss Social Welfare Policy",
+              "count": 27
+            },
+            {
+              "label": "Swiss Pensions Policy",
+              "count": 11
+            },
+            {
+              "label": "Swiss Insurance Discrimination",
+              "count": 7
+            },
+            {
+              "label": "Swiss Insurance Industry",
+              "count": 7
+            },
+            {
+              "label": "Social Welfare",
+              "count": 6
+            },
+            {
+              "label": "Swiss Pensions Security Risks",
+              "count": 4
+            },
+            {
+              "label": "Swiss Care Worker Policy",
+              "count": 1
+            },
+            {
+              "label": "Swiss Welfare State",
+              "count": 1
+            }
+          ]
+        },
+        "Other Economic Topics": {
+          "total": 1137,
+          "top_labels": [
+            {
+              "label": "Swiss Economy",
+              "count": 98
+            },
+            {
+              "label": "Media Regulation",
+              "count": 78
+            },
+            {
+              "label": "Swiss Military Budget",
+              "count": 70
+            },
+            {
+              "label": "Swiss Postal Reform",
+              "count": 68
+            },
+            {
+              "label": "Swiss Demography Policy",
+              "count": 64
+            },
+            {
+              "label": "Business",
+              "count": 49
+            },
+            {
+              "label": "Economy",
+              "count": 34
+            },
+            {
+              "label": "Swiss Solar Energy Policy",
+              "count": 34
+            },
+            {
+              "label": "Swiss Economic Policy",
+              "count": 32
+            },
+            {
+              "label": "Swiss Demographic Trends",
+              "count": 30
+            }
+          ]
+        }
+      }
+    },
+    "Defense, Security & Military": {
+      "total": 2222,
+      "subgroups": {
+        "Military Policy & Procurement": {
+          "total": 1080,
+          "top_labels": [
+            {
+              "label": "Swiss Military Policy",
+              "count": 332
+            },
+            {
+              "label": "Swiss Military Procurement",
+              "count": 115
+            },
+            {
+              "label": "Swiss Defense Policy",
+              "count": 112
+            },
+            {
+              "label": "Swiss Military Preparedness",
+              "count": 81
+            },
+            {
+              "label": "Swiss Military Funding",
+              "count": 54
+            },
+            {
+              "label": "Swiss Military Service Policy",
+              "count": 29
+            },
+            {
+              "label": "Swiss Military Export Policy",
+              "count": 26
+            },
+            {
+              "label": "Swiss Military Reform",
+              "count": 21
+            },
+            {
+              "label": "Military Procurement",
+              "count": 20
+            },
+            {
+              "label": "Military Procurement",
+              "count": 19
+            }
+          ]
+        },
+        "Defense Industry & Arms Exports": {
+          "total": 87,
+          "top_labels": [
+            {
+              "label": "Swiss Defense Industry",
+              "count": 34
+            },
+            {
+              "label": "Swiss Waffenexport Policy",
+              "count": 21
+            },
+            {
+              "label": "Arms Export Policy",
+              "count": 12
+            },
+            {
+              "label": "Swiss Defense Industry Policy",
+              "count": 10
+            },
+            {
+              "label": "Waffenexportgesetz",
+              "count": 4
+            },
+            {
+              "label": "Swiss Waffenexport Reform",
+              "count": 3
+            },
+            {
+              "label": "Waffenexportregulierung",
+              "count": 1
+            },
+            {
+              "label": "Waffenexport",
+              "count": 1
+            },
+            {
+              "label": "Waffenexport",
+              "count": 1
+            }
+          ]
+        },
+        "Security Policy & Intelligence": {
+          "total": 408,
+          "top_labels": [
+            {
+              "label": "Swiss Security Policy",
+              "count": 73
+            },
+            {
+              "label": "Cybersecurity",
+              "count": 45
+            },
+            {
+              "label": "Security Threats",
+              "count": 44
+            },
+            {
+              "label": "Swiss Security Measures",
+              "count": 33
+            },
+            {
+              "label": "Swiss Counterterrorism",
+              "count": 24
+            },
+            {
+              "label": "Swiss National Security Policy",
+              "count": 22
+            },
+            {
+              "label": "Swiss Security Threats",
+              "count": 15
+            },
+            {
+              "label": "SecurityMeasures",
+              "count": 13
+            },
+            {
+              "label": "Security Measures",
+              "count": 13
+            },
+            {
+              "label": "Spionage",
+              "count": 13
+            }
+          ]
+        },
+        "Crime Prevention & Law Enforcement": {
+          "total": 278,
+          "top_labels": [
+            {
+              "label": "Swiss Crime Policy",
+              "count": 22
+            },
+            {
+              "label": "Swiss Crime Prevention",
+              "count": 20
+            },
+            {
+              "label": "Traffic Regulation",
+              "count": 18
+            },
+            {
+              "label": "Crime",
+              "count": 14
+            },
+            {
+              "label": "Organized Crime Prevention",
+              "count": 13
+            },
+            {
+              "label": "Swiss Traffic Noise Control",
+              "count": 11
+            },
+            {
+              "label": "Swiss Youth Crime Policy",
+              "count": 10
+            },
+            {
+              "label": "Crime Prevention",
+              "count": 10
+            },
+            {
+              "label": "Swiss Mafia Policy",
+              "count": 9
+            },
+            {
+              "label": "Swiss Traffic Regulation",
+              "count": 9
+            }
+          ]
+        },
+        "Disaster Response & Humanitarian": {
+          "total": 221,
+          "top_labels": [
+            {
+              "label": "Swiss Disaster Response",
+              "count": 41
+            },
+            {
+              "label": "Disaster Relief",
+              "count": 35
+            },
+            {
+              "label": "Swiss Gaza Policy",
+              "count": 32
+            },
+            {
+              "label": "Swiss Natural Disaster Response",
+              "count": 20
+            },
+            {
+              "label": "Humanitarian Aid",
+              "count": 18
+            },
+            {
+              "label": "Humanitarian Crisis",
+              "count": 17
+            },
+            {
+              "label": "Humanitarian Crisis",
+              "count": 11
+            },
+            {
+              "label": "Swiss Disaster Relief",
+              "count": 9
+            },
+            {
+              "label": "Swiss Humanitarian Aid",
+              "count": 7
+            },
+            {
+              "label": "Swiss Humanitarian Aid Policy",
+              "count": 6
+            }
+          ]
+        },
+        "Other Defense & Security Topics": {
+          "total": 148,
+          "top_labels": [
+            {
+              "label": "Defense Policy",
+              "count": 18
+            },
+            {
+              "label": "Security",
+              "count": 16
+            },
+            {
+              "label": "Military Cooperation",
+              "count": 8
+            },
+            {
+              "label": "MilitaryProcurement",
+              "count": 8
+            },
+            {
+              "label": "Swiss Civil Defense Policy",
+              "count": 8
+            },
+            {
+              "label": "Military Infrastructure",
+              "count": 8
+            },
+            {
+              "label": "MilitaryExpansion",
+              "count": 8
+            },
+            {
+              "label": "EU-Security Pact",
+              "count": 7
+            },
+            {
+              "label": "National Service",
+              "count": 6
+            },
+            {
+              "label": "Swiss EU Security Cooperation",
+              "count": 6
+            }
+          ]
+        }
+      }
+    },
+    "Demographic Change & Population": {
+      "total": 292,
+      "subgroups": {
+        "Aging Society & Population Trends": {
+          "total": 252,
+          "top_labels": [
+            {
+              "label": "Demographic Change",
+              "count": 87
+            },
+            {
+              "label": "Demografische Entwicklung",
+              "count": 69
+            },
+            {
+              "label": "Demografischer Wandel",
+              "count": 53
+            },
+            {
+              "label": "Aging Population",
+              "count": 16
+            },
+            {
+              "label": "Aging Population",
+              "count": 13
+            },
+            {
+              "label": "Demographic Trends",
+              "count": 4
+            },
+            {
+              "label": "DemographicChange",
+              "count": 3
+            },
+            {
+              "label": "Demographic Transition",
+              "count": 3
+            },
+            {
+              "label": "Demographic Trends",
+              "count": 1
+            },
+            {
+              "label": "Demografischer Wandel",
+              "count": 1
+            }
+          ]
+        },
+        "Population & Immigration Demographics": {
+          "total": 39,
+          "top_labels": [
+            {
+              "label": "Population Growth",
+              "count": 12
+            },
+            {
+              "label": "Demography Policy",
+              "count": 10
+            },
+            {
+              "label": "Demografie",
+              "count": 7
+            },
+            {
+              "label": "Swiss Population Policy",
+              "count": 4
+            },
+            {
+              "label": "Urban Demographics",
+              "count": 2
+            },
+            {
+              "label": "Demografische Risiken",
+              "count": 1
+            },
+            {
+              "label": "Demografischer Notstand",
+              "count": 1
+            },
+            {
+              "label": "Swiss Urban Demographics",
+              "count": 1
+            },
+            {
+              "label": "Population Growth",
+              "count": 1
+            }
+          ]
+        },
+        "Fertility & Pronatalism": {
+          "total": 1,
+          "top_labels": [
+            {
+              "label": "Pronatalismus",
+              "count": 1
+            }
+          ]
+        },
+        "Other Demographic Topics": {
+          "total": 0,
+          "top_labels": []
+        }
+      }
+    },
+    "Healthcare, Social Welfare & Education": {
+      "total": 1352,
+      "subgroups": {
+        "Healthcare Policy & Reform": {
+          "total": 759,
+          "top_labels": [
+            {
+              "label": "Swiss Healthcare Policy",
+              "count": 212
+            },
+            {
+              "label": "Healthcare Reform",
+              "count": 172
+            },
+            {
+              "label": "Healthcare Policy",
+              "count": 77
+            },
+            {
+              "label": "Healthcare Regulation",
+              "count": 56
+            },
+            {
+              "label": "Healthcare Financing",
+              "count": 50
+            },
+            {
+              "label": "Healthcare Workforce",
+              "count": 30
+            },
+            {
+              "label": "Swiss Healthcare Financing",
+              "count": 30
+            },
+            {
+              "label": "Healthcare Infrastructure",
+              "count": 28
+            },
+            {
+              "label": "Swiss Healthcare Reform",
+              "count": 25
+            },
+            {
+              "label": "Healthcare Costs",
+              "count": 17
+            }
+          ]
+        },
+        "Education Policy & Reform": {
+          "total": 369,
+          "top_labels": [
+            {
+              "label": "Swiss Education Policy",
+              "count": 178
+            },
+            {
+              "label": "Education Reform",
+              "count": 58
+            },
+            {
+              "label": "Swiss Education Reform",
+              "count": 50
+            },
+            {
+              "label": "Swiss Language Policy",
+              "count": 25
+            },
+            {
+              "label": "Education Reform",
+              "count": 12
+            },
+            {
+              "label": "Swiss Education Infrastructure",
+              "count": 9
+            },
+            {
+              "label": "Swiss Education Inequality",
+              "count": 6
+            },
+            {
+              "label": "Swiss Higher Education Policy",
+              "count": 5
+            },
+            {
+              "label": "Swiss Medical Education Reform",
+              "count": 4
+            },
+            {
+              "label": "Swiss Vocational Education",
+              "count": 4
+            }
+          ]
+        },
+        "Social Benefits & Family Policy": {
+          "total": 145,
+          "top_labels": [
+            {
+              "label": "Swiss Family Policy",
+              "count": 30
+            },
+            {
+              "label": "Pension Reform",
+              "count": 28
+            },
+            {
+              "label": "SocialWelfare",
+              "count": 15
+            },
+            {
+              "label": "FamilyPolicy",
+              "count": 10
+            },
+            {
+              "label": "Swiss Social Commentary",
+              "count": 7
+            },
+            {
+              "label": "Pension Reform",
+              "count": 7
+            },
+            {
+              "label": "Swiss Social Trends",
+              "count": 7
+            },
+            {
+              "label": "Family Policy",
+              "count": 6
+            },
+            {
+              "label": "Kinderbetreuungspolitik",
+              "count": 6
+            },
+            {
+              "label": "Swiss Social Policy",
+              "count": 6
+            }
+          ]
+        },
+        "End-of-Life, Mental Health & Disability": {
+          "total": 37,
+          "top_labels": [
+            {
+              "label": "Suizidhilfegesetz",
+              "count": 16
+            },
+            {
+              "label": "Suizidhilfe",
+              "count": 6
+            },
+            {
+              "label": "Euthanasia Controversy",
+              "count": 5
+            },
+            {
+              "label": "Swiss Suicide Policy",
+              "count": 3
+            },
+            {
+              "label": "Suizidkapsel Policy",
+              "count": 2
+            },
+            {
+              "label": "Swiss Forensic Psychiatry",
+              "count": 1
+            },
+            {
+              "label": "Suizidprävention in U-Haft",
+              "count": 1
+            },
+            {
+              "label": "Disability Policy",
+              "count": 1
+            },
+            {
+              "label": "Swiss Euthanasia Policy",
+              "count": 1
+            },
+            {
+              "label": "Disability Employment Policy",
+              "count": 1
+            }
+          ]
+        },
+        "Other Health & Welfare Topics": {
+          "total": 42,
+          "top_labels": [
+            {
+              "label": "Healthcare",
+              "count": 5
+            },
+            {
+              "label": "Youth Education",
+              "count": 5
+            },
+            {
+              "label": "Swiss Women's Pension Policy",
+              "count": 4
+            },
+            {
+              "label": "Language Policy",
+              "count": 4
+            },
+            {
+              "label": "Youth Democracy Education",
+              "count": 4
+            },
+            {
+              "label": "Healthcare Shortage",
+              "count": 3
+            },
+            {
+              "label": "Education Technology",
+              "count": 3
+            },
+            {
+              "label": "Holocaust Education",
+              "count": 2
+            },
+            {
+              "label": "Swiss Inclusive Education",
+              "count": 1
+            },
+            {
+              "label": "Language Education",
+              "count": 1
+            }
+          ]
+        }
+      }
+    },
+    "Environment, Energy & Infrastructure": {
+      "total": 1569,
+      "subgroups": {
+        "Energy Policy & Nuclear": {
+          "total": 529,
+          "top_labels": [
+            {
+              "label": "Swiss Energy Policy",
+              "count": 263
+            },
+            {
+              "label": "Energy Policy",
+              "count": 105
+            },
+            {
+              "label": "Swiss Nuclear Energy Policy",
+              "count": 29
+            },
+            {
+              "label": "Energy Infrastructure",
+              "count": 19
+            },
+            {
+              "label": "Nuclear Energy Policy",
+              "count": 18
+            },
+            {
+              "label": "RenewableEnergyPolicy",
+              "count": 15
+            },
+            {
+              "label": "Swiss EU Energy Policy",
+              "count": 15
+            },
+            {
+              "label": "EnergyPolicy",
+              "count": 14
+            },
+            {
+              "label": "Solar Energy Policy",
+              "count": 13
+            },
+            {
+              "label": "Renewable Energy Policy",
+              "count": 12
+            }
+          ]
+        },
+        "Climate & Environmental Protection": {
+          "total": 476,
+          "top_labels": [
+            {
+              "label": "Swiss Climate Policy",
+              "count": 103
+            },
+            {
+              "label": "Swiss Environmental Policy",
+              "count": 78
+            },
+            {
+              "label": "Climate Policy",
+              "count": 62
+            },
+            {
+              "label": "Klimaschutz",
+              "count": 47
+            },
+            {
+              "label": "Environmental Policy",
+              "count": 22
+            },
+            {
+              "label": "Environmental Policy",
+              "count": 21
+            },
+            {
+              "label": "EnvironmentalProtection",
+              "count": 20
+            },
+            {
+              "label": "Klimawandel",
+              "count": 18
+            },
+            {
+              "label": "Klimaseniorinnen-Urteil",
+              "count": 14
+            },
+            {
+              "label": "Umweltverantwortung",
+              "count": 13
+            }
+          ]
+        },
+        "Transportation & Infrastructure": {
+          "total": 452,
+          "top_labels": [
+            {
+              "label": "Swiss Transportation Infrastructure",
+              "count": 173
+            },
+            {
+              "label": "Swiss Transportation Policy",
+              "count": 80
+            },
+            {
+              "label": "Transport Infrastructure",
+              "count": 44
+            },
+            {
+              "label": "TransportInfrastructure",
+              "count": 42
+            },
+            {
+              "label": "Transportation Policy",
+              "count": 24
+            },
+            {
+              "label": "Transportation Infrastructure",
+              "count": 19
+            },
+            {
+              "label": "Swiss Traffic Policy",
+              "count": 12
+            },
+            {
+              "label": "Transportation Infrastructure",
+              "count": 12
+            },
+            {
+              "label": "Disaster Response",
+              "count": 9
+            },
+            {
+              "label": "Urban Transportation",
+              "count": 8
+            }
+          ]
+        },
+        "Urban Planning & Development": {
+          "total": 15,
+          "top_labels": [
+            {
+              "label": "Swiss Urbanization",
+              "count": 7
+            },
+            {
+              "label": "Swiss Urban Policy",
+              "count": 5
+            },
+            {
+              "label": "Swiss Urban Violence Prevention",
+              "count": 3
+            }
+          ]
+        },
+        "Other Environment & Infrastructure Topics": {
+          "total": 97,
+          "top_labels": [
+            {
+              "label": "Accessibility in Public Transportation",
+              "count": 7
+            },
+            {
+              "label": "Natural Disasters",
+              "count": 7
+            },
+            {
+              "label": "Swiss Internet Infrastructure",
+              "count": 6
+            },
+            {
+              "label": "Swiss Nuclear Disarmament Policy",
+              "count": 6
+            },
+            {
+              "label": "Climate Change",
+              "count": 5
+            },
+            {
+              "label": "Climate Change Policy",
+              "count": 4
+            },
+            {
+              "label": "Air Traffic",
+              "count": 4
+            },
+            {
+              "label": "Telecom Infrastructure",
+              "count": 4
+            },
+            {
+              "label": "EnvironmentalPolicy",
+              "count": 3
+            },
+            {
+              "label": "Housing Infrastructure",
+              "count": 3
+            }
+          ]
+        }
+      }
+    },
+    "International Relations & Geopolitics": {
+      "total": 1155,
+      "subgroups": {
+        "Switzerland-Ukraine & Eastern Europe": {
+          "total": 329,
+          "top_labels": [
+            {
+              "label": "Swiss Ukraine Relations",
+              "count": 195
+            },
+            {
+              "label": "Swiss Ukraine Diplomacy",
+              "count": 88
+            },
+            {
+              "label": "Swiss Ukraine Aid",
+              "count": 11
+            },
+            {
+              "label": "Ukraine Aid",
+              "count": 8
+            },
+            {
+              "label": "Swiss Russia Relations",
+              "count": 7
+            },
+            {
+              "label": "Libanesischer Bürgerkrieg",
+              "count": 6
+            },
+            {
+              "label": "Swiss EU Ukraine Relations",
+              "count": 5
+            },
+            {
+              "label": "Ukraine Relations",
+              "count": 2
+            },
+            {
+              "label": "Ukraine Wiederaufbau",
+              "count": 2
+            },
+            {
+              "label": "Swiss Russia Sanctions Policy",
+              "count": 2
+            }
+          ]
+        },
+        "Middle East & Africa Policy": {
+          "total": 210,
+          "top_labels": [
+            {
+              "label": "Swiss Hamas Policy",
+              "count": 46
+            },
+            {
+              "label": "Swiss Israel Relations",
+              "count": 20
+            },
+            {
+              "label": "Swiss Palestine Relations",
+              "count": 19
+            },
+            {
+              "label": "Swiss Palestine Recognition Policy",
+              "count": 17
+            },
+            {
+              "label": "Swiss Iran Relations",
+              "count": 16
+            },
+            {
+              "label": "Swiss Palestine Diplomacy",
+              "count": 13
+            },
+            {
+              "label": "Swiss Sudan Aid Policy",
+              "count": 9
+            },
+            {
+              "label": "Syrian Conflict",
+              "count": 8
+            },
+            {
+              "label": "Swiss Sudan Relations",
+              "count": 7
+            },
+            {
+              "label": "UNRWA Funding",
+              "count": 7
+            }
+          ]
+        },
+        "Switzerland-US Relations": {
+          "total": 163,
+          "top_labels": [
+            {
+              "label": "US Swiss Relations",
+              "count": 92
+            },
+            {
+              "label": "US-Swiss Relations",
+              "count": 22
+            },
+            {
+              "label": "US Swiss Relations is not applicable here, as the article is not about the US.",
+              "count": 18
+            },
+            {
+              "label": "US-Swiss Relations",
+              "count": 10
+            },
+            {
+              "label": "US Election Policy",
+              "count": 7
+            },
+            {
+              "label": "US-Mexico Relations",
+              "count": 4
+            },
+            {
+              "label": "US Foreign Policy",
+              "count": 3
+            },
+            {
+              "label": "US Swiss Relations is not applicable here, as the article is not about the US.",
+              "count": 3
+            },
+            {
+              "label": "US Swiss Relations is not applicable here, as the article is not about the US.",
+              "count": 2
+            },
+            {
+              "label": "US Swiss Relations is not applicable here, as the article is not about the US.",
+              "count": 1
+            }
+          ]
+        },
+        "Switzerland-Asia Relations": {
+          "total": 66,
+          "top_labels": [
+            {
+              "label": "Swiss China Relations",
+              "count": 64
+            },
+            {
+              "label": "Uigur Women's Rights",
+              "count": 1
+            },
+            {
+              "label": "Karabakh Conflict",
+              "count": 1
+            }
+          ]
+        },
+        "Swiss Neutrality & Foreign Aid": {
+          "total": 326,
+          "top_labels": [
+            {
+              "label": "Swiss Foreign Policy",
+              "count": 103
+            },
+            {
+              "label": "Swiss International Relations",
+              "count": 47
+            },
+            {
+              "label": "Swiss Foreign Aid Policy",
+              "count": 21
+            },
+            {
+              "label": "Swiss Neutrality Policy",
+              "count": 17
+            },
+            {
+              "label": "Swiss Foreign Aid",
+              "count": 15
+            },
+            {
+              "label": "Diplomacy",
+              "count": 11
+            },
+            {
+              "label": "Swiss Sanctions Against Syria",
+              "count": 11
+            },
+            {
+              "label": "Swiss Development Aid Policy",
+              "count": 9
+            },
+            {
+              "label": "Swiss Neutrality",
+              "count": 9
+            },
+            {
+              "label": "Swiss Foreign Aid",
+              "count": 9
+            }
+          ]
+        },
+        "Other International Topics": {
+          "total": 61,
+          "top_labels": [
+            {
+              "label": "Swiss Afghan Relations",
+              "count": 6
+            },
+            {
+              "label": "International Relations",
+              "count": 6
+            },
+            {
+              "label": "Swiss Gastronomy Awards",
+              "count": 6
+            },
+            {
+              "label": "Armenia Conflict",
+              "count": 5
+            },
+            {
+              "label": "European Right-Wing Populism",
+              "count": 4
+            },
+            {
+              "label": "US Democratic Party Leadership",
+              "count": 3
+            },
+            {
+              "label": "Swiss Eritrean Community Conflict",
+              "count": 3
+            },
+            {
+              "label": "Gaza Conflict",
+              "count": 3
+            },
+            {
+              "label": "US Congressional Election",
+              "count": 2
+            },
+            {
+              "label": "Iranian Regime Change",
+              "count": 2
+            }
+          ]
+        }
+      }
+    }
+  }
+}

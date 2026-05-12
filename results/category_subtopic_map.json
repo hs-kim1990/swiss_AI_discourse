@@ -1,0 +1,84 @@
+{
+  "_description": "Flat mapping category->subgroups from subgroup_taxonomy_v2.json",
+  "Swiss Domestic Politics & Governance": [
+    "Direct Democracy & Volksinitiative",
+    "Federal Executive & Administration",
+    "Party Politics & Electoral Competition",
+    "Budget, Austerity & Fiscal Policy",
+    "Governance Accountability & Scandals",
+    "General Political Affairs (SVP/Migration-Adjacent)",
+    "Media, Transparency & Accountability",
+    "Civil Rights, Equality & Justice",
+    "Culture, Society & Identity",
+    "Local & Regional Governance"
+  ],
+  "Economy, Labor & Finance": [
+    "Banking, Finance & Taxation",
+    "Housing & Urban Development",
+    "Labor Market & Wages",
+    "Trade & International Commerce",
+    "Agriculture, Industry & Business",
+    "Social Benefits, Pensions & Welfare",
+    "Other Economic Topics"
+  ],
+  "Immigration & Asylum Policy": [
+    "Asylum Procedures & Reform",
+    "Swiss Migration Policy",
+    "EU & International Asylum Policy",
+    "Migration Control & Border Policy",
+    "Other Migration Topics",
+    "Refugee Housing & Facilities"
+  ],
+  "Swiss-EU Relations & Bilateral Agreements": [
+    "Core Switzerland-EU Framework",
+    "Brexit & European Realignment",
+    "EU Trade & Economic Cooperation",
+    "EU Security & Defense",
+    "EU Institutional Affairs",
+    "Other EU Topics"
+  ],
+  "Refugee & Migrant Integration": [
+    "Refugee Experiences & Stories",
+    "Integration Programs & Policy",
+    "Other Integration Topics",
+    "Cultural & Social Integration",
+    "Employment & Economic Integration",
+    "Education & Youth Integration"
+  ],
+  "Defense, Security & Military": [
+    "Military Policy & Procurement",
+    "Security Policy & Intelligence",
+    "Crime Prevention & Law Enforcement",
+    "Disaster Response & Humanitarian",
+    "Other Defense & Security Topics",
+    "Defense Industry & Arms Exports"
+  ],
+  "Environment, Energy & Infrastructure": [
+    "Energy Policy & Nuclear",
+    "Climate & Environmental Protection",
+    "Transportation & Infrastructure",
+    "Other Environment & Infrastructure Topics",
+    "Urban Planning & Development"
+  ],
+  "Healthcare, Social Welfare & Education": [
+    "Healthcare Policy & Reform",
+    "Education Policy & Reform",
+    "Social Benefits & Family Policy",
+    "Other Health & Welfare Topics",
+    "End-of-Life, Mental Health & Disability"
+  ],
+  "International Relations & Geopolitics": [
+    "Switzerland-Ukraine & Eastern Europe",
+    "Swiss Neutrality & Foreign Aid",
+    "Middle East & Africa Policy",
+    "Switzerland-US Relations",
+    "Switzerland-Asia Relations",
+    "Other International Topics"
+  ],
+  "Demographic Change & Population": [
+    "Aging Society & Population Trends",
+    "Population & Immigration Demographics",
+    "Fertility & Pronatalism",
+    "Other Demographic Topics"
+  ]
+}

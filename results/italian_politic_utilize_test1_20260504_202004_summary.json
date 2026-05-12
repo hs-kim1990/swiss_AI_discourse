@@ -1,0 +1,8 @@
+{
+  "total_documents": 200,
+  "successfully_classified": 0,
+  "failed": 200,
+  "category_distribution": {},
+  "success_rate": 0.0,
+  "sentiment_distribution": {}
+}

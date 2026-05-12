@@ -1,0 +1,22 @@
+{
+  "total_documents": 200,
+  "successfully_classified": 198,
+  "failed": 2,
+  "category_distribution": {
+    "NOT TOPIC": 195,
+    "Environment, Energy & Infrastructure": 1,
+    "Healthcare, Social Welfare & Education": 1,
+    "Refugee & Migrant Integration": 1
+  },
+  "success_rate": 0.99,
+  "sentiment_distribution": {
+    "NOT TOPIC": 195,
+    "positive": 2,
+    "neutral": 1
+  },
+  "subtopic_distribution": {
+    "Climate & Environmental Protection": 1,
+    "Other Health & Welfare Topics": 1,
+    "Refugee Experiences & Stories": 1
+  }
+}
