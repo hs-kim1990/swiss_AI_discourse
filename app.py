@@ -78,23 +78,38 @@ def get_source_color(code):
 
 # ── Load topic mapping from preproc.json ──────────────────────────────────
 # Maps fine-grained raw classifications → broad topic names used in dashboard
-TOPIC_MAPPING = {}  # raw_classification_lower -> broad_topic
+TOPIC_MAPPING = {}      # article_id (str) -> broad_topic
+SENTIMENT_MAPPING = {}  # article_id (str) -> sentiment string
+ITEMS_ARTICLES = []     # full article records from items files (have sentiment)
 
 def load_topic_mapping():
-    global TOPIC_MAPPING
-    preproc_path = os.path.join(DOCS_DATA_DIR, 'preproc.json')
-    if not os.path.exists(preproc_path):
-        print('WARNING: preproc.json not found, topic filtering will not work')
-        return
-    with open(preproc_path, 'r', encoding='utf-8') as f:
-        preproc = json.load(f)
-    # preproc.topicStats has broad topics; items files have the raw classifications
-    # Build mapping by scanning items files
+    global TOPIC_MAPPING, SENTIMENT_MAPPING, ITEMS_ARTICLES
     items_index_path = os.path.join(DOCS_DATA_DIR, 'items_index.json')
     if not os.path.exists(items_index_path):
+        print('WARNING: items_index.json not found')
         return
     with open(items_index_path, 'r', encoding='utf-8') as f:
         items_index = json.load(f)
+
+    SOURCE_NAME_MAP = {
+        'NZZ':'NZZ','NZZM':'NZZ am Sonntag','NZZO':'NZZ Online',
+        'TA':'Tages-Anzeiger','SRF':'SRF','RSI':'RSI','RTS':'RTS',
+        'BLI':'Blick','BLIO':'Blick Online','AZ':'Aargauer Zeitung',
+        'BAZ':'Basler Zeitung','BEOL':'Berner Zeitung','WOZ':'WOZ',
+        'FUW':'Finanz und Wirtschaft','FUWO':'Finanz und Wirtschaft Online',
+        'SGT':'St. Galler Tagblatt','LUZ':'Luzerner Zeitung',
+        'LT':'Le Temps','LTO':'Le Temps Online',
+        '24H':'24 Heures','TDG':'Tribune de Genève',
+        'TPS':'TPS','TPSO':'TPS Online','ZWSO':'Zentralschweiz Online',
+        'ZWA':'Zentralschweiz','NNHEU':'Neue Helvetische Gesellschaft',
+    }
+    SOURCE_COLOR_MAP = {
+        'NZZ':'#7a6ab8','SRF':'#c06030','RSI':'#1a8a3a','RTS':'#1a5fa8',
+        'BLI':'#D45B5B','BLIO':'#D45B5B','TA':'#3a5a8a',
+        'LT':'#1a5fa8','LTO':'#1a5fa8','24H':'#2a7a9a','TDG':'#5a3a8a',
+        'TPS':'#4a8a7a','TPSO':'#4a8a7a','ZWA':'#8a6a2a','ZWSO':'#8a6a2a',
+    }
+
     for broad_topic, url in items_index.items():
         filename = os.path.basename(url)
         items_path = os.path.join(DOCS_DATA_DIR, filename)
@@ -102,13 +117,41 @@ def load_topic_mapping():
             continue
         with open(items_path, 'r', encoding='utf-8') as f:
             items = json.load(f)
-        # Each item is an array: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary]
-        # We need to map article IDs to broad topics
+        # Each item: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary]
         for item in items:
-            if isinstance(item, list) and len(item) > 0:
-                article_id = item[0]
-                TOPIC_MAPPING[str(article_id)] = broad_topic
-    print(f'Loaded topic mapping for {len(TOPIC_MAPPING):,} articles from preproc')
+            if not isinstance(item, list) or len(item) < 8:
+                continue
+            article_id = str(item[0])
+            pubtime    = str(item[1] or '')
+            medium     = str(item[2] or '')
+            language   = str(item[3] or '')
+            sentiment  = str(item[4] or '').strip().lower()
+            subtopic   = str(item[5] or '')
+            head       = str(item[6] or '')
+            summary    = str(item[7] or '')
+
+            TOPIC_MAPPING[article_id]     = broad_topic
+            SENTIMENT_MAPPING[article_id] = sentiment
+
+            ITEMS_ARTICLES.append({
+                'id':           item[0],
+                'headline':     head,
+                'summary':      summary,
+                'broad_topic':  broad_topic,
+                'subtopic':     subtopic,
+                'sentiment':    sentiment,
+                'pubtime_month': pubtime[:7] if len(pubtime) >= 7 else '',
+                'year':         int(pubtime[:4]) if len(pubtime) >= 4 and pubtime[:4].isdigit() else None,
+                'date':         pubtime[:10],
+                'source':       medium,
+                'outlet':       SOURCE_NAME_MAP.get(medium, medium),
+                'color':        SOURCE_COLOR_MAP.get(medium, '#7A7A8A'),
+                'language':     language,
+                'classification': broad_topic,
+            })
+
+    print(f'Loaded topic+sentiment mapping for {len(TOPIC_MAPPING):,} articles')
+    print(f'ITEMS_ARTICLES: {len(ITEMS_ARTICLES):,} full records available')
 
 load_topic_mapping()
 
@@ -145,12 +188,18 @@ for lang, filename in DATA_FILES.items():
         if classification.upper() in ('NOT TOPIC', 'NONE', ''):
             continue
         year, date_str = parse_date(item.get('pubtime'))
+        pubtime = str(item.get('pubtime') or '')
+        pubtime_month = pubtime[:7] if len(pubtime) >= 7 else ''
+        article_id = str(item.get('id'))
+
         ALL_ARTICLES.append({
             'id':             item.get('id'),
             'headline':       item.get('head', ''),
             'summary':        item.get('summary', ''),
             'classification': classification,
-            'broad_topic':    TOPIC_MAPPING.get(str(item.get('id')), ''),
+            'broad_topic':    TOPIC_MAPPING.get(article_id, ''),
+            'sentiment':      SENTIMENT_MAPPING.get(article_id, ''),
+            'pubtime_month':  pubtime_month,
             'verification':   item.get('verification', ''),
             'source':         item.get('medium_code', ''),
             'outlet':         get_source_display(item.get('medium_code', '')),
@@ -166,8 +215,6 @@ for lang, filename in DATA_FILES.items():
 
 print(f'\nTotal loaded: {len(ALL_ARTICLES):,} topic articles across {len(DATA_FILES)} languages')
 print(f'Data directory: {DATA_DIR}')
-if len(ALL_ARTICLES) == 0:
-    print('ERROR: No articles loaded — check that data files exist in the data/ folder')
 
 
 # ── Routes ─────────────────────────────────────────────────────────────────
@@ -230,33 +277,40 @@ def api_articles():
     q              = request.args.get('q', '').strip().lower()
     langs          = request.args.get('lang', '').strip()
     year           = request.args.get('year', type=int)
-    year_from      = request.args.get('year_from', type=int)
-    year_to        = request.args.get('year_to', type=int)
+    month_from     = request.args.get('month_from', '').strip()
+    month_to       = request.args.get('month_to', '').strip()
     source         = request.args.get('source', '').strip()
     classification = request.args.get('classification', '').strip().lower()
+    sentiment      = request.args.get('sentiment', '').strip().lower()
     limit          = request.args.get('limit', 100, type=int)
     offset         = request.args.get('offset', 0, type=int)
 
     lang_list = [l.strip() for l in langs.split(',') if l.strip()] if langs else []
 
+    # Use ITEMS_ARTICLES when filtering by sentiment or broad topic (they have full sentiment data)
+    pool = ITEMS_ARTICLES if (sentiment or classification) else ALL_ARTICLES
+
     results = []
-    for article in ALL_ARTICLES:
-        if lang_list and article['language'] not in lang_list:
+    for article in pool:
+        if lang_list and article.get('language') not in lang_list:
             continue
-        if year and article['year'] != year:
+        if year and article.get('year') != year:
             continue
-        if year_from and (article['year'] or 0) < year_from:
+        if month_from and (article.get('pubtime_month') or '') < month_from:
             continue
-        if year_to and (article['year'] or 0) > year_to:
+        if month_to and (article.get('pubtime_month') or '') > month_to:
             continue
-        if source and article['source'] != source:
+        if source and article.get('source') != source:
             continue
         if classification and (article.get('broad_topic') or '').lower() != classification:
+            continue
+        if sentiment and (article.get('sentiment') or '').lower() != sentiment:
             continue
         if q:
             searchable = ' '.join([
                 article.get('headline') or '',
                 article.get('summary') or '',
+                article.get('broad_topic') or '',
                 article.get('classification') or '',
             ]).lower()
             if q not in searchable:
@@ -277,19 +331,26 @@ def api_articles():
 @app.route('/api/stats')
 def api_stats():
     by_lang = {}
+    by_year = {}
     for a in ALL_ARTICLES:
         l = a['language']
         by_lang[l] = by_lang.get(l, 0) + 1
+        if a['year']:
+            by_year[a['year']] = by_year.get(a['year'], 0) + 1
 
     sources = set(a['source'] for a in ALL_ARTICLES)
     years   = [a['year'] for a in ALL_ARTICLES if a['year']]
+    peak_year = max(by_year, key=by_year.get) if by_year else None
 
     return jsonify({
-        'total_articles': len(ALL_ARTICLES),
-        'total_sources':  len(sources),
-        'year_min':       min(years) if years else None,
-        'year_max':       max(years) if years else None,
-        'by_language':    by_lang,
+        'total_articles':   len(ALL_ARTICLES),
+        'total_sources':    len(sources),
+        'year_min':         min(years) if years else None,
+        'year_max':         max(years) if years else None,
+        'by_language':      by_lang,
+        'by_year':          by_year,
+        'peak_year':        peak_year,
+        'peak_year_count':  by_year.get(peak_year, 0) if peak_year else 0,
     })
 
 
