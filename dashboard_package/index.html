@@ -77,6 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sd-block.den-block .sd-sub-label{background:#f8d7da;color:#721c24}
 .sd-list{list-style:none;padding:0}
 .sd-list li{position:relative;padding:6px 10px 6px 20px;font-size:12px;line-height:1.55;color:var(--text2);border-bottom:1px solid #f0f0f0}
+.src-ids{display:block;font-size:10px;color:#aaa;margin-top:2px;font-style:italic}
 .sd-list li:last-child{border-bottom:none}
 .sd-list li::before{content:"•";position:absolute;left:6px;font-weight:700}
 .sup-block .sd-list li::before{color:#28a745}
@@ -389,7 +390,7 @@ async function loadDetailView(){
 }
 function buildSubNav(subs){
   const nav=document.getElementById('sub-nav');
-  nav.innerHTML='<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>'+
+  nav.innerHTML=`<button class="sub-nav-btn active" onclick="selectSubNav(this,'')" data-sub="">All</button>`+
     subs.map(s=>`<button class="sub-nav-btn" data-sub="${s}" onclick="selectSubNav(this,this.dataset.sub)">${s}</button>`).join('');
 }
 function selectSubNav(btn,sub){
@@ -460,8 +461,7 @@ function buildSentChart(cls,sf){
       plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},
       scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
 }
-function makeBulletBlock(sub,points,isSup){
-  return`<div class="sd-block ${isSup?'sup-block':'den-block'}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+function makeBulletBlock(sub, points, isSup) {  const cls = isSup ? 'sup-block' : 'den-block';  const items = points.map(pt => {    const text = typeof pt === 'string' ? pt : (pt.text || pt);    const ids  = (typeof pt === 'object' && pt.ids) ? pt.ids : [];    const idStr = ids.length ? `<span class="src-ids">ID: ${ids.join(', ')}</span>` : '';    return `<li>${text}${idStr}</li>`;  }).join('');  return `<div class="sd-block ${cls}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${items}</ul></div>`;}"><div class="sd-sub-label">${sub}</div><ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
 }
 function renderSupDen(sub){
   const supEl=document.getElementById('sup-content'),denEl=document.getElementById('den-content');

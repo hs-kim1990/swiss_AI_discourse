@@ -1,0 +1,29 @@
+{
+  "total_documents": 200,
+  "successfully_classified": 195,
+  "failed": 5,
+  "category_distribution": {
+    "NOT TOPIC": 186,
+    "Immigration & Asylum Policy": 2,
+    "Demographic Change & Population": 2,
+    "Economy, Labor & Finance": 2,
+    "Swiss Domestic Politics & Governance": 2,
+    "Refugee & Migrant Integration": 1
+  },
+  "success_rate": 0.975,
+  "sentiment_distribution": {
+    "NOT TOPIC": 186,
+    "neutral": 4,
+    "negative": 4,
+    "positive": 1
+  },
+  "subtopic_distribution": {
+    "Swiss Migration Policy": 1,
+    "Aging Society & Population Trends": 2,
+    "Agriculture, Industry & Business": 2,
+    "Direct Democracy & Volksinitiative": 1,
+    "Local & Regional Governance": 1,
+    "Employment & Economic Integration": 1,
+    "Asylum Procedures & Reform": 1
+  }
+}

@@ -6,8 +6,82 @@ python topic_extraction/extract_topic.py \
 
 
 python -m llm_module.run\
-    --input_file ./data/politics/cleaned_yin_4k_0309.csv \
-    --output_file run_yin_4k_sample.json \
+    --input_file ./data/politics/German_politic.tsv \
+    --output_file German_politic.json \
     --categories "Asylum,Integration,Economy,Security" \
-    --mode all \
-    --sample 500
+    --mode all
+
+python -m llm_module.run\
+    --vllm_urls "http://localhost:8000,http://localhost:8001,http://localhost:8010,http://localhost:8011,http://localhost:8012" \
+    --workers 5 \
+    --input_file ./data/politics/German_politic.tsv \
+    --output_file German_politic.json \
+    --categories "Asylum,Integration,Economy,Security" \
+    --mode all
+
+
+    CUDA_VISIBLE_DEVICES=5 python -m vllm.entrypoints.openai.api_server \
+        --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+        --served-model-name llama \
+        --enable-lora \
+        --max-model-len 8192 \
+        --max-num-seqs 128 \
+        --trust-remote-code \
+        --port 8010 \
+        --distributed-executor-backend mp
+
+    CUDA_VISIBLE_DEVICES=6 python -m vllm.entrypoints.openai.api_server \
+        --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+        --served-model-name llama \
+        --enable-lora \
+        --max-model-len 8192 \
+        --max-num-seqs 128 \
+        --trust-remote-code \
+        --port 8011 \
+        --distributed-executor-backend mp
+
+    CUDA_VISIBLE_DEVICES=3 python -m vllm.entrypoints.openai.api_server \
+        --model unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit \
+        --served-model-name llama \
+        --enable-lora \
+        --max-model-len 8192 \
+        --max-num-seqs 128 \
+        --trust-remote-code \
+        --port 8015 \
+        --distributed-executor-backend mp
+
+
+python -m llm_module.run \
+  --vllm_urls "http://localhost:8000,http://localhost:8001,http://localhost:8010,http://localhost:8011,http://localhost:8012" \
+  --workers 5 \
+  --input_file ./data/politics/German_politic.tsv \
+  --topic_mode utilize \
+  --mode all \
+  --output_file german_politic_utilize.json
+
+
+python -m llm_module.run \
+  --vllm_urls "http://localhost:8015" \
+  --workers 1 \
+  --input_file ./data/politics/italian_politics.tsv \
+  --topic_mode utilize \
+  --mode all \
+  --output_file italian_politic_utilize.json
+
+python -m llm_module.run \
+  --vllm_urls "http://localhost:8014,http://localhost:8013" \
+  --workers 2 \
+  --input_file ./data/politics/french_politics_failed.tsv \
+  --topic_mode utilize \
+  --mode all \
+  --output_file french_politic_failed_utilize.json
+
+
+
+python -m llm_module.run\
+    --vllm_urls "http://localhost:8000,http://localhost:8012,http://localhost:8010,http://localhost:8011" \
+    --workers 4 \
+    --input_file ./data/politics/german_srf.tsv \
+    --output_file german_srf.json \
+    --topic_mode utilize \
+    --mode all

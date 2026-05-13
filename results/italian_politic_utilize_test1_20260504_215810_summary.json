@@ -1,0 +1,24 @@
+{
+  "total_documents": 200,
+  "successfully_classified": 193,
+  "failed": 7,
+  "category_distribution": {
+    "NOT TOPIC": 187,
+    "Demographic Change & Population": 3,
+    "Economy, Labor & Finance": 1,
+    "Immigration & Asylum Policy": 1,
+    "Swiss Domestic Politics & Governance": 1
+  },
+  "success_rate": 0.965,
+  "sentiment_distribution": {
+    "NOT TOPIC": 187,
+    "positive": 3,
+    "neutral": 3
+  },
+  "subtopic_distribution": {
+    "Aging Society & Population Trends": 3,
+    "Banking, Finance & Taxation": 1,
+    "Swiss Migration Policy": 1,
+    "Direct Democracy & Volksinitiative": 1
+  }
+}

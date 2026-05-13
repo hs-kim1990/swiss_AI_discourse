@@ -1,0 +1,18 @@
+{
+  "total_documents": 200,
+  "successfully_classified": 197,
+  "failed": 3,
+  "category_distribution": {
+    "NOT TOPIC": 195,
+    "Demographic Change & Population": 2
+  },
+  "success_rate": 0.985,
+  "sentiment_distribution": {
+    "NOT TOPIC": 195,
+    "neutral": 1,
+    "positive": 1
+  },
+  "subtopic_distribution": {
+    "Aging Society & Population Trends": 2
+  }
+}

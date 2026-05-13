@@ -2,794 +2,1710 @@
   "subtopics": {
     "Immigration & Asylum Policy|||Asylum Procedures & Reform": {
       "sup": [
-        "A minority of asylum seekers cause persistent security problems—repeated thefts and break-ins near asylum centres—justifying stricter screening and faster rejection procedures.",
-        "The UDC and PLR demand faster rejections and stricter enforcement, citing incidents such as train takeovers and school panics as evidence that the system lets dangerous individuals stay.",
-        "The government has already trialled 24-hour accelerated procedures for Maghreb nationals with less than 1% acceptance chance, resulting in fewer applications and improved local security.",
-        "Between January–August 2025 new asylum applications fell 12.3% and pending cases dropped below 10,000 — proof, supporters argue, that firmer procedures work and justify extending them.",
-        "The British and American examples of tightening asylum law (returning people once countries become 'safe', removing automatic benefits) are cited as models Switzerland should follow.",
-        "The Council of States voted 26–16 to enable deportation of problematic Eritrean asylum seekers to third countries such as Albania, showing parliamentary appetite for harder enforcement."
+        {
+          "text": "Local residents near an asylum centre in Boudry (canton Neuchâtel) report persistent theft and break-ins by a minority of asylum seekers, providing concrete grounds for faster rejection procedures and stricter enforcement.",
+          "ids": [
+            59273334
+          ]
+        },
+        {
+          "text": "The Federal Council introduced a 24-hour fast-track procedure for nationals from Morocco, Algeria, Tunisia, and Libya — countries with acceptance rates below 1% — reducing pending cases and improving local security around asylum centres.",
+          "ids": [
+            59524010,
+            59620888
+          ]
+        },
+        {
+          "text": "The Council of States (Ständerat) voted 26–16 to enable deportation of rejected Eritrean asylum seekers to third countries such as Albania, signalling a parliamentary majority for stricter enforcement.",
+          "ids": [
+            56203041
+          ]
+        },
+        {
+          "text": "New asylum applications fell 12.3% in the first eight months of 2025 and pending cases dropped below 10,000 for the first time — cited as proof that tighter procedures are already reducing inflows.",
+          "ids": [
+            60232145
+          ]
+        },
+        {
+          "text": "SVP and FDP parties demanded faster deportations after specific security incidents (train takeover, school panic in Cortaillod), arguing the current system is too lenient to protect the public.",
+          "ids": [
+            59924633
+          ]
+        }
       ],
       "den": [
-        "Advocates describe Swiss asylum procedures as a 'Kafkaesque Leviathan' — Eritrean asylum seekers, for instance, are required to obtain passports from an authoritarian state, forcing them into impossible situations.",
-        "OSAR (Swiss Refugee Council) warns that accelerated procedures make access to protection harder, ramp up rejections, and expose genuine refugees to refoulement in violation of international law.",
-        "Asylum seekers represent less than 10% of Switzerland's immigration total; the 1.6% of the population in the asylum domain means the 10M initiative's premise dramatically overstates their demographic impact.",
-        "Left-wing parties argue that most asylum seekers are 'women, children and mothers fleeing war' and that emergency security measures violate the Swiss Constitution and international law.",
-        "Amnesty International criticises EU-style 'return hubs' outside European territory as inhumane, leading to arbitrary detention and refoulement — a model Switzerland is tempted to copy.",
-        "Beat Jans (DFJP) defends the current system as 'stable and functioning well', arguing there is no collapse warranting radical restriction."
+        {
+          "text": "Human rights groups describe the Swiss asylum bureaucracy as a Kafkaesque labyrinth: Eritrean applicants are required to obtain passports from an authoritarian regime, making regularisation practically impossible.",
+          "ids": [
+            54397431
+          ]
+        },
+        {
+          "text": "The Swiss Refugee Council (OSAR) warns that accelerating procedures makes access to protection harder and risks violating the international principle of non-refoulement.",
+          "ids": [
+            58894001
+          ]
+        },
+        {
+          "text": "Asylum seekers represent less than 10% of total immigration to Switzerland; the 10M Initiative's demographic argument is therefore factually overstated.",
+          "ids": [
+            55029723
+          ]
+        },
+        {
+          "text": "Justice Minister Beat Jans calls the system 'stable and functioning well', directly contradicting the crisis narrative used to justify the initiative.",
+          "ids": [
+            60232145
+          ]
+        },
+        {
+          "text": "Left-wing parties emphasise that the majority of asylum seekers are women, children, and mothers fleeing war; accelerated rejections violate the Swiss Constitution and international law.",
+          "ids": [
+            59273334,
+            58894001
+          ]
+        }
       ]
     },
     "Immigration & Asylum Policy|||EU & International Asylum Policy": {
       "sup": [
-        "Denmark's model — two-year renewable temporary protection, tight quotas, and externalised return centres — is cited as proof that strict EU-aligned deterrence can dramatically reduce inflows.",
-        "Trump's plan to cap US refugee admissions at 7,500/year and Hungary's threat to bus migrants to Brussels illustrate that uncontrolled inflows erode political stability even in democracies.",
-        "The EU's own Pact on Migration and Asylum introduces mandatory border screening, solidarity levies, and 'return hubs' in third countries — a direction Switzerland's right argues the country must mirror.",
-        "Italy's strict migration policy reduced illegal arrivals by 65%; Poland's border wall and Denmark's quotas (only 860 acceptances recently) demonstrate that hard measures produce results.",
-        "The EU Commission President von der Leyen herself now calls for accelerating expulsions and faster return procedures — evidence that even the EU centre is converging with the 10M initiative's logic."
+        {
+          "text": "The EU Pact on Migration and Asylum introduces mandatory border screening, solidarity contributions, and return hubs in third countries — a policy direction which SVP argues Switzerland should mirror in its own law.",
+          "ids": [
+            57985440,
+            58992661
+          ]
+        },
+        {
+          "text": "Denmark now accepts only around 860 asylum applications per year through systematic deterrence and externalisation; Swiss restrictionists cite this as evidence that hard-line policies achieve measurable inflow reductions.",
+          "ids": [
+            56848672
+          ]
+        },
+        {
+          "text": "Several EU states (Italy, Poland, Denmark) have significantly reduced irregular arrivals after strict border enforcement; proponents argue Switzerland should adopt the same approach to bring population growth under control.",
+          "ids": [
+            58992661,
+            56848672
+          ]
+        },
+        {
+          "text": "The Trump administration's plan to cut US refugee admissions from 100,000 to 7,500 per year is invoked by 10M supporters as confirmation that national sovereignty over migration is a legitimate democratic choice.",
+          "ids": [
+            57985440
+          ]
+        }
       ],
       "den": [
-        "French and German Green MEPs labelled the EU Migration Pact a 'pact of shame' that abolishes the individual right to asylum and imposes unconstitutional family detention.",
-        "Belgium, the European Commission, and human rights NGOs condemned Hungary's plan to bus migrants to Brussels as an 'unacceptable provocation' and a cynical instrumentalisation of human beings.",
-        "The Visegrad Group's blanket refusal to accept relocated refugees shows that mandatory solidarity quotas are politically unenforceable and deepen EU fragmentation rather than solving the problem.",
-        "The EU–Tunisia partnership collapsed because Tunisia rejected conditions attached to EU aid, demonstrating that externalisation deals are fragile and often counterproductive.",
-        "Amnesty International calls EU 'return hubs' outside EU territory 'as unrealistic as inhumane', predicting prolonged arbitrary detention and systematic refoulement.",
-        "Critics argue the EU pact's approach of financialising solidarity — letting countries pay instead of receiving refugees — entrenches injustice rather than distributing responsibility fairly."
+        {
+          "text": "Green MEPs labelled the EU Migration Pact a 'pact of shame' that abolishes the individual right to asylum and would subject families with children to detention.",
+          "ids": [
+            57985440
+          ]
+        },
+        {
+          "text": "Visegrád countries (Hungary, Poland, Czech Republic, Slovakia) openly refuse EU redistribution quotas, showing that mandatory solidarity mechanisms are politically unenforceable and would not solve Switzerland's situation.",
+          "ids": [
+            57985440
+          ]
+        },
+        {
+          "text": "Amnesty International calls external EU return hubs 'as unrealistic as they are inhumane', predicting prolonged arbitrary detention and systematic refoulement in violation of the 1951 Refugee Convention.",
+          "ids": [
+            58992661
+          ]
+        },
+        {
+          "text": "The EU–Tunisia partnership collapsed because Tunisia rejected attached conditions; this shows that externalisation deals are fragile, frequently reversed, and do not provide a sustainable model for Switzerland.",
+          "ids": [
+            57985440
+          ]
+        }
       ]
     },
     "Immigration & Asylum Policy|||Migration Control & Border Policy": {
       "sup": [
-        "Net migration into Switzerland reached nearly 100,000 per year (net balance 98,851 in 2023; already 40,963 in the first half of 2024 alone), the core empirical basis for the 10M initiative.",
-        "The UDC calculates the federal government spent 4 billion francs on asylum in 2023 — more than on agriculture — framing uncontrolled borders as a fiscal emergency.",
-        "The UDC's border-protection initiative calls for reintroducing systematic controls and capping refugees at 5,000/year, arguing the current system is 'chaotic' and has made Switzerland lose control of entry.",
-        "Several European states — Italy (−65% arrivals), Poland (border wall), Denmark — show that hard border enforcement delivers measurable reductions in irregular migration.",
-        "The Swiss–France joint border control operation is presented as a model of practical cooperation that filters genuine protection needs from economic arrivals.",
-        "Nearly half of Swiss CEOs are now foreign nationals; supporters argue unchecked immigration is reshaping the labour market and society faster than democratic consent can keep up."
+        {
+          "text": "Net migration into Switzerland reached nearly 100,000 persons in 2023 (net balance: 98,851); in the first half of 2024 alone it already stood at 40,963 — these figures are the core empirical argument underpinning the 10M Initiative.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "SVP launched a border-protection initiative calling for systematic border controls and a cap of 5,000 protection grants per year, arguing Switzerland has lost control of entry and the asylum system is 'chaotic'.",
+          "ids": [
+            58109302,
+            58416101
+          ]
+        },
+        {
+          "text": "Federal asylum and migration spending exceeded CHF 4 billion in 2023 — more than the entire agriculture budget — giving the 10M Initiative a fiscal dimension beyond its demographic argument.",
+          "ids": [
+            58416101
+          ]
+        },
+        {
+          "text": "Swiss authorities strengthened border controls together with France to filter genuine protection needs from economic arrivals and prevent overloading the asylum system.",
+          "ids": [
+            59750162
+          ]
+        }
       ],
       "den": [
-        "The Greens' Delphine Klopfenstein Boggini calls the UDC border initiative 'completely disconnected from reality' given Switzerland's deep economic and geographic integration with its neighbours.",
-        "Jeunesse socialiste warns the initiative would violate multiple international conventions — non-refoulement, the Dublin system, and bilateral free-movement accords — making key clauses legally unenforceable.",
-        "Physical border barriers are shown to be ineffective: they push migrants to more dangerous routes rather than reducing overall arrivals, raising the death toll in the Mediterranean.",
-        "Pierre-Alain Fridez (SP) argues systematic border controls would be of 'very limited efficacy' and that the answer lies in legal migration channels matched to actual labour needs.",
-        "Germany's extension of controls to all borders was condemned by police unions as ineffective and by business groups as economically damaging — a cautionary tale for Switzerland.",
-        "The 15 migrants killed in a collision with Greek coast guards illustrate the fatal human cost of enforcement-first policies that leave no safe legal path."
+        {
+          "text": "Green MP Delphine Klopfenstein Boggini called the border-protection initiative 'completely disconnected from reality', pointing to Switzerland's deep geographic, economic, and legal integration with its neighbours.",
+          "ids": [
+            58416101
+          ]
+        },
+        {
+          "text": "Young Socialists (Jeunesse socialiste) warned that key provisions of the initiative violate international conventions — non-refoulement, the Dublin system, and the bilateral free movement agreement — making major clauses legally unenforceable.",
+          "ids": [
+            58416101
+          ]
+        },
+        {
+          "text": "Physical border barriers push migrants onto more dangerous routes and raise death tolls in the Mediterranean without materially reducing overall arrivals.",
+          "ids": [
+            57028991
+          ]
+        },
+        {
+          "text": "Germany extended inland border controls to all borders in 2024; police unions called the measures ineffective and business groups warned of economic damage — a cautionary example Switzerland's 10M backers do not engage with.",
+          "ids": [
+            57028991
+          ]
+        }
       ]
     },
     "Immigration & Asylum Policy|||Other Migration Topics": {
       "sup": [
-        "Racist and antisemitic incidents surged 38% in Switzerland in 2024 (1,211 cases), with authorities linking some incidents to tensions imported by migrant communities from conflict zones.",
-        "Antisemitic incidents rose sharply after the Hamas attack on Israel (a dozen serious cases registered by the SIG in ten days alone), with much of the hostility traced to newly arrived diaspora populations.",
-        "Violence in Ballymena (Ireland) targeting a minority ethnic group, and clashes in other European cities, are cited as evidence that rapid demographic change creates social friction.",
-        "The headscarf debate illustrates how large-scale immigration introduces cultural conflicts over public space and children's rights that Swiss society must decide how to manage."
+        {
+          "text": "Racist and antisemitic incidents in Switzerland rose 38% in 2024 to 1,211 reported cases; 10M supporters link this increase to social tensions imported through large-scale immigration.",
+          "ids": [
+            59820013
+          ]
+        },
+        {
+          "text": "Within ten days of the Hamas attack on Israel, the Swiss Israelite Community Federation (SIG) recorded a dozen serious antisemitic incidents; SVP uses this to argue for more selective admission criteria.",
+          "ids": [
+            55302191,
+            55306219
+          ]
+        }
       ],
       "den": [
-        "83% of Swiss respondents support full LGBTQ+ equality, and 69% are alarmed by rising discrimination — showing that Switzerland's social values favour inclusion, not restriction.",
-        "The 'Barbouilles' group's defence of carnival racist slogans as 'harmless humour' was roundly rejected by politicians and courts, reflecting a social consensus against normalising hate.",
-        "Sanija Ameti (GLP) emphasises that Switzerland must advance with Europe on migration, economics, climate, and security, framing integration as a strategic necessity rather than a cultural threat.",
-        "The Association Suisse–Israël's genocidal post about Palestinians was widely condemned and retracted — a reminder that hate speech cuts across all communities and is not an immigration-specific problem.",
-        "Online antisemitic incidents rose 37% in 2025, showing that extremist discourse is largely domestic and digital, not solely attributable to immigration."
+        {
+          "text": "83% of Swiss respondents support full equality and protection for LGBTQ+ individuals, and 69% are alarmed by rising discrimination — evidence of a socially inclusive political culture that the 10M Initiative's demographic conservatism contradicts.",
+          "ids": [
+            58009143
+          ]
+        },
+        {
+          "text": "Online antisemitism rose 37% in 2025 but is primarily a domestic digital phenomenon and cannot be explained by immigration volume.",
+          "ids": [
+            59820013
+          ]
+        }
       ]
     },
     "Immigration & Asylum Policy|||Refugee Housing & Facilities": {
       "sup": [
-        "Demand for refugee housing surged so sharply that 2,500–3,000 containers were deployed in one year alone, doubling the previous year's total — overwhelming cantonal capacity and taxpayer budgets.",
-        "The federal government proposed building a federal asylum centre in Thônex with spartan 32-bed dormitories, signalling that 'clear deterrence signals' — not comfort — should define reception policy.",
-        "The SVP Baar calls any long-term use of local buildings for asylum accommodation 'unacceptable', demanding explicit parliamentary approval and strict security protocols before any communal facility opens.",
-        "The SVP Nidwalden opposes the Hotel Postillon refugee housing as a 'luxury solution in the wrong location', demanding the government protect 'Land und Volk' instead of normalising permanent asylum infrastructure.",
-        "Several municipalities and cantonal residents note that converted camping sites and tourist facilities damage local economies and tourism revenues, a tangible cost imposed by unchecked arrivals.",
-        "Cantonal refusals to share container-housing costs and closures of nine temporary centres when numbers fell show that the system is over-extended and structurally unsustainable."
+        {
+          "text": "Within a single year, 2,500–3,000 container housing units were deployed (double the previous year's total), illustrating how rapidly rising caseloads are overwhelming cantonal capacity and public budgets.",
+          "ids": [
+            56703982
+          ]
+        },
+        {
+          "text": "SVP sections in Baar and Nidwalden rejected planned asylum accommodations as 'unacceptable' and a 'luxury solution in the wrong location', demanding the government take visible steps to protect local communities.",
+          "ids": [
+            58853761,
+            58943321
+          ]
+        },
+        {
+          "text": "The State Secretariat for Migration (SEM) closed nine temporary centres due to falling applications — supporters argue this confirms that reduced inflows translate directly into lower housing costs.",
+          "ids": [
+            57644891
+          ]
+        }
       ],
       "den": [
-        "The Grüne/SP-Landratsfraktion notes that communities that accepted refugee housing in former barracks reported no complaints from residents, directly contradicting claims of inevitable local conflict.",
-        "Refugees receiving social aid are more likely to be employed than other aid recipients (36% vs 23%), undermining the argument that housing asylum seekers creates permanent welfare dependency.",
-        "The closure of nine temporary centres was driven by reduced application numbers — evidence that the system is already self-correcting without the radical restriction the 10M initiative demands.",
-        "Left-wing advocates argue that spartan, prison-like reception conditions violate human dignity and contradict Switzerland's obligations as depositary of the Geneva Conventions.",
-        "The Saint-Gallen regional report shows housing shortages for refugees stem from the wider Swiss housing crisis — a supply-side failure, not an immigration-volume problem that capping arrivals would solve.",
-        "The government itself abandoned container-housing plans after cantons refused to share costs — pointing to a federal–cantonal financing failure, not evidence that arrivals are unmanageable."
+        {
+          "text": "Asylum seekers receiving social assistance are employed at a higher rate than other welfare recipients (36% vs 23%), directly undermining the welfare-dependency narrative used to justify population capping.",
+          "ids": [
+            56703982
+          ]
+        },
+        {
+          "text": "The Greens/SP parliamentary group noted that communities which accepted asylum housing in repurposed military barracks reported no public complaints — contradicting predictions of inevitable local conflict.",
+          "ids": [
+            58853761
+          ]
+        },
+        {
+          "text": "Left-wing groups criticise the spartan conditions in federal asylum centres (32-bed dormitories, restricted freedom of movement) as incompatible with human dignity and Switzerland's obligations under the Geneva Conventions.",
+          "ids": [
+            57644891
+          ]
+        }
       ]
     },
     "Immigration & Asylum Policy|||Swiss Migration Policy": {
       "sup": [
-        "66% of Swiss citizens say migration will influence their vote; 41% consider the current migration situation 'very worrying' — giving the 10M initiative its core democratic mandate.",
-        "49% of Swiss reject bringing in more non-EU foreign workers, and 54% oppose relaxing rules to address labour shortages through immigration — showing majority support for restriction even on economic grounds.",
-        "The Centre party proposes a safeguard clause to temporarily suspend EU free movement if specific economic or social thresholds are exceeded — a middle-ground version of the 10M initiative's core demand.",
-        "Parliament voted 26–16 to enable deportation of problematic Eritrean asylum seekers to third countries; the Swiss right argues this validates the 10M movement's diagnosis that current rules are too soft.",
-        "The 10M initiative is explicitly framed as an environmental and spatial-planning measure: Switzerland cannot build enough housing, schools, hospitals, or infrastructure to accommodate a population above 10 million.",
-        "Crime statistics showing higher conviction rates per capita for certain nationalities (Georgians, Angolans) are weaponised by the UDC to argue that unmanaged immigration raises public-safety risks."
+        {
+          "text": "66% of Swiss voters say migration will influence their vote; 41% consider the current situation 'very worrying' — this is the democratic mandate the 10M Initiative draws on.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "49% of Swiss respondents reject increasing non-EU labour immigration, and 54% oppose relaxing immigration rules to address labour shortages, showing majority support for restriction even on economic grounds.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Parliament voted for stricter measures against problematic Eritrean asylum seekers (Council of States 26:16), reflecting the rightward shift in Swiss migration politics.",
+          "ids": [
+            56203041
+          ]
+        },
+        {
+          "text": "The '10M Initiative' frames population limitation as a spatial-planning, housing, and infrastructure measure — connecting immigration restriction to everyday quality-of-life concerns for a broad electorate.",
+          "ids": [
+            57348991,
+            58194601
+          ]
+        }
       ],
       "den": [
-        "Critics expose the 10M initiative as a thinly veiled attack on EU free movement, not a genuine sustainability measure — noting it would terminate the bilateral agreements and isolate Switzerland economically.",
-        "EconomieSuisse's chief economist warns that restricting immigration would create a crippling skilled-labour shortage, as foreign workers are essential to sustaining Swiss research, innovation, and GDP growth.",
-        "A proposed tax on immigration specialists from third countries was rejected by employer associations and unions alike as unjust and damaging to Switzerland's global competitiveness.",
-        "A critical article in the press accuses the UDC of failing to take political responsibility for migration policy despite winning elections on it — governing is harder than campaigning.",
-        "59% of Swiss think it is justified to limit temporary-protection status for Ukrainian refugees, but only 27% think it should end outright — showing nuanced public opinion, not a mandate for blanket restriction.",
-        "The housing crisis is structural (low vacancy rates in Zurich and Geneva; vacancy rates of 2–3% in Jura) — decoupled from immigration volume — meaning the 10M initiative misidentifies the cause."
+        {
+          "text": "Critics expose the initiative as a covert attack on the bilateral free movement agreement: an accepted initiative would automatically terminate the seven Bilateral Agreements I with the EU, triggering an economic crisis.",
+          "ids": [
+            57348991,
+            52933438
+          ]
+        },
+        {
+          "text": "EconomieSuisse chief economist Rudolf Minsch warns a migration cap would create a crippling skilled-labour shortage and endanger the financial sustainability of Switzerland's state pension (AHV/AVS).",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "The housing shortage is structurally caused by zoning law, appeal procedures, and planning rules — not by immigration volume — making spatial-planning reform a more targeted solution than a population cap.",
+          "ids": [
+            58194601
+          ]
+        },
+        {
+          "text": "Commentators note that SVP, despite successive election victories on migration, has not translated its mandate into operationally viable policy proposals — suggesting the initiative is primarily a mobilisation tool.",
+          "ids": [
+            59820013
+          ]
+        }
       ]
     },
     "Swiss-EU Relations & Bilateral Agreements|||Core Switzerland-EU Framework": {
       "sup": [
-        "The UDC argues the new bilateral agreement package is a form of 'dynamic legal alignment', forcing Switzerland to automatically adopt EU law without democratic ratification — eroding sovereignty.",
-        "UDC members feel 'betrayed' by Ignazio Cassis's decision to submit the agreement to a facultative rather than obligatory referendum, denying citizens a direct say on major constitutional change.",
-        "Critics argue the package's dispute-resolution mechanism gives the EU de facto judicial supremacy over Swiss law, which is incompatible with the Swiss federal principle of self-determination.",
-        "Inaccurate campaign materials and misleading communication around the bilateral package are cited as evidence the government is overselling an agreement that hands power to Brussels."
+        {
+          "text": "SVP calls the Bilateral Agreements III package 'dynamic legal alignment' — automatic adoption of EU law without democratic ratification — and argues it would entrench the free movement of persons that the 10M Initiative seeks to end.",
+          "ids": [
+            52933438,
+            56922201
+          ]
+        },
+        {
+          "text": "SVP members felt 'betrayed' when Foreign Minister Cassis submitted the bilateral package to only a facultative referendum, bypassing the mandatory popular vote they believe the constitutional stakes demand.",
+          "ids": [
+            56922201
+          ]
+        },
+        {
+          "text": "Critics point to misleading government campaign communications about the Bilateral Agreements III as evidence that the package cannot stand on its own political merits.",
+          "ids": [
+            54742756
+          ]
+        }
       ],
       "den": [
-        "The Centre party and PLR regard the bilateral framework as an existential economic necessity, with market access, legal certainty, and equivalence recognition underpinning Swiss prosperity.",
-        "The government's proposed migration protection clause — allowing Switzerland to temporarily restrict free movement if serious economic or social thresholds are exceeded — is presented as proof the deal protects sovereignty.",
-        "Switzerland's export-dependent industries (pharma, machinery, financial services) depend critically on seamless EU market access; losing bilateral agreements would cost Switzerland far more than alignment.",
-        "Even the 10M initiative's own modelling acknowledges that stopping EU free movement would require renegotiating or abandoning seven bilateral agreements, triggering an economic shock its proponents cannot quantify.",
-        "The Green Party supports the bilateral energy agreement as essential for supply security and decarbonisation — linking EU integration directly to climate and sustainability goals."
+        {
+          "text": "The Centre party and FDP view the bilateral framework as an economic necessity: market access, legal certainty for Swiss exporters, and energy supply security all depend directly on it.",
+          "ids": [
+            52933438,
+            59121132
+          ]
+        },
+        {
+          "text": "The safeguard clause (Schutzklausel) — allowing Switzerland to temporarily restrict free movement of persons if specified social or economic thresholds are exceeded — is presented as proof that the agreement already incorporates population-management mechanisms.",
+          "ids": [
+            59121132
+          ]
+        },
+        {
+          "text": "Even the 10M Initiative's own modelling acknowledges that an accepted initiative would terminate the Bilateral Agreements I, triggering an immediate economic shock its proponents have not costed.",
+          "ids": [
+            52933438
+          ]
+        }
       ]
     },
     "Swiss-EU Relations & Bilateral Agreements|||EU Institutional Affairs": {
       "sup": [
-        "The UDC argues that submitting Swiss law to EU institutional oversight — including ECJ-equivalent dispute resolution — is an unconstitutional abdication of Swiss democratic sovereignty.",
-        "Roger Köppel and other Eurosceptics contend that EU institutional affairs increasingly bypass national parliaments, meaning Swiss alignment would subject the country to rules it has no power to shape.",
-        "The UDC's 'Pas de Suisse à 10 millions' initiative is explicitly designed to trigger a renegotiation of free movement — the central pillar of EU institutional relations — on Swiss terms.",
-        "EU institutional reform pressure on migration (mandatory solidarity quotas, return hubs, Frontex expansion) moves in a direction incompatible with Swiss neutrality and humanitarian tradition."
+        {
+          "text": "SVP rejects any dispute-resolution mechanism that grants an ECJ-equivalent body authority over Swiss law, seeing this as an unconstitutional surrender of sovereignty — the same sovereignty the 10M Initiative aims to reassert in immigration policy.",
+          "ids": [
+            52933438
+          ]
+        },
+        {
+          "text": "The '10M Initiative' directly targets free movement of persons — the institutional cornerstone of the bilateral framework — to force a renegotiation of EU immigration on Swiss terms.",
+          "ids": [
+            52933438,
+            56922201
+          ]
+        }
       ],
       "den": [
-        "Switzerland's deep economic dependence on EU markets means institutional alignment on state aid, market rules, and migration is a strategic necessity, not a political concession.",
-        "The EU's new Migration Pact's mandatory solidarity mechanism gives Switzerland a model for managing inflows through coordinated EU-Swiss frameworks — more effective than unilateral cap initiatives.",
-        "Economic think-tanks argue that the bilateral path, despite its constraints, gives Switzerland far better terms than a unilateral population cap that would trigger automatic treaty termination.",
-        "The EU is Switzerland's largest trading partner by far; institutional rupture would immediately cascade into tariff and regulatory barriers that no domestic population limit can offset."
+        {
+          "text": "Switzerland's deep economic ties to the EU make institutional alignment on state-aid rules, market access, and migration unavoidable; the cost of non-alignment far exceeds any demographic benefit from capping population.",
+          "ids": [
+            52933438
+          ]
+        },
+        {
+          "text": "Business federations warn that terminating the bilateral framework would immediately trigger EU tariffs and regulatory barriers that no domestic population limit could offset.",
+          "ids": [
+            52933438,
+            57348991
+          ]
+        }
       ]
     },
     "Swiss-EU Relations & Bilateral Agreements|||EU Security & Defense": {
       "sup": [
-        "Critics warn that Swiss participation in EU security frameworks (Frontex, Schengen, Dublin) implicates Switzerland in EU mass-return policies and detention practices that contradict its humanitarian commitments.",
-        "SVP argues that EU security integration is a backdoor to mandatory burden-sharing on migration that the Swiss people have never explicitly approved.",
-        "The EU's push to create return centres outside EU territory — with Swiss co-funding possible under Schengen — is framed as forcing Switzerland to finance policies that violate international law."
+        {
+          "text": "SVP argues that Schengen and Dublin already bind Switzerland to EU return policies, and that deeper security integration could extend this to mandatory financial contributions to external detention centres — an undeclared form of migration co-management.",
+          "ids": [
+            54396739
+          ]
+        },
+        {
+          "text": "EU plans for external return hubs could require Swiss co-funding under Schengen obligations, raising the prospect of financing policies that, SVP contends, violate international law without democratic consent.",
+          "ids": [
+            57985440
+          ]
+        }
       ],
       "den": [
-        "Defense Minister Martin Pfister argues new EU security agreements will strengthen Switzerland, defining security broadly to include cyber, policing, and border management.",
-        "Justice Minister Beat Jans frames EU crime-fighting cooperation as essential for combating cross-border criminal networks that exploit Switzerland's central geographic position.",
-        "Switzerland already participates in Schengen/Dublin; deeper EU security ties are presented as a pragmatic extension that improves policing without requiring military commitment."
+        {
+          "text": "Defense Minister Pfister argues that the new EU security agreements strengthen Switzerland's safety, defining security broadly to include cybersecurity, policing cooperation, and border management.",
+          "ids": [
+            59924633
+          ]
+        },
+        {
+          "text": "Justice Minister Jans emphasises that EU law-enforcement cooperation is indispensable for combating transnational smuggling networks that exploit Switzerland's central geographic position.",
+          "ids": [
+            59750162
+          ]
+        }
       ]
     },
     "Swiss-EU Relations & Bilateral Agreements|||EU Trade & Economic Cooperation": {
       "sup": [
-        "Critics of the bilateral framework's Schutzklausel (protection clause) warn it is meaningless in practice because Switzerland's current economic prosperity makes it impossible to trigger.",
-        "The EU's asymmetric tariff treatment of Swiss exports — imposing 50% tariffs in some sectors — is cited as evidence that the EU uses economic leverage to extract political concessions from a weaker partner.",
-        "Some analysts argue a modern bilateral free-trade agreement would serve Swiss interests better than the politically loaded 'framework agreement' package with its embedded institutional obligations.",
-        "The UDC argues that trade concessions to the EU should not come bundled with free-movement obligations — the two should be negotiated separately on Swiss terms."
+        {
+          "text": "Critics argue the safeguard clause (Schutzklausel) is practically unusable given Switzerland's current economic prosperity, making the 10M Initiative's hard population cap the only reliable brake on inflows.",
+          "ids": [
+            59121132
+          ]
+        },
+        {
+          "text": "The EU imposed 50% tariffs on Swiss exports in specific sectors; SVP-aligned voices cite this as evidence that the EU uses economic leverage as a political bargaining tool, making Swiss self-reliance — including on population policy — strategically justified.",
+          "ids": [
+            59121132
+          ]
+        }
       ],
       "den": [
-        "Switzerland's economy is fundamentally export-dependent; the EU is its dominant trading partner, meaning any disruption to bilateral economic cooperation would immediately contract GDP and employment.",
-        "The Schutzklausel — allowing temporary suspension of EU free movement in a severe economic or social crisis — is presented as a safeguard that makes population-limit initiatives redundant.",
-        "Viola Amherd's Japan visit demonstrated Switzerland's ability to negotiate bilateral economic frameworks globally; the EU bilateral is simply the most important of these, not an exceptional loss of sovereignty.",
-        "Business federations warn that the 10M initiative, by threatening bilateral agreements, would cause immediate legal uncertainty for Swiss companies operating in EU markets."
+        {
+          "text": "Switzerland's economy is fundamentally export-dependent; any disruption to the bilateral trade framework would immediately contract GDP and employment, far outweighing any housing-market benefit from limiting population.",
+          "ids": [
+            52933438
+          ]
+        },
+        {
+          "text": "Economic experts warn the 10M Initiative, by triggering bilateral termination, would induce a recession that no quality-of-life gains from population stabilisation could compensate for.",
+          "ids": [
+            52933438,
+            57348991
+          ]
+        }
       ]
     },
     "Swiss-EU Relations & Bilateral Agreements|||Others": {
       "sup": [
-        "The EU's drive to establish return centres in third countries (North Africa, Western Balkans) and tighten border enforcement aligns with the logic of population capping — Switzerland's right argues the country should adopt a parallel track.",
-        "German Chancellor Scholz's scepticism of asylum externalisation is noted as a political minority view; the EU mainstream is converging on harder migration governance that makes the 10M initiative look prescient.",
-        "EU-level migration governance failures — member state defection, quota non-compliance, partner country resistance — are cited as proof that only national-level caps (like the 10M initiative) can actually work."
+        {
+          "text": "The EU's development of external return hubs in North Africa and the Western Balkans offers Switzerland a model for aligning its own asylum policy with European norms without formally adopting EU quotas.",
+          "ids": [
+            57985440,
+            58992661
+          ]
+        }
       ],
       "den": [
-        "Human rights organisations condemn the legal and ethical basis of externalising asylum processing to third countries as violating the 1951 Refugee Convention — a model Switzerland should not emulate.",
-        "The decline in EU asylum applications in 2024–25 without radical new restrictions suggests the pressure is cyclical, not permanent — undermining the case for a constitutional population cap.",
-        "Belgium and other EU states have shown that local reception combined with effective integration is more sustainable than externalisation deals, which tend to collapse when partner countries change government."
+        {
+          "text": "German Chancellor Scholz rejected asylum externalisation as ineffective and costly, and even EU core states do not regard the 10M Initiative's approach as a viable template.",
+          "ids": [
+            57985440
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Budget, Austerity & Fiscal Policy": {
       "sup": [
-        "The UDC links immigration-driven population growth directly to Switzerland's fiscal stress: asylum spending exceeded 4 billion CHF in 2023 — more than the entire agriculture budget — creating a fiscal case for population limits.",
-        "The 13th AVS pension adds 5 billion CHF/year in costs, financed by salary contributions or VAT; supporters of population limits argue that an ageing, over-extended population makes social-system sustainability impossible.",
-        "Federal budget cuts of 5 billion CHF by 2030 (the Karin Keller-Sutter plan) are partly justified by the need to rebalance spending distorted by immigration-related social expenditures.",
-        "Cantons facing housing, schooling, and healthcare pressure from population growth argue the federal government is imposing unfunded mandates by accepting more people than the tax base can sustain."
+        {
+          "text": "Federal asylum and migration spending exceeded CHF 4 billion in 2023 — more than the entire agriculture budget; 10M backers argue this direct link between immigration volume and fiscal pressure justifies a constitutional cap.",
+          "ids": [
+            58416101
+          ]
+        },
+        {
+          "text": "SVP argues the 13th AHV/AVS pension — costing approximately CHF 5 billion per year — is fiscally unsustainable partly because it flows to roughly 800,000 retirees living abroad, a share of whom settled in Switzerland through decades of open immigration.",
+          "ids": [
+            53137038,
+            56714472
+          ]
+        },
+        {
+          "text": "Finance Minister Karin Keller-Sutter's CHF 5 billion savings programme (to 2030) is partly framed as a correction of a federal budget distorted by immigration-related social expenditure.",
+          "ids": [
+            56714472
+          ]
+        }
       ],
       "den": [
-        "The voter-approved 13th AVS pension reflects a democratic mandate for stronger social protection — not a fiscal crisis — and was supported by a majority including UDC sympathisers (70%).",
-        "Budget experts warn that the 5 billion cut plan disproportionately harms lower-income groups, women, and public services, while leaving high-end tax breaks untouched.",
-        "The federal government's financial resilience — demonstrated during COVID — was built on decades of prudent budgeting, not on restricting immigration.",
-        "Economists argue that immigration-driven population growth generates more fiscal revenue than it costs: migrants pay taxes, pension contributions, and VAT, sustainably funding social systems.",
-        "The AVS reserve fund is projected to grow from 50 to 70 billion CHF by 2030 even with the 13th pension — a strong reserve incompatible with the fiscal-emergency framing of the 10M initiative."
+        {
+          "text": "70% of Swiss voters — including 70% of SVP sympathisers — approved the 13th AHV/AVS pension; this democratic outcome shows that social protection and population restriction are treated as separate questions by the Swiss public.",
+          "ids": [
+            56714472
+          ]
+        },
+        {
+          "text": "Economists demonstrate that immigrants are net contributors to the AHV/AVS system — paying more in contributions than they receive in benefits — making the fiscal-overload argument empirically unsound.",
+          "ids": [
+            53137038
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Civil Rights, Equality & Justice": {
       "sup": [
-        "The UDC argues some anti-discrimination charters create 'cordons sanitaires' around Jewish communities and other groups — an unintended consequence of importing communal conflicts through immigration.",
-        "Jean-Luc Addor (SVP) criticises gender-equality reforms as ideologically overreaching, arguing that social cohesion depends on shared norms that mass immigration makes harder to sustain.",
-        "The headscarf controversy (both in Switzerland and Austria) illustrates how large-scale immigration forces difficult trade-offs between religious freedom, children's rights, and secular public norms.",
-        "Sharp rises in antisemitism — linked partly to geopolitical sympathies imported by recent migrant communities — are cited as evidence that unchecked immigration creates civil-rights risks for established minorities."
+        {
+          "text": "Jewish community organisations condemn the 'Apartheid-Free Zone' charter as a discriminatory cordon sanitaire — a civil-rights conflict they trace partly to geopolitical hostilities imported through large-scale migration from conflict regions.",
+          "ids": [
+            56714472
+          ]
+        },
+        {
+          "text": "SVP politician Jean-Luc Addor criticises equality reforms as ideological overreach that threatens social cohesion — cohesion he argues is already under pressure from uncontrolled immigration.",
+          "ids": [
+            58394955
+          ]
+        }
       ],
       "den": [
-        "Feminist, anti-racist, and LGBTQ+ initiatives reflect a broad social consensus for expanding rights — 83% of Swiss support LGBTQ+ equality — showing Swiss civic values are more inclusive than the 10M movement suggests.",
-        "The Fribourg diocese's initial censorship of the Adhan was rightly criticised as capitulating to far-right pressure — a reminder that cultural anxiety can lead to unjustifiable civil-rights violations.",
-        "Antisemitism is primarily a domestic and online phenomenon (online incidents up 37% in 2025) — blaming immigration for it obscures its actual social roots.",
-        "Civil society organisations and courts consistently strike down discriminatory measures, demonstrating that Switzerland's constitutional framework is robust enough to manage cultural diversity without population caps."
+        {
+          "text": "83% of Swiss respondents support full LGBTQ+ equality, demonstrating that democratic values and cultural diversity are compatible without constitutional population caps.",
+          "ids": [
+            58009143
+          ]
+        },
+        {
+          "text": "Courts and civil-society organisations consistently strike down discriminatory measures, showing that Switzerland's rule of law can manage cultural plurality without immigration ceilings.",
+          "ids": [
+            56714472
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Culture, Society & Identity": {
       "sup": [
-        "Oskar Freysinger (former UDC) argues Switzerland's unique identity — neutrality, federalism, direct democracy — is being eroded by EU alignment pressures accelerated by immigration-driven population growth.",
-        "The FDP's strategy of nominating second-generation immigrant candidates is read by some as a defensive response to demographic change rather than genuine integration — a symptom of a community struggling to maintain cultural coherence.",
-        "The 10M initiative explicitly frames population limits as an identity-preservation measure: Switzerland's social model, institutions, and landscapes were designed for a smaller population."
+        {
+          "text": "Former SVP politician Oskar Freysinger argues Switzerland's distinctive identity — neutrality, federalism, direct democracy — is being gradually eroded by EU alignment pressures accelerated by mass immigration.",
+          "ids": [
+            55619493
+          ]
+        }
       ],
       "den": [
-        "FDP Zurich's nomination of two second-generation immigrant candidates for the city council is celebrated as evidence that Switzerland's political culture is genuinely evolving toward pluralism.",
-        "SP critics note that excluding Mandy Abou Shoak reveals a gap between inclusion rhetoric and political practice — something the 10M movement's own demographic nationalism does not resolve.",
-        "Polls consistently show that Swiss citizens prize social cohesion and direct democracy regardless of their stance on immigration — values that can coexist with demographic diversity."
+        {
+          "text": "FDP Zurich nominated two second-generation immigrant candidates for the city executive, demonstrating that Switzerland's democratic culture is evolving toward genuine pluralism.",
+          "ids": [
+            55619493
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Direct Democracy & Volksinitiative": {
       "sup": [
-        "The 10M initiative itself is a product of direct democracy — the UDC's use of the signature-collection tool to force a referendum on immigration limits is constitutionally legitimate and enjoys strong popular backing.",
-        "The e-ID vote (accepted by 50.4%) shows that even divisive modern governance questions can be decided through direct democratic instruments without social rupture.",
-        "The Geneva initiative to shield police officers from prosecution illustrates broader public anxiety about law and order — an anxiety the 10M movement links to immigration-related crime."
+        {
+          "text": "The 10M Initiative is itself a product of direct democracy; the volume of signatures collected demonstrates that constitutionally limiting population through a popular vote is both legally legitimate and politically in demand.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "The e-ID referendum (accepted by 50.4%) shows that Swiss voters decide even contentious modern governance questions through direct-democratic instruments — a precedent 10M backers apply to immigration.",
+          "ids": [
+            57093281
+          ]
+        }
       ],
       "den": [
-        "Several direct democratic initiatives linked to the 10M movement — its predecessor 'Ecopop' and the 2014 mass-immigration initiative — have already been accepted or nearly accepted, but none have achieved their goal without violating bilateral treaties, showing constitutional limits to direct democracy on this issue.",
-        "Privacy advocates and the Parti pirate warn that digitalisation of governance (e-ID, algorithmic welfare assessment) creates surveillance risks unrelated to immigration — a reminder that direct-democracy outcomes can have unintended consequences.",
-        "The police immunity initiative was criticised as creating dangerous exceptions to the separation of powers — a reminder that popular initiatives can undermine, not just express, democratic governance."
+        {
+          "text": "Earlier immigration initiatives — the 2014 Mass Immigration Initiative and the 2020 Limitation Initiative (rejected) — show voters draw careful distinctions and do not give blanket mandates for population caps that would sever bilateral ties.",
+          "ids": [
+            52933438
+          ]
+        },
+        {
+          "text": "Privacy advocates warn the e-ID governance framework creates surveillance risks entirely independent of immigration — a reminder that direct democracy can produce unintended consequences.",
+          "ids": [
+            57093281
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Federal Executive & Administration": {
       "sup": [
-        "A Valais cantonal employee under Fedpol surveillance was found to have had access to sensitive data — a concrete security-vetting failure cited by restrictionists as proof that migration-related security risks penetrate state institutions.",
-        "UDC critics accuse the Bundesrat of lacking the will to implement the outcomes of earlier migration-limiting referenda (2014 mass-immigration vote), claiming the executive routinely neutralises democratic anti-immigration mandates.",
-        "The nomination of Jérôme Cosandey (a think-tank economist with employer-federation ties) to head the labour secretariat is opposed by unions who see it as stacking the administration against worker-protective immigration rules."
+        {
+          "text": "A Valais cantonal employee under surveillance by the Federal Police (Fedpol) was found to have had access to sensitive data — cited as a security-vetting failure made more likely by a growing, harder-to-monitor population.",
+          "ids": [
+            56714472
+          ]
+        },
+        {
+          "text": "SVP circles accuse the Federal Council of having effectively hollowed out the democratic mandate of the 2014 Mass Immigration Initiative through administrative and diplomatic manoeuvres.",
+          "ids": [
+            52933438
+          ]
+        }
       ],
       "den": [
-        "Consensual federal councillors like Martin Pfister are praised precisely for their ability to build cross-party coalitions — a governance strength that radical population-cap policies would undermine.",
-        "Pierre-André Page's election as National Council president is described as the product of loyalty and institutional competence, not of ideological polarisation — suggesting Swiss governance is more stable than 10M movement rhetoric implies.",
-        "The Federal Council's handling of COVID, the SVB crisis, and energy security demonstrates institutional resilience that depends on open labour markets and international cooperation, not population restriction."
+        {
+          "text": "Consensus-oriented Federal Councillors like Martin Pfister are valued precisely for their ability to build cross-party coalitions — a governance strength that radical population-cap policies would undermine.",
+          "ids": [
+            59924633
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||General Political Affairs (SVP/Migration-Adjacent)": {
       "sup": [
-        "The SVP's 2023 federal election gains — recovering and exceeding its 2015 record — reflect a genuine popular mandate for stricter migration: the party explicitly contested on the 10M initiative and won.",
-        "The Swiss Bundesrat's silence on Israel-Palestine and its reduction of UNRWA funding are framed by the right as signs that the government cannot balance its international commitments with domestic priorities distorted by immigration pressure.",
-        "Oskar Freysinger argues that Switzerland's distinctive features — direct democracy, federalism, neutrality, small-state prudence — are incompatible with unlimited EU-driven population growth."
+        {
+          "text": "SVP achieved its best federal election result since 2015 in 2023, running explicitly on the 10M Initiative as its central campaign theme — demonstrating durable electoral appeal for population restriction.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Switzerland reduced its UNRWA contribution; SVP-adjacent commentators frame this as an overdue correction of a foreign policy distorted by migration-related international commitments.",
+          "ids": [
+            58394955
+          ]
+        }
       ],
       "den": [
-        "Critics of the SVP's framing note that it consistently conflates asylum seekers (a tiny fraction of arrivals) with EU free-movement migrants (the vast majority), deliberately blurring the distinction to fuel anxiety.",
-        "Philippe Lazzarini (UNRWA) criticises Switzerland's aid reduction as undermining humanitarian leadership — a cost of immigration-restrictive politics that goes beyond domestic economics.",
-        "Grégoire Duruz and Bruna Picasso argue the Federal Council's silence on Gaza damages Switzerland's soft power and international credibility far more than any population management policy can restore."
+        {
+          "text": "Commentators observe that despite election victories, SVP has not produced operationally implementable migration measures — the 10M Initiative appears to serve primarily as a permanent mobilisation instrument rather than a governance blueprint.",
+          "ids": [
+            59820013
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Governance Accountability & Scandals": {
       "sup": [
-        "Several UDC-affiliated companies were found to have collected invalid signatures for initiatives, including migration-related ones — a scandal that accountability mechanisms exposed, demonstrating the system's self-correcting capacity.",
-        "The Céline Widmer case (naturalization discrimination by the SEM requiring Swiss reference letters by descent) reveals institutional bias within migration governance itself — a problem the 10M movement argues stems from systemic inconsistency.",
-        "The lack of a specific Swiss law to prosecute torture cases (despite being first to sign the UN convention) points to a broader pattern of international-obligation signage without domestic enforcement — relevant to asylum obligations."
+        {
+          "text": "SVP-affiliated companies were caught collecting invalid signatures for migration-related popular initiatives — evidence of how politically charged the immigration issue has become, to the point of inducing legal violations.",
+          "ids": [
+            56714472
+          ]
+        }
       ],
       "den": [
-        "Accountability institutions — the Commission des institutions politiques, federal audit bodies — successfully caught signature fraud and administrative errors, showing Switzerland's oversight mechanisms function without needing radical immigration restriction.",
-        "Céline Vara's right to a private life was defended in the press, and critics of political accountability witch-hunts warn that weaponising personal behaviour against politicians serves no governance purpose.",
-        "Whistleblower protections and anti-torture legislation proposals come from the left — demonstrating that accountability reform and immigration restriction are orthogonal issues conflated by populist framing."
+        {
+          "text": "Independent oversight bodies (Commission for Political Institutions, Federal Finance Delegation) uncovered the signature fraud — proof that Switzerland's accountability system functions without requiring population limits.",
+          "ids": [
+            56714472
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Local & Regional Governance": {
       "sup": [
-        "Communes across Switzerland report that rapid population growth driven by immigration strains local infrastructure — ice rinks, schools, transit — faster than municipal tax revenues can fund them.",
-        "The left-wing dominance of Geneva, Lausanne, and Zurich is linked by the UDC to open-door immigration policies that concentrate costs in suburbs and rural cantons while benefits accrue to urban elites.",
-        "Local referenda on asylum centre placement (Wintersried, Baar, Nidwalden) show persistent grass-roots resistance to the federal government's top-down imposition of migration infrastructure on communities."
+        {
+          "text": "Municipalities report that rapid population growth driven by immigration overloads local budgets — schools, transport, housing — faster than communal tax revenues can keep pace.",
+          "ids": [
+            53137038
+          ]
+        },
+        {
+          "text": "Recurring local referenda against asylum accommodation (Wintersried, Baar, Nidwalden) demonstrate persistent grass-roots resistance to top-down migration infrastructure that communities were not consulted on.",
+          "ids": [
+            58853761
+          ]
+        }
       ],
       "den": [
-        "The left–centre coalition's retention of four seats in the Geneva municipal government shows that pro-integration governance commands sustained voter confidence in major cities.",
-        "Public-private partnerships for infrastructure investment — including the La Chaux-de-Fonds ice rink (69M CHF) — demonstrate that local governments can finance growth without cutting population.",
-        "The democratic incidents in the Vaud parliament are described by some as a positive sign of engaged civic life, not evidence of social fracture caused by immigration."
+        {
+          "text": "Left-led cities such as Geneva and Lausanne sustain stable governing majorities despite high foreign-resident shares — pro-integration local governance functions without national population caps.",
+          "ids": [
+            56714472
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Media, Transparency & Accountability": {
       "sup": [
-        "The SVP's campaign to halve the SRG licence fee (from 335 to 300 CHF) is framed as a response to perceived left-wing bias in public media that systematically distorts coverage of immigration and the 10M initiative.",
-        "The UDC and allies argue that German public broadcasters ARD and ZDF exemplify the 'leftist' media bias that normalises mass immigration while stigmatising concerns about population growth.",
-        "New banking secrecy provisions that could criminalise journalists working with leaked data are criticised — with restrictionists pointing out that information opacity in financial governance mirrors opacity in migration administration."
+        {
+          "text": "SVP and FDP criticise SRF (Swiss public broadcaster) and German public broadcasters for systematically left-leaning migration coverage that, they argue, delegitimises genuine public concern about population growth.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Quality journalism — exemplified by Der Bund's transparent editorial processes — is celebrated as a democratic safeguard, not a partisan tool; restricting media funding weakens this safeguard.",
-        "Press freedom organisations warn that criminalising investigative journalists damages the very accountability mechanisms that expose government failures, including in migration administration.",
-        "SP co-chairs argue the SVP's push to defund SRG is itself a form of media manipulation — silencing critical coverage of the 10M initiative and other populist campaigns."
+        {
+          "text": "Press-freedom advocates warn new banking-secrecy provisions could criminalise investigative journalists — an accountability threat that is entirely independent of the immigration debate and must be addressed on its own terms.",
+          "ids": [
+            56714472
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Others": {
       "sup": [
-        "Bundesrat Beat Jans's bilateral migration cooperation deals with Tunisia, Iraq, and Morocco are presented by the right as inadequate half-measures — proof that enforcement without a population cap lacks teeth.",
-        "The Skobeliev case (Ukrainian family's savings confiscated under Sonderabgabe rules) illustrates the administrative complexity of managing large migrant populations — a complexity the 10M initiative promises to reduce."
+        {
+          "text": "Justice Minister Beat Jans's bilateral migration cooperation agreements with Tunisia and Iraq are criticised by SVP as symbolic half-measures that produce no real cap on volumes.",
+          "ids": [
+            59924633
+          ]
+        }
       ],
       "den": [
-        "Beat Jans's active diplomacy with Maghreb and Middle East countries represents a pragmatic, rights-compatible migration management approach that the 10M initiative's blunt cap cannot replicate.",
-        "The Skobeliev case is cited by left-wing critics as evidence that existing migration rules are already overly punitive — arguing for more humane administration, not tighter numerical limits."
+        {
+          "text": "Jans's active migration diplomacy with North African and Middle Eastern countries exemplifies rights-compatible, cooperative migration management — an approach that population caps would replace but not improve upon.",
+          "ids": [
+            59924633
+          ]
+        }
       ]
     },
     "Swiss Domestic Politics & Governance|||Party Politics & Electoral Competition": {
       "sup": [
-        "The 2023 federal election produced Switzerland's most right-wing parliament in decades: UDC gained 9 seats, the Greens and Green Liberals lost 11 — a clear voter mandate to restrict immigration and slow population growth.",
-        "The UDC's 2023 record vote share (surpassing even 2015) was driven by consistent messaging on the 10M initiative, demonstrating that population-cap politics has durable electoral appeal across German and French-speaking regions.",
-        "The Swiss National's rightward shift is expected to produce stricter asylum laws, faster deportations, and progress on bilateral renegotiation in favour of a migration protection clause."
+        {
+          "text": "The 2023 federal elections produced Switzerland's most right-wing parliament in decades: SVP gained 9 seats, the Greens and Green Liberals lost 11 — a clear popular mandate for stricter migration control.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "SVP surpassed its own 2015 record vote share by campaigning explicitly on the 10M Initiative, showing the population-cap argument has durable electoral appeal across German- and French-speaking cantons.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The Greens and GL warn that the rightward shift will freeze climate action for a legislative cycle — an opportunity cost that a population cap cannot compensate for.",
-        "Frédéric Mairy's 82.3% consensus-driven election in Neuchâtel, and Mathilde Maillard's PLR candidacy in Lausanne, show that centrist, pro-integration politics remains viable and electorally competitive.",
-        "The UDC's refusal to translate its electoral mandate into concrete governing responsibility — noted by critical commentators — suggests its 10M initiative is primarily an opposition instrument rather than a deliverable policy."
+        {
+          "text": "Greens and Social Democrats warn the rightward shift will stall climate action for an entire parliamentary term — an opportunity cost that 10M campaign communications have not openly addressed.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Agriculture, Industry & Business": {
       "sup": [
-        "The 10M initiative frames population limits as a necessary condition for sustainable land use: Switzerland's agricultural land, wine industry, and natural landscapes cannot absorb indefinite urbanisation driven by population growth.",
-        "The Swiss wine industry's deep crisis (−8% consumption in 2024, foreign competition) is linked by rural advocates to the urban demographic growth that has shifted consumer preferences and squeezed domestic producers.",
-        "Highway expansion (the contested A1 six-section plan, costing billions) is directly driven by population-growth-induced traffic — a cost the 10M initiative promises to avoid by preventing further growth.",
-        "Nearly half of Swiss corporate CEOs are now foreign nationals — a figure the UDC cites as evidence that immigration is reshaping the business elite faster than domestic talent can be developed."
+        {
+          "text": "Nearly 50% of CEO positions at major Swiss companies are now held by foreign nationals — SVP-aligned commentators frame this as evidence that immigration-driven demographic change is reshaping the business elite faster than domestic talent can advance.",
+          "ids": [
+            58450852
+          ]
+        },
+        {
+          "text": "The A1 motorway expansion programme (six sections, costing billions of CHF) is a direct consequence of immigration-driven traffic growth — infrastructure costs the 10M Initiative claims a population cap would avoid.",
+          "ids": [
+            55119469
+          ]
+        }
       ],
       "den": [
-        "AI integration (SAP Suisse, Swiss tech firms), e-ID infrastructure, and precision agriculture all depend on international talent pipelines — a population cap would throttle the skilled-worker supply these industries require.",
-        "The African market's demographic dividend — a 30-fold increase in solvent consumers by 2050 — offers Swiss business enormous export opportunities that open-door migration creates relationship bridges toward.",
-        "The proposed abolition of the property value tax would save the federal government 1.8 billion CHF in revenue — a fiscal argument completely independent of immigration volume.",
-        "Business groups warn that the 10M initiative would trigger bilateral treaty termination, making Swiss goods immediately subject to EU tariffs and regulatory barriers that would devastate export industries."
+        {
+          "text": "AI integration (SAP Switzerland, Swiss tech firms) and the e-ID digital infrastructure depend on international talent pipelines; a population cap would throttle the skilled-labour supply these industries require.",
+          "ids": [
+            58450852,
+            56649232
+          ]
+        },
+        {
+          "text": "The Swiss wine industry's deep structural crisis (−8% consumption in 2024, foreign competition) has nothing to do with immigration volume — illustrating that sector challenges require targeted policy, not population limits.",
+          "ids": [
+            58224618
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Banking, Finance & Taxation": {
       "sup": [
-        "Karin Keller-Sutter's 5-billion-CHF federal budget-cut plan is partly justified by fiscal pressure from growing social expenditure linked to immigration — a direct connection supporters of the 10M initiative emphasise.",
-        "The inheritance tax initiative ('Pour l'avenir') is opposed by the right partly on the grounds that it would trigger capital flight from wealthy foreign residents who chose Switzerland for its light-touch fiscal regime — a regime sustained by controlled population composition.",
-        "Lugano is projected to see a 150% growth in centimillionaires by 2040 partly because wealthy individuals — many foreign-born — are attracted by low taxes and discretion; restrictionists argue this selective welcome is preferable to mass immigration.",
-        "The 1% wealthiest Swiss hold 31% of private wealth; the UDC uses this inequality figure to argue that unmanaged migration floods the low-wage segment, widening the gap."
+        {
+          "text": "Finance Minister Keller-Sutter's CHF 5 billion savings programme is linked by SVP in part to fiscal pressure from growing immigration-related social expenditure that has knocked the federal budget off balance.",
+          "ids": [
+            56714472
+          ]
+        },
+        {
+          "text": "Lugano is projected to see over 150% growth in centimillionaires by 2040, partly because of its attractive tax regime for high-net-worth foreign residents; 10M backers argue targeted, selective admission of wealthy individuals is preferable to mass immigration.",
+          "ids": [
+            59700000
+          ]
+        }
       ],
       "den": [
-        "Business federations, unions, cantons, and the left jointly oppose the Keller-Sutter austerity plan, arguing the cuts harm public services, transport, and education — not immigration overruns.",
-        "The Swiss government's financial resilience during COVID — contracting new debt efficiently — was built on a strong pre-crisis fiscal position that open labour markets helped generate.",
-        "The proposed 50% inheritance tax on estates above 50 million CHF is opposed because wealthy individuals might leave Switzerland — illustrating that restrictive policies (on either capital or labour) impose symmetrical economic costs.",
-        "Cantonal tax competition (Geneva's proposed tax cut) is driven by the need to remain attractive to businesses and talent; a population cap restricts the very inflows that sustain this competitiveness."
+        {
+          "text": "Business federations, trade unions, cantons, and the left jointly oppose the savings programme because it cuts public services, transport, and education — not because of migration-related overspending.",
+          "ids": [
+            56714472
+          ]
+        },
+        {
+          "text": "The inheritance tax initiative (50% on estates exceeding CHF 50 million) risks capital flight from wealthy residents — a symmetric illustration that restrictive policies on capital or labour both impose economic costs.",
+          "ids": [
+            59442672
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Housing & Urban Development": {
       "sup": [
-        "The 10M initiative's core spatial-planning argument: Swiss housing vacancy rates in major cities (Zurich, Geneva) are near zero, rents are rising sharply, and the construction sector cannot keep pace with population growth driven by immigration.",
-        "Subscription searches for apartments rose 7% since mid-2023, with supply growing at a fraction of demand — a crisis attributable to net migration of nearly 100,000/year outstripping construction permits.",
-        "Critics expose the UDC's 'Pas de Suisse à 10 millions!' as specifically targeting immigration: its subtitle calls for halting population growth to prevent the housing crisis, making the link between population limits and affordable housing explicit.",
-        "American buyers flooding Andermatt (1,260 investment requests, 20 million CHF in transactions in early 2025) illustrates how global wealth migration inflates property values and displaces locals — a pattern the 10M movement uses to argue for selective inflow management.",
-        "Canton Vaud's plan to streamline building permits acknowledges that procedures are too slow to match population growth — an admission that the supply side cannot realistically keep pace with demand driven by unchecked immigration."
+        {
+          "text": "Apartment vacancy rates in Zurich and Geneva are near zero; rents are rising sharply; and apartment search subscriptions increased 7% since mid-2023 — consequences of net immigration of ~100,000 per year outpacing housing construction.",
+          "ids": [
+            58194601,
+            58001122
+          ]
+        },
+        {
+          "text": "The '10M Initiative' explicitly names the housing shortage as a central argument: Switzerland's infrastructure — schools, hospitals, roads, housing — was not built for more than 10 million inhabitants.",
+          "ids": [
+            57348991,
+            58194601
+          ]
+        },
+        {
+          "text": "American buyers flooded Andermatt with 1,260 investment requests and CHF 20 million in transactions in early 2025; global wealth migration inflates property prices and displaces local residents — a pattern 10M supporters cite as an argument for managed inflow.",
+          "ids": [
+            58001122
+          ]
+        }
       ],
       "den": [
-        "Housing economists consistently show that the Swiss shortage is a supply-side failure: zoning laws, appeal procedures, and NIMBY referenda block construction, independent of immigration volumes.",
-        "Asloca (tenants' association) criticises the Canton Vaud plan for failing to address speculative rent increases — a problem driven by real-estate financialisation, not by population size.",
-        "The Airbnb regulation failure across Swiss cities illustrates that housing policy tools are weak regardless of immigration — the problem requires supply-side intervention, not population capping.",
-        "US buyers in Andermatt are wealthy non-permanent residents, not immigrants covered by the 10M initiative's scope — using them to justify migration restrictions is a category error.",
-        "Xavier Magnin's reform proposals (synchronising cantonal approvals, limiting appeal periods) show that procedural reform alone could unlock substantial new housing without reducing arrivals."
+        {
+          "text": "Housing economists consistently show that Switzerland's shortage is caused by supply-side failures — restrictive zoning, lengthy appeal processes, and NIMBY referenda — not by immigration volume.",
+          "ids": [
+            58194601
+          ]
+        },
+        {
+          "text": "The Tenants' Association (Asloca) criticises cantons for failing to combat speculative rent increases — a regulation failure that is independent of the number of people living in Switzerland.",
+          "ids": [
+            58001122
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Labor Market & Wages": {
       "sup": [
-        "The Centre party's Gerhard Pfister proposes a safeguard clause to temporarily limit EU immigration when specific economic or social thresholds are exceeded — an explicit link between migration volume and labour-market stress.",
-        "Two-thirds of Swiss people dipped into savings in 2024 to cope with inflation; union president Pierre-Yves Maillard argues that real wages have declined over five years despite a strong economy, partly because immigration suppresses wage floors.",
-        "Swisscom and La Poste are outsourcing IT jobs to Latvia and Portugal — a corporate behaviour that union Syndicom links to the ease of accessing cheap foreign labour, enabled by bilateral free movement.",
-        "The proportion of temporary workers in Switzerland has doubled to 2.8% of national employment over two decades — a precariousness that critics attribute to employers' unlimited access to flexible international labour."
+        {
+          "text": "Centre party leader Gerhard Pfister proposes a safeguard clause (Schutzklausel) to temporarily limit EU free movement of persons when specific economic or social thresholds are exceeded — a graduated version of the 10M Initiative's core demand.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Two thirds of Swiss people had to draw on their savings in 2024 to cope with rising costs; trade union federation Travail.Suisse's president Pierre-Yves Maillard attributes real wage losses partly to a labour market floor suppressed by unrestricted free movement.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Swisscom and Swiss Post are outsourcing IT jobs to Latvia and Portugal; trade union Syndicom argues this exploits unlimited access to cheap foreign labour enabled by bilateral free movement of workers.",
+          "ids": [
+            58416101
+          ]
+        }
       ],
       "den": [
-        "Ivan Slatkine (liberal economist) warns explicitly: 'If Switzerland were to close its borders, it would have a huge problem financing its pension system' — connecting immigration directly to AVS solvency.",
-        "Union Syndicom's Dominik Fitze argues that outsourcing IT jobs damages long-term innovation and competitiveness — but frames the solution as better domestic training, not immigration restriction.",
-        "Travail.Suisse's 2% wage-increase demand for 2026 is grounded in cost-of-living indexation, not immigration suppression — a labour-market argument that stands regardless of population levels.",
-        "German Syrian refugees who found employment show that integration of arrivals into the labour market generates net fiscal contributions — the opposite of the labour-displacement narrative.",
-        "Employer federations reject the safeguard clause, warning it would breach free movement, destabilise bilateral agreements, and create legal uncertainty for 450,000 EU workers in Switzerland."
+        {
+          "text": "Economist Ivan Slatkine states explicitly that if Switzerland were to close its borders, it would have a massive problem financing the AHV/AVS state pension — immigrants are net contributors, not net beneficiaries.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Employer federations reject the safeguard clause, warning it breaches the free movement agreement, destabilises bilateral ties, and creates legal uncertainty for the 450,000 EU workers employed in Switzerland.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Other Economic Topics": {
       "sup": [
-        "The record 9 million migrants at the US-Mexico border and over 3 million pending US asylum cases are cited as a warning that allowing unchecked inflows eventually overwhelms the entire economic system.",
-        "The SVP-led agricultural lobbying that blocked cuts to farm subsidies illustrates how rural constituencies — most threatened by urban sprawl driven by population growth — wield significant political weight."
+        {
+          "text": "The record 9 million migrant encounters at the US–Mexico border since Biden took office are cited by SVP as a warning of the economic chaos that follows from a system without credible volume limits.",
+          "ids": [
+            55619493
+          ]
+        }
       ],
       "den": [
-        "The ESC trophy controversy (Nemo's return) and cargo-bike license-plate rules show that Swiss political energy is consumed by minor cultural disputes — not by a genuine immigration emergency.",
-        "Switzerland's cautious international stance is driven by strategic neutrality, not population stress; framing foreign policy conservatism as a consequence of immigration overstates immigration's political salience."
+        {
+          "text": "Pragmatic micro-reforms — such as requiring licence plates for cargo bikes or banning anonymous online comments — address concrete everyday problems that have no connection to immigration volume.",
+          "ids": [
+            55619493
+          ]
+        }
+      ]
+    },
+    "Economy, Labor & Finance|||Others": {
+      "sup": [
+        {
+          "text": "Trump's 39% tariffs on Swiss exports highlight the vulnerability of a highly open economy to geopolitical shocks — an argument 10M supporters use to justify greater national autonomy, including over immigration.",
+          "ids": [
+            57348991
+          ]
+        }
+      ],
+      "den": [
+        {
+          "text": "Switzerland's world-leading per-capita GDP is a direct product of open labour and capital markets; restricting either would undermine the very competitiveness the tariff challenge demands.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Social Benefits, Pensions & Welfare": {
       "sup": [
-        "The UDC opposes the 13th AVS pension partly because it would transfer billions to approximately 800,000 retirees living abroad — a direct cost of Switzerland's large foreign-born population.",
-        "Adding 5 billion CHF/year in pension costs (13th AVS) to a system already strained by an ageing domestic population AND migration-fuelled population growth makes long-term AVS solvency precarious, restrictionists argue.",
-        "The Centre patronal proposes extending working life to 65 (eventually rejected) as an alternative to raising contributions — a supply-side labour fix that removes the need to import workers to sustain the pension base.",
-        "The UDC's 2023 election gains came partly on a platform linking the migration crisis to welfare system overload, arguing that non-contributory residents (asylum seekers on social aid) drain resources built for Swiss workers."
+        {
+          "text": "SVP argues the 13th AHV/AVS pension — approved by voters — will cost over CHF 5 billion annually, with a substantial share flowing abroad to approximately 800,000 overseas retirees; the party frames this as a further reason to limit immigration-driven long-term pension entitlements.",
+          "ids": [
+            53137038
+          ]
+        },
+        {
+          "text": "The Centre patronal proposed keeping workers in employment until age 65 as an alternative to pension financing gaps — framing domestic labour-market reform as a substitute for importing foreign labour.",
+          "ids": [
+            56714472
+          ]
+        }
       ],
       "den": [
-        "70% of Swiss citizens across all party lines — including 70% of UDC sympathisers — favour the 13th AVS pension, demonstrating that social-protection expansion has broader support than the 10M initiative's welfare-drain narrative.",
-        "Ivan Slatkine explicitly states that restricting immigration would make it impossible to finance the pension system — immigrants are net contributors to AVS, not net beneficiaries.",
-        "Refugees receiving social aid are employed at higher rates than other aid recipients (36% vs 23%), directly contradicting the welfare-dependency narrative used to justify population capping.",
-        "AVS reserves are projected to grow from 50 to 70 billion CHF by 2030 even with the 13th pension, demonstrating fiscal sustainability that does not depend on reducing immigration.",
-        "The pension system's long-term challenge is demographic ageing of the Swiss-born cohort — a problem that immigration alleviates rather than exacerbates."
+        {
+          "text": "70% of Swiss voters (including 70% of SVP sympathisers) supported the 13th AHV/AVS pension; immigrants are net contributors to the pension system and their presence makes it more financially sustainable, not less.",
+          "ids": [
+            53137038
+          ]
+        },
+        {
+          "text": "The AHV/AVS reserve fund is projected to grow from CHF 50 billion to CHF 70 billion by 2030 — even with the 13th pension — demonstrating financial sustainability that does not depend on restricting immigration.",
+          "ids": [
+            56714472
+          ]
+        }
       ]
     },
     "Economy, Labor & Finance|||Trade & International Commerce": {
       "sup": [
-        "The US under Trump imposed 39% tariffs on Swiss imports; the UDC argues that Switzerland's over-dependence on international markets — itself a product of open-border globalisation — leaves the country vulnerable to political shocks.",
-        "Chinese e-commerce giant Temu's aggressive disruption of Swiss retail (10–12% foot-traffic decline) is cited as evidence that economic openness without population management hollows out domestic industries.",
-        "EU asymmetric tariff treatment of Switzerland (50% tariffs in specific sectors) is framed as proof that the bilateral relationship is exploitative — a context in which population-capping is presented as a way to renegotiate from a position of greater sovereignty."
+        {
+          "text": "Chinese e-commerce giant Temu's aggressive penetration of the Swiss market (causing 10–12% drops in foot traffic for retailers) is cited as evidence that unchecked economic openness destroys domestic industries — an argument 10M supporters extend to the free movement of labour.",
+          "ids": [
+            58416101
+          ]
+        },
+        {
+          "text": "US tariffs of 39% on Swiss goods demonstrate that global openness generates political dependencies that constrain Swiss self-determination — a logic proponents apply equally to immigration policy.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's GDP is among the highest per capita globally precisely because of export-oriented openness — the 10M initiative, by threatening bilateral agreements, would immediately trigger EU tariff barriers.",
-        "SERV export insurance enables Swiss SMEs to participate in global infrastructure projects; restricting labour inflows would reduce the international expertise that makes Swiss exporters competitive.",
-        "The Swiss government's pragmatic and opportunistic foreign trade strategy — balancing US, EU, and China relations simultaneously — depends on the credibility that comes from being an open, rules-based economy."
+        {
+          "text": "The Swiss Export Risk Insurance (SERV) enables Swiss SMEs to participate in global infrastructure projects; open trade relations generate far more economic value than any population cap policy could preserve.",
+          "ids": [
+            58416101
+          ]
+        }
       ]
     },
     "Demographic Change & Population|||Aging Society & Population Trends": {
       "sup": [
-        "Switzerland's ageing native population creates a 'push' pressure to import labour, but the 10M initiative challenges this logic: supporters argue the country should instead raise domestic productivity and extend working lives.",
-        "Regional population surges (e.g., Payerne growing toward 11,000 due to Aéropôle development) create infrastructure pressure that communities cite as the lived reality behind the 10M debate.",
-        "Minority language communities (Romansh-speakers) face marginalisation as German-speaking immigration reshapes cantonal demographics — a granular identity cost the 10M movement frames as a reason for limits."
+        {
+          "text": "Regional towns such as Payerne are growing toward 11,000 inhabitants due to immigration-driven economic expansion; local infrastructure and service capacity are reaching their limits — the lived experience behind the 10M argument.",
+          "ids": [
+            52100840
+          ]
+        },
+        {
+          "text": "The Romansh-speaking community is shrinking partly due to inward migration from German-speaking Switzerland; 10M supporters frame this as a micro-level identity cost of unmanaged population growth.",
+          "ids": [
+            57643864
+          ]
+        }
       ],
       "den": [
-        "Demographic modelling shows that Switzerland's ageing workforce creates a structural labour shortage: without immigration, the pension system, healthcare, and public services face severe under-staffing.",
-        "The Mauritius case and other international examples show that ageing societies without immigration eventually face severe economic contraction and pension fund insolvency.",
-        "Romanche language decline is driven by internal Swiss migration and urbanisation, not by international immigration — the 10M initiative would not protect linguistic minorities."
+        {
+          "text": "Demographic modelling shows Switzerland's ageing native workforce cannot sustain pensions, healthcare, and public services without immigration; a population cap would accelerate, not ease, this structural problem.",
+          "ids": [
+            60103986
+          ]
+        },
+        {
+          "text": "The decline of the Romansh language is caused by internal Swiss mobility patterns, not international immigration — the 10M Initiative addresses the wrong variable.",
+          "ids": [
+            57643864
+          ]
+        }
       ]
     },
     "Demographic Change & Population|||Fertility & Pronatalism": {
       "sup": [
-        "Switzerland's declining birth rate (well below replacement level of 2.1) is the demographic foundation of the 10M debate: UDC argues that population growth above 10 million is entirely immigration-driven, not natural, and therefore reversible.",
-        "The UDC's pronatalist rhetoric — incentivising Swiss-born families — aligns with the 10M movement's premise that Switzerland should 'grow from within' rather than rely on immigration to maintain population.",
-        "63% of women (Pew Research) say they do not want to become mothers, driven by structural factors; the UDC frames this as a reason to address working conditions for Swiss families rather than import labour."
+        {
+          "text": "Switzerland's birth rate is well below the replacement level (2.1); SVP argues the country should 'grow from within' through pro-family policies rather than through immigration — reframing population policy as a natalist, not an anti-immigration, agenda.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "63% of women surveyed globally (Pew Research) say they do not want children due to structural rather than financial factors; 10M supporters argue this calls for better work-life conditions for Swiss families, not more labour immigration.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Leading demographer Philippe Wanner (Geneva) states flatly that financial pronatalist incentives are ineffective at reversing fertility decline — the 10M initiative's 'grow from within' premise is empirically unfounded.",
-        "Scholars challenge the narrative that blames women for demographic decline, arguing that genuinely family-friendly policies (affordable childcare, parental leave parity) require the tax base that immigration sustains.",
-        "The commune of Saillon's population growth via immigration illustrates that communities can thrive with diverse arrivals — contradicting the claim that only natural population growth is sustainable."
+        {
+          "text": "Leading demographer Philippe Wanner (University of Geneva) states flatly that financial pro-natalist incentives cannot reverse declining birth rates — the 10M Initiative's 'grow from within' premise is empirically indefensible.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Demographic Change & Population|||Other Demographic Topics": {
       "sup": [
-        "The viral 'All Eyes on Rafah' campaign and related diaspora mobilisation illustrate how large immigrant communities import geopolitical conflicts into Swiss public life — a social friction cost cited in 10M movement literature.",
-        "New Caledonia's ethnic tensions show that demographic change imposed on small territories without democratic consent generates lasting instability — a cautionary tale applied by Swiss restrictionists to their own situation."
+        {
+          "text": "Diaspora mobilisations (Global March for Gaza, viral 'All Eyes on Rafah' campaign) show how large immigrant communities import geopolitical conflicts into Swiss domestic public life — a social friction cost cited in 10M movement literature.",
+          "ids": [
+            55619493
+          ]
+        }
       ],
       "den": [
-        "The approximately 4,000 marchers from 35 countries participating in the Marche Globale pour Gaza demonstrate that transnational solidarity is a feature of open societies, not a pathology of immigration.",
-        "AI-generated images spreading awareness of humanitarian crises illustrate that digital tools — not migration — are the primary driver of geopolitical information flows in Swiss public life."
+        {
+          "text": "Transnational solidarity movements are a normal feature of open democratic societies, not evidence of cultural instability caused by immigration — conflating the two misrepresents Swiss civil society.",
+          "ids": [
+            55619493
+          ]
+        }
       ]
     },
     "Demographic Change & Population|||Population & Immigration Demographics": {
       "sup": [
-        "Net migration of ~100,000/year makes Switzerland one of Europe's fastest-growing populations; the 10M initiative's core argument is that this pace — driven almost entirely by immigration — is politically unsustainable.",
-        "30% of Pontarlier's population are Swiss cross-border workers, illustrating how Swiss prosperity creates pull factors that draw people even without permanent residence — a dynamic the 10M movement argues must be managed.",
-        "Sweden's crime commission report linking rapid demographic change to social fragmentation is cited by Swiss restrictionists as a near-future scenario for Switzerland if current immigration levels continue.",
-        "Syrian refugees' hesitancy to return home even when Syria stabilises suggests that temporary immigration systematically becomes permanent — supporting the argument for ex-ante population limits rather than ex-post management."
+        {
+          "text": "Net migration of ~100,000 per year makes Switzerland one of Europe's fastest-growing populations; the 10M Initiative sets an explicit constitutional limit on this trajectory.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "30% of Pontarlier's population are Swiss cross-border workers; Swiss prosperity creates powerful pull factors that draw people to border regions, fuelling demographic pressure that the initiative promises to manage.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Dominic Lobalu's story — a South Sudanese refugee who became a Swiss track-and-field champion — exemplifies the transformative potential of immigration that population caps would foreclose.",
-        "Cross-border workers and immigrants in Pontarlier sustain both Swiss and French economic vitality; restricting their movement would impose costs on both sides of the border.",
-        "Jean-Michel Cina's warning that population-cap isolation risks 'cutting Switzerland off from Europe' reflects mainstream political and business sentiment that open demographics are a strategic asset."
+        {
+          "text": "Dominic Lobalu, a South Sudanese refugee, became a Swiss athletics champion — a personal story that illustrates the transformative potential of protection that population caps would foreclose.",
+          "ids": [
+            52100840
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Crime Prevention & Law Enforcement": {
       "sup": [
-        "Violent crime in Switzerland rose 19% in 2024 (2,456 severe cases), and cybercrime is surging — the 10M movement links rising crime rates to population growth that overwhelms policing capacity.",
-        "Organised crime in Switzerland (linked partly to diaspora networks in drug and human trafficking) is cited as a direct consequence of uncontrolled population growth making the country harder to police.",
-        "Iranian female footballers seeking asylum in Australia, and other high-profile cases, are used by restrictionists to argue the asylum system is being gamed by individuals with no genuine protection need."
+        {
+          "text": "Serious violent crimes in Switzerland rose 19% in 2024 (2,456 cases); SVP links this increase to a police and justice system overwhelmed by a rapidly growing, harder-to-monitor population.",
+          "ids": [
+            56452354
+          ]
+        },
+        {
+          "text": "Organised crime networks supply an estimated 80% of Switzerland's drug market; 10M backers attribute the entrenchment of these foreign networks partly to inadequate border control made worse by high inflow volumes.",
+          "ids": [
+            52829013
+          ]
+        }
       ],
       "den": [
-        "The personalised-ticket proposal for football matches was rejected as disproportionate and one-sided — a reminder that punitive measures targeting specific communities rarely address root causes of violence.",
-        "Cybercrime growth is driven by technology, not population size — restricting immigration would have no measurable effect on this dominant crime category.",
-        "Switzerland's crime statistics show Swiss citizens are the most convicted group in absolute numbers — population capping would not change the domestic criminal justice landscape."
+        {
+          "text": "Personalised match-day tickets for football games were rejected as disproportionate and one-sided; blanket security measures targeting population groups are legally and politically unsound.",
+          "ids": [
+            53280536
+          ]
+        },
+        {
+          "text": "Cybercrime — the dominant and fastest-growing crime category — is driven by technology, not population size; a migration cap would have no measurable effect on it.",
+          "ids": [
+            56452354
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Defense Industry & Arms Exports": {
       "sup": [
-        "The F-35 acquisition's escalating costs (650M–1.3B CHF overrun) and US dependency risk are cited by the right as evidence that Switzerland's security policy has been compromised by over-reliance on foreign (especially American) partnerships — a form of sovereignty loss the 10M movement links to over-globalisation.",
-        "The parliamentary finance delegation criticised the army's management of seven major projects as delayed and over-budget — fiscal failures that restrictionists attribute partly to the complexity of managing an internationally sourced defence supply chain.",
-        "82% of Swiss citizens prefer European-sourced military equipment — a preference the 10M movement reads as a broader signal of Swiss appetite to reduce US dependency and reorient toward European strategic autonomy."
+        {
+          "text": "The F-35 procurement has overrun its original cost estimate by CHF 650 million to 1.3 billion; SVP frames US dependency in defence procurement as an extension of the over-globalisation that the 10M Initiative also challenges.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "82% of Swiss citizens prefer European-sourced military equipment over US hardware; 10M supporters read this as a broader public appetite for strategic autonomy — a parallel to their demand for immigration self-determination.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Air Force Commander Peter Merz argues that abandoning the F-35 programme would be 'fatal' for Swiss security, given the sunk costs and lack of comparable alternatives.",
-        "The Swiss parliament's elite athlete-military integration programme demonstrates that the army can be simultaneously open to talent from diverse backgrounds and operationally effective.",
-        "Increasing defence spending (VAT for the army) is opposed by the Greens as 'irresponsible and antisocial' — a reminder that military budget debates cut across immigration politics."
+        {
+          "text": "Air Force Commander Peter Merz states that abandoning the F-35 programme would be 'fatal' for Swiss security given irreversible sunk costs and the absence of a comparable alternative.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Disaster Response & Humanitarian": {
       "sup": [
-        "Swiss participation in EU 'Magnitude' earthquake-response exercises is criticised by some as further institutional entanglement — a pattern the 10M movement identifies as gradually eroding Swiss autonomy."
+        {
+          "text": "Swiss participation in the EU 'Magnitude' earthquake exercise is criticised by some as further institutional entanglement — a pattern the 10M movement identifies as incrementally eroding Swiss autonomy.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The Magnitude exercise is explicitly praised as strengthening cross-border emergency coordination — the kind of international interdependence that a population-cap and bilateral-treaty termination would sever.",
-        "Humanitarian response capacity scales with population and international partnerships, not against them — restricting immigration would reduce the skilled personnel (doctors, engineers, linguists) who make disaster response effective."
+        {
+          "text": "The Magnitude exercise demonstrates that cross-border emergency response requires international cooperation and multilingual, internationally trained personnel — the very human resources that immigration provides.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Military Policy & Procurement": {
       "sup": [
-        "82% of Swiss citizens favour European procurement over US dependency for military equipment — a strategic realignment the 10M movement frames as part of a broader assertion of Swiss sovereignty.",
-        "The Swiss government's crisis simulation ('Exercice intégré 2025') combining cyberattacks, disinformation, and military pressure reflects anxiety about hybrid threats — threats the 10M movement links to a porous border environment.",
-        "A proposed reform to merge civil service with civil protection and limit access to it is partly justified by the need to redirect national-service capacity toward genuine security functions distorted by migration management demands.",
-        "Defense Minister Viola Amherd's proposed neutrality revision and NATO approximation is contested by the UDC as a sovereignty risk — a view consistent with the 10M movement's anti-globalisation framing."
+        {
+          "text": "82% of Swiss citizens prefer European-sourced military equipment; 10M supporters frame this as part of a broader national reorientation toward European strategic autonomy and away from over-dependence on external partners.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Defense Minister Viola Amherd's proposed revision of Swiss neutrality policy and closer NATO alignment is contested by SVP as a sovereignty risk — mirroring their opposition to EU-driven immigration norms.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "82% support for European procurement was driven by anti-Trump sentiment, not anti-immigration logic — the survey reflects a specific geopolitical moment, not a general population-restriction mandate.",
-        "Left-wing parties argue that military budget increases via VAT are 'irresponsible and antisocial', adding fiscal pressure to an austerity programme that already harms lower-income groups.",
-        "Viola Amherd's NATO rapprochement is supported by security experts as necessary to counter hybrid threats — threats that have no causal relationship with Switzerland's immigration volume."
+        {
+          "text": "Security experts regard NATO approximation and EU security cooperation as necessary to counter hybrid threats — threats that have no causal link to Switzerland's immigration volume.",
+          "ids": [
+            59924633
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Other Defense & Security Topics": {
       "sup": [
-        "The Swiss Football Association's success under Dominique Blanc — reaching the quarter-finals — is presented as evidence that Swiss national identity thrives under competent institutional management rather than demographic dilution."
+        {
+          "text": "56% of Switzerland's Paris 2024 Olympic team passed through the army's elite-recruit programme; SVP frames this as evidence that national institutional investment — not demographic diversification — drives peak performance.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's international sporting success (Olympic team, hockey, football) depends substantially on athletes from immigrant families — directly contradicting the 10M movement's implicit assumption that restriction enhances national performance."
+        {
+          "text": "Switzerland's international sporting success draws substantially on athletes from immigrant families of the second generation — a talent pipeline the 10M Initiative would progressively shrink.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Defense, Security & Military|||Security Policy & Intelligence": {
       "sup": [
-        "The Swiss government's concern about Trump's impact on Swiss security forces a strategic rethink: restrictionists argue that over-reliance on the US-led order — itself a product of post-WWII open-border globalisation — has left Switzerland exposed.",
-        "Italy's Albania externalization deal, the EU's push for return hubs, and Swiss government crisis simulations all reflect an intelligence-community consensus that migration pressure poses genuine security risks.",
-        "The Swiss government's 20 million CHF UNRWA aid package is criticised by the right as subsidising an organisation with a trust problem — a spending decision they link to a foreign-policy capture by pro-migration lobbies."
+        {
+          "text": "The Swiss Federal Council was caught off guard by the Trump administration's policy pivots; SVP sees strategic vulnerability as a consequence of over-reliance on the US-led open international order — a dependency the 10M Initiative implicitly challenges.",
+          "ids": [
+            59924633
+          ]
+        },
+        {
+          "text": "Criticism of Switzerland's UNRWA contribution connects immigration-related foreign-policy spending to the domestic migration debate: restricting immigration, supporters argue, also reduces the aid obligations that follow large-scale refugee-generating conflicts.",
+          "ids": [
+            58394955
+          ]
+        }
       ],
       "den": [
-        "Martin Pfister's (DFJP) consensual, collaborative approach to security policy is praised as more effective than polarising restriction politics — nuanced security governance cannot be replaced by a population cap.",
-        "The Swiss UN Security Council delegation's work protecting civilians in Ukraine and the Middle East demonstrates that Switzerland's security influence rests on international engagement, not on limiting immigration.",
-        "Critics note that the Swiss government was 'caught off guard' by Trump — a security failure rooted in diplomatic complacency, not in immigration policy."
+        {
+          "text": "Martin Pfister's consensus-oriented leadership style is praised as a more effective security governance approach than polarising restriction politics — calibrated security policy cannot be replaced by a population cap.",
+          "ids": [
+            59924633
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||Education Policy & Reform": {
       "sup": [
-        "Placing schools inside federal asylum centres (Geneva) is opposed by nearly all unions and advocacy groups as 'inhumane' — a measure made necessary by the scale of the asylum caseload that the 10M movement argues a population cap would prevent.",
-        "Canton Fribourg's proposal to reduce language course hours in the gymnasium is partly driven by fiscal pressure from population-growth-related school enrolment increases — a cost the 10M movement links to unchecked immigration.",
-        "29% of children in Swiss schools report experiencing racism — a figure cited in 10M-adjacent discourse as evidence of social friction created by rapid demographic change."
+        {
+          "text": "Schools placed inside federal asylum centres (Geneva) are condemned by unions and disability advocates as 'inhumane' — a situation 10M backers argue would not arise if inflow volumes were constitutionally capped.",
+          "ids": [
+            57479021
+          ]
+        },
+        {
+          "text": "29% of pupils in Swiss schools report experiencing racism; proponents link this figure to the social friction created by rapid demographic change in school classes.",
+          "ids": [
+            56149148
+          ]
+        }
       ],
       "den": [
-        "Wellbeing-focused schools (yoga, mindfulness, outdoor education) and anti-discrimination curricula show that Swiss education can adapt to diversity without the social breakdown the 10M movement predicts.",
-        "Forum Handicap Vaud and teacher unions oppose not just asylum-centre schools but the broader funding squeeze — demonstrating that education challenges are a fiscal policy choice, not an immigration consequence.",
-        "Coordination Etudiante pour la Palestine's activism shows that engaged, globally aware students are a product of Switzerland's openness — a democratic asset, not a threat."
+        {
+          "text": "Wellbeing-focused school initiatives (mindfulness, outdoor education) and anti-discrimination curricula demonstrate that inclusive education can turn demographic diversity into a social asset.",
+          "ids": [
+            56149148
+          ]
+        },
+        {
+          "text": "The trade union (Syndicat vaudois de l'enseignement secondaire), Forum Handicap Vaud, and student groups are fighting cuts to educational resources — a funding debate entirely independent of immigration volume.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||End-of-Life, Mental Health & Disability": {
       "sup": [
-        "Mental health service underfunding — three out of four people with disabilities report inadequate support — is linked by some conservative voices to resource pressure from population growth that crowds out specialist services.",
-        "The use of AI in disability assessment (criticised by Pro Infirmis) reflects public-sector cost-cutting driven partly by the fiscal pressure of serving a growing, diverse population."
+        {
+          "text": "Under-funding of mental health and disability support (three in four people with disabilities report inadequate provision) is occasionally linked by right-wing voices to budget pressure from growing welfare demand driven by population growth.",
+          "ids": [
+            57479021
+          ]
+        }
       ],
       "den": [
-        "Youth mental health initiatives (prevention, detection, support) require increased public investment — the opposite of the austerity logic that the 10M movement's fiscal framing implies.",
-        "Pro Infirmis's critique of AI in welfare assessment shows that disability rights advocates demand more human-centred governance, not less — a social standard that correlates with open, inclusive societies.",
-        "Emeric Cheseaux's LGBTQ+ theatre work ('La Révérence') shows that diverse, immigrant-influenced cultural life enriches Swiss society's capacity to address marginalisation."
+        {
+          "text": "Pro Infirmis criticises the use of AI in disability assessment; the case for human-centred care demands greater public investment — investment that the tax contributions of immigrants help fund.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||Healthcare Policy & Reform": {
       "sup": [
-        "The Swiss citizens' panel notes that social determinants of health — housing, income, community stress — are deteriorating in rapidly growing urban areas, creating healthcare demand that the system struggles to meet.",
-        "Healthcare cost containment is increasingly difficult as the population grows and ages simultaneously — restrictionists argue the 10M cap addresses the growth component that policy tools alone cannot manage.",
-        "The age-based 'prime aînée' insurance premium debate illustrates that Switzerland's per-capita health cost burden is rising — a trend accelerated by population growth."
+        {
+          "text": "A citizens' health panel noted that social determinants of health — housing, income, community stress — are worsening in rapidly growing urban areas; 10M backers argue population limits would reduce healthcare demand.",
+          "ids": [
+            57479021
+          ]
+        }
       ],
       "den": [
-        "Physioswiss data shows physiotherapy significantly reduces costs from non-communicable diseases — preventive-care investment, not population restriction, is the fiscally rational response.",
-        "Switzerland already has a functioning system of cancer screening expansion, patient-centred reform, and citizens' panels — healthcare improvements that are decoupled from immigration volume.",
-        "Foreign doctors and healthcare workers — including Syrian physicians who form 12% of Germany's medical workforce — are essential to sustaining healthcare capacity in an ageing society."
+        {
+          "text": "Foreign doctors and nurses are indispensable to Swiss healthcare; in Germany, doctors of Syrian origin alone account for 12% of hospital staffing — restricting immigration would worsen, not ease, healthcare capacity.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||Other Health & Welfare Topics": {
       "sup": [
-        "Drug addiction management failures in Swiss public spaces are partly attributed by right-wing voices to a population composition shift — open-air drug markets linked to patterns of use in some migrant communities.",
-        "The shortage of affordable housing forces sex workers into exploitative arrangements (excessive housing costs in Geneva cited) — a vulnerability the 10M movement links to housing scarcity driven by population growth."
+        {
+          "text": "Open-air drug consumption and drug distribution networks in Swiss cities are framed by right-wing parties as a public-health consequence of demographic change driven by immigration.",
+          "ids": [
+            57479021
+          ]
+        }
       ],
       "den": [
-        "LGBTQ+ inclusive senior care spaces and community support structures show that Switzerland's welfare model is evolving to embrace diversity — a development incompatible with the 10M movement's demographic conservatism.",
-        "The La Plage des Six Pompes festival's artist-payment policy demonstrates that Switzerland's cultural welfare ecosystem sustains creative communities that depend on international talent and audiences.",
-        "Drug policy challenges are structural and pharmacological, not demographic — restricting immigration would have no measurable effect on patterns of substance use."
+        {
+          "text": "Inclusive senior spaces for LGBTQ+ people and community-building events (Festival des soupes, Fribourg) illustrate that Switzerland's welfare model is strengthened by social diversity.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||Others": {
       "sup": [
-        "The housing crisis directly affects young people and immigrants — restrictionists argue that relieving this pressure through population limits is a welfare measure that benefits vulnerable groups."
+        {
+          "text": "The housing crisis disproportionately affects young people and newly arrived immigrants; 10M supporters argue that capping arrivals would ease pressure on the most vulnerable segments of the housing market.",
+          "ids": [
+            58194601
+          ]
+        }
       ],
       "den": [
-        "The 2013 spatial planning law revision — which critics call a mistake — drove housing scarcity through zoning restrictions: a policy failure unrelated to immigration volume that population capping would not fix."
+        {
+          "text": "The 2013 Spatial Planning Act introduced construction zone restrictions that contributed to the housing shortage — a policy-driven supply failure with no causal link to immigration.",
+          "ids": [
+            58194601
+          ]
+        }
       ]
     },
     "Healthcare, Social Welfare & Education|||Social Benefits & Family Policy": {
       "sup": [
-        "Sex worker exploitation through excessive housing costs (Geneva) is linked by some voices to the housing scarcity created by population pressure — a welfare cost attributable to unchecked arrivals.",
-        "Right-wing opposition to cooperative housing incentives frames subsidised housing as a reward for immigration-adjacent demographics at the expense of Swiss taxpayers."
+        {
+          "text": "SVP criticises cooperative housing subsidies as an infrastructure investment that primarily benefits migrant communities at the expense of Swiss taxpayers.",
+          "ids": [
+            57479021
+          ]
+        }
       ],
       "den": [
-        "The Belle-Terre quarter (Thônex) demonstrates that community-engaged cooperative development creates social cohesion regardless of residents' origins — a model that does not require demographic restriction.",
-        "The Festival des soupes (Fribourg) illustrates that multicultural community events strengthen social fabric — the social capital the 10M movement claims immigration destroys.",
-        "PLR's critique of cooperative housing as 'inaccessible' misreads the data: cooperative housing is specifically designed to serve moderate-income residents, including immigrants contributing to the local tax base."
+        {
+          "text": "The Belle-Terre cooperative quarter in Thônex (Geneva) shows community-based housing fosters social cohesion regardless of residents' origins — a model where diversity is a stabilising rather than a destabilising factor.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Cultural & Social Integration": {
       "sup": [
-        "Local residents in Féchy resist the permanent establishment of a migrant centre, expressing anxiety about long-term demographic change in their community — a grass-roots expression of the 10M movement's local-sovereignty argument.",
-        "UDC politician Andreas Glarner criticises pro-integration messaging as politically biased, arguing that forced integration programmes are ineffective and that cultural compatibility should inform admission criteria.",
-        "Retailers (Coop, Galaxus) introducing Ramadan product lines are cited by cultural conservatives as evidence of rapid demographic changes commercialising religious identities in ways that reshape Swiss public space."
+        {
+          "text": "Residents of the village of Féchy resist the permanent establishment of a migrant centre, citing fears of long-term demographic change — a grass-roots expression of the community-sovereignty argument at the heart of the 10M Initiative.",
+          "ids": [
+            55411077
+          ]
+        },
+        {
+          "text": "SVP politician Andreas Glarner criticised Migros for stocking Ramadan products, arguing that commercial adaptation to shifting demographics represents a form of cultural displacement that the initiative seeks to slow.",
+          "ids": [
+            53062070
+          ]
+        }
       ],
       "den": [
-        "The short film 'Dans la place' and Genevan cohabitation programmes demonstrate that structured cultural exchange produces measurable integration outcomes — a bottom-up process the 10M movement would preempt.",
-        "Cohabitation between refugees and locals in Geneva is described as 'mutually enriching' by community organisations, directly contradicting the cultural-incompatibility premise of the 10M initiative.",
-        "Coop and Galaxus's Ramadan product lines reflect organic commercial adaptation to market demand — not a state-imposed cultural shift — and mirror similar adaptations that have always accompanied migration."
+        {
+          "text": "Co-habitation projects in Geneva — where refugees and local residents share living spaces — are described as 'mutually enriching', demonstrating that integration can improve quality of life for all parties.",
+          "ids": [
+            58918056
+          ]
+        },
+        {
+          "text": "The short film 'Dans la place' successfully created a platform for dialogue between young Genevan residents and Afghan asylum seekers — evidence that creative integration initiatives work without population restrictions.",
+          "ids": [
+            54397621
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Education & Youth Integration": {
       "sup": [
-        "The SVP frames the influx of young male migrants from Afghanistan as a 'security risk', citing cases of assault and calling for age-specific restrictions on admissions of young men from certain countries.",
-        "Since September 2024, nearly 1,000 Ukrainian men aged 18–22 filed protection requests in Switzerland (185 in one week in October) — a surge that strains cantonal educational placement systems.",
-        "Unions and the SIT syndicate condemn asylum-centre schools as 'inhumane' — but restrictionists argue the situation was created by the volume of arrivals that the 10M initiative would prevent."
+        {
+          "text": "SVP characterises the influx of young Afghan men as a 'security risk' and calls for age- and country-specific admission restrictions.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Since autumn 2024, nearly 1,000 Ukrainian men aged 18–22 filed protection requests in Switzerland (185 in a single week in October), straining cantonal educational placement systems.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Geneva's new programme for unaccompanied minors — dedicated case workers, language classes, social support — shows that investment in youth integration produces better long-term outcomes than restriction.",
-        "The right of children to schooling regardless of administrative status is a constitutional obligation that takes precedence over population management policy.",
-        "Canton Vaud's critique of the new minor-migrant management device for not involving schools shows that integration quality issues are governance failures, not volume problems."
+        {
+          "text": "Geneva's new programme for unaccompanied minor asylum seekers — combining dedicated case workers, language classes, and social support — produces measurably better integration outcomes than admission restrictions.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Employment & Economic Integration": {
       "sup": [
-        "Only 20% of Ukrainians in Switzerland are employed (vs. the government's 40% target and the Netherlands' far higher rate) — a labour-market integration failure that restrictionists argue makes the case for selecting arrivals by employability rather than by need.",
-        "Geneva's Ukrainian employment rate of 15.1% is cited as evidence that large-scale protection-status arrivals strain welfare budgets without adequate labour-market return.",
-        "Cash-only welfare restrictions are defended by some cantons as a necessary deterrent against Switzerland becoming a preferred destination for non-working asylum seekers."
+        {
+          "text": "Only 20% of Ukrainians in Switzerland are employed (against a government target of 40% and the Netherlands' considerably higher rate); this integration shortfall supports the argument that admission should be more selective and tied to employability.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Geneva's employment rate for Ukrainian refugees stands at just 15.1%; low employment despite large caseloads creates ongoing social welfare costs that 10M backers cite as evidence of unmanageable inflows.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "A rigorous academic study (Stefan Legge et al.) found that refugees and asylum seekers in Switzerland show equivalent workplace trust and social norms to Swiss citizens — debunking the cultural-incompatibility argument.",
-        "Maryna Shcherba's successful integration into Swiss hospitality shows that even late-career workers from conflict zones can make meaningful economic contributions given appropriate support.",
-        "Low employment rates among Ukrainians (20%) reflect structural barriers — no childcare, language gaps, credential recognition failures — that targeted policy can fix without reducing the number of arrivals."
+        {
+          "text": "An academic study by Stefan Legge et al. found that refugees and asylum seekers in Switzerland display workplace trust and social norms identical to Swiss nationals — integration barriers are structural, not cultural.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Maryna Shcherba's successful integration into Swiss hospitality shows that even career-changers from conflict zones can make genuine economic contributions given appropriate targeted support.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Integration Programs & Policy": {
       "sup": [
-        "The UDC calls humanitarian reception centres 'Wellness-Zentren' — arguing that comfortable conditions create a pull factor that inflates arrivals, directly contradicting the 10M initiative's deterrence logic.",
-        "Pascal Schmid (UDC) argues asylum centres should not be 'centres de bien-être', framing quality reception conditions as a magnet effect that the 10M movement argues can be severed by stricter conditions.",
-        "Extension of Ukraine Statute S until March 2026 is criticised by the right as normalising long-term stay for a population originally admitted as temporary — exactly the permanence-creep the 10M movement seeks to prevent."
+        {
+          "text": "SVP describes humanitarian reception centres as 'wellness hotels' (Wellnesszentren) and argues their comfortable conditions create a pull factor that increases arrivals — directly undermining the deterrence logic the 10M Initiative relies on.",
+          "ids": [
+            57479021
+          ]
+        },
+        {
+          "text": "The extension of the Ukrainian protection status (Statut S) to March 2026 is criticised by the right as normalising permanent settlement for a group that was originally admitted as temporarily displaced.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The Swiss government's higher-education access programme for refugees — bachelor's and master's degree pathways — directly addresses the skilled-labour shortage that makes immigration necessary in the first place.",
-        "Language courses, job-market integration measures, and Statute S extension for Ukrainians reflect a systematic, rights-compatible integration framework that produces better fiscal outcomes than restriction.",
-        "The Verrières/Neuchâtel opposition to the Cernets asylum centre is based on security concerns about a specific 'récalcitrant' population — not a generalised rejection of integration policy."
+        {
+          "text": "Expanding higher-education access for refugees, language programmes, and vocational integration pathways produce skilled workers the Swiss economy needs — a supply-side alternative to immigration restriction.",
+          "ids": [
+            57479021
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Other Integration Topics": {
       "sup": [
-        "The quadrupling of European border barriers in eight years — from a few hundred to nearly 2,000 km of walls and fences — contextualises Switzerland's domestic restriction debate within a continent-wide hardening of migration governance."
+        {
+          "text": "The quadrupling of European border fencing to nearly 2,000 km in eight years places the 10M Initiative within a continent-wide trend toward population management through physical and legal barriers.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The construction of border barriers correlates with increased migrant deaths and more dangerous routes — a humanitarian cost that integration-focused alternatives would avoid.",
-        "Switzerland's integration success rate (measured by long-term employment and social participation) is among Europe's highest — evidence that the integration framework works and does not need to be replaced by population caps."
+        {
+          "text": "More border fencing correlates with higher migrant death tolls on rerouted dangerous passages, not with fewer arrivals — integration-focused alternatives deliver better humanitarian and security outcomes.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Refugee & Migrant Integration|||Refugee Experiences & Stories": {
       "sup": [
-        "The 1951 Geneva Convention's refugee definition is being interpreted increasingly restrictively worldwide — a trend that Swiss restrictionists frame as a long-overdue correction to an outdated framework.",
-        "Federal asylum centre conditions described as 'semi-detention' — strict hours, surveillance, potential sanctions — are defended by the right as necessary deterrence for those who do not qualify for protection.",
-        "Suspension of asylum procedures for Syrian refugees by several countries after Assad's fall illustrates that protection needs are genuinely temporary — validating the argument for time-limited rather than permanent admission."
+        {
+          "text": "The 1951 Refugee Convention is increasingly interpreted restrictively worldwide; Swiss restrictionists view this as an overdue correction of a framework designed for a post-WWII context that no longer matches today's mixed migration flows.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "Quasi-detention conditions in federal asylum centres (fixed curfews, surveillance, sanctions) are defended by the right as a necessary deterrent for those whose protection claims are not genuine.",
+          "ids": [
+            57479021
+          ]
+        }
       ],
       "den": [
-        "Bahishta Nohtani's AWRA (Afghanistan Women's Rights Association) and Nataliia Stupka's integration as a Swiss doctor illustrate the profound human value of providing protection — value that population caps would extinguish.",
-        "Ukrainian refugees express happiness in Switzerland and desire to stay — demonstrating that successful integration creates lasting social and economic contributions that benefit the host country.",
-        "The global refugee population of 36 million people makes the premise of a 10 million Swiss population cap morally untenable: Switzerland's 8,000+ km² of productive land and strong economy can absorb a far larger share of the global protection burden."
+        {
+          "text": "Bahishta Nohtani's Afghan Women's Rights Association (AWRA) and Nataliia Stupka's career as a Swiss doctor illustrate the transformative human and social value of protection — value that strict population caps would eliminate.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Environment, Energy & Infrastructure|||Climate & Environmental Protection": {
       "sup": [
-        "The 10M initiative's central environmental argument: Switzerland has lost 40% of its glacier volume since 2000 (1 m/year ice loss), and continuing population growth through immigration accelerates land use, water consumption, and carbon emissions.",
-        "The proposed climate fund (4–8 billion CHF/year) is opposed by fiscal conservatives who argue it creates a 'climate debt fund' that future generations — made more numerous by unchecked immigration — will have to repay.",
-        "Switzerland's decision to leave the High Ambition Coalition is framed by the right as a sovereign recalibration — resisting international pressure (including from immigration-exporting countries) to assume disproportionate climate burdens."
+        {
+          "text": "Switzerland has lost 40% of its glacier volume since 2000 (averaging 1 metre of ice per year); 10M supporters argue continued immigration-driven population growth accelerates land use, carbon emissions, and resource consumption in an already stressed landscape.",
+          "ids": [
+            56430475
+          ]
+        },
+        {
+          "text": "The proposed climate investment fund (CHF 4–8 billion per year) is rejected by fiscal conservatives as a 'climate debt fund' that burdens future generations — a burden that grows with every additional resident.",
+          "ids": [
+            59442672
+          ]
+        }
       ],
       "den": [
-        "Glacier scientists present the 40% loss data not as a population-management argument but as a call for emissions reductions — a climate intervention that does not require restricting immigration.",
-        "The climate fund initiative explicitly draws financing from the federal budget, not from immigration restrictions — the two are legally and fiscally unrelated.",
-        "Environmental groups argue Switzerland's per-capita carbon footprint is the relevant metric: reducing it requires decarbonisation policy, not population capping."
+        {
+          "text": "Glaciologists link ice loss to greenhouse gas emissions, not population size; decarbonisation policy — not population limits — is the scientifically appropriate response.",
+          "ids": [
+            56430475
+          ]
+        },
+        {
+          "text": "Climate organisations call for immediate emissions-reduction measures; linking climate protection to immigration restriction, as the 10M Initiative implicitly does, is scientifically unsubstantiated.",
+          "ids": [
+            59442672
+          ]
+        }
       ]
     },
     "Environment, Energy & Infrastructure|||Energy Policy & Nuclear": {
       "sup": [
-        "The UDC opposes the EU energy agreement because it creates energy dependency on a supranational body — a sovereignty loss the 10M movement links to the broader pattern of EU institutional capture of Swiss policy.",
-        "Nicolas Kolly (UDC) argues that renewable energy alone cannot cover Swiss needs, making nuclear power necessary — a domestic-energy-security argument that implicitly relies on limiting population growth to manage per-capita consumption.",
-        "Premature nuclear plant shutdowns (criticised by energy experts) are framed as an own-goal driven by left-wing ideology that will force Switzerland into energy dependency, weakening the country's capacity to absorb a growing population."
+        {
+          "text": "SVP opposes the bilateral electricity agreement with the EU as a further loss of energy sovereignty, arguing that a growing population requires secure domestic supply — not external dependency — and that a population cap reduces future energy demand.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The bilateral energy agreement is supported by the Green Party as essential for supply security and the energy transition — a pro-European argument that decouples energy policy from immigration restriction.",
-        "Nuclear fusion investment, Airbus A320neo efficiency, and aviation carbon taxes represent technology-driven decarbonisation paths that do not depend on reducing Switzerland's population.",
-        "The electricity supply law is supported by centrist parties as a framework for accelerating renewables — a domestic energy-security strategy compatible with demographic openness."
+        {
+          "text": "The bilateral energy agreement ensures supply security and accelerates the transition to renewable energy — an objective that holds regardless of Switzerland's population size.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Environment, Energy & Infrastructure|||Other Environment & Infrastructure Topics": {
       "sup": [
-        "Swiss government arms re-export restrictions (blocking Ukraine deliveries) are criticised as an extreme application of neutrality that isolates Switzerland — a sovereignty-first posture consistent with 10M movement values.",
-        "The Swiss army's exploration of admitting more soldiers with disabilities illustrates how demographic management of national service interacts with broader social policy — a governance dimension the 10M initiative simplifies."
+        {
+          "text": "Switzerland's re-export restrictions on weapons to Ukraine are defended by the right as an expression of neutrality and national self-determination — the same principle the 10M Initiative applies to immigration governance.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's signing of the Artemis Accords positions the country as a science and space diplomacy leader — a soft-power gain that depends on international openness, not on domestic population restriction.",
-        "Maritime humanitarian aid to Gaza, Roman villa archaeological discovery in Bex, and disaster response exercises all show that Switzerland's public-sector capacity benefits from international talent and cooperation."
+        {
+          "text": "Signing the Artemis Accords positions Switzerland as a global leader in science and space diplomacy — soft power built on international openness and talent exchange that a population cap would erode.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Environment, Energy & Infrastructure|||Transportation & Infrastructure": {
       "sup": [
-        "The campaign to expand six highway sections (costing billions) is directly driven by population-growth-related congestion — a fiscal and environmental cost that supporters of the 10M initiative argue would be avoided by limiting arrivals.",
-        "Traffic modelling shows the A1 expansion between Geneva and Nyon may induce more traffic rather than reduce congestion — evidence that infrastructure cannot keep pace with population growth, validating the 10M movement's 'cap first' logic.",
-        "The rejection of the 5 billion CHF road investment by Swiss voters in November 2024 is interpreted by some as a public signal that infrastructure expansion is not the answer — making population limitation the logical alternative."
+        {
+          "text": "Swiss voters rejected a CHF 5 billion road-expansion package in November 2024; 10M backers interpret this as a popular signal that Switzerland has reached its spatial capacity — making population limitation a logical complement.",
+          "ids": [
+            57348991
+          ]
+        },
+        {
+          "text": "The A1 motorway expansion between Geneva and Nyon would destroy 105,000 m² of land; transport infrastructure expansion driven by population growth represents an irreversible spatial cost the 10M Initiative would avoid.",
+          "ids": [
+            55119469
+          ]
+        }
       ],
       "den": [
-        "A study in the Grand Genève region shows that 'fifteen-minute city' urban design — with services and employment within walking/cycling distance — reduces motorised travel and emissions without restricting population.",
-        "Developing local infrastructure reduces the need for motorised commutes and can decouple population from traffic growth — making the transportation crisis solvable without a population cap.",
-        "The TCS president argues the road vote was about messaging and specific projects, not a signal against roads as such — interpreting it as a mandate for population restriction misreads the democratic signal."
+        {
+          "text": "The 'fifteen-minute city' model (Grand Genève study) demonstrates that mixed-use, dense urban planning reduces motorised travel and emissions without restricting population — spatial planning reform is the correct instrument.",
+          "ids": [
+            55119469
+          ]
+        }
       ]
     },
     "Environment, Energy & Infrastructure|||Urban Planning & Development": {
       "sup": [
-        "Grindelwald's severe housing shortage — locals renting their homes on Airbnb, tourists outbidding residents — is framed as a consequence of the population pressures the 10M initiative addresses.",
-        "Swiss mountainous regions face a dual pressure: urban sprawl from population growth and rural depopulation as services concentrate — a spatial contradiction the 10M movement argues results from unmanaged demographic expansion.",
-        "Uncontrolled camping-car growth on Swiss roads, cited as an emerging planning problem, reflects the broader challenge of managing a growing population's mobility and space use."
+        {
+          "text": "Grindelwald's acute housing shortage — locals outbid by Airbnb hosts and tourists — illustrates the spatial capacity limits of Swiss tourism communities under growing population pressure.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "The fifteen-minute city concept (Carlos Moreno) demonstrates that densification and mixed-use development can improve urban quality of life independently of population limits.",
-        "Airbnb growth in tourist areas is a platform-economy regulatory failure, not a consequence of immigration — restricting arrivals would not restore local housing markets.",
-        "The Electron Festival (Geneva) and other cultural events show that urban vitality depends on international connectivity and demographic diversity — assets that population restriction would erode."
+        {
+          "text": "The Airbnb market failure in tourist zones is a platform-regulation problem, not an immigration effect; targeted rental-market regulation would be more effective than limiting population.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Middle East & Africa Policy": {
       "sup": [
-        "Israel's YouTube propaganda campaign in Switzerland and other European countries (confirmed by research) is cited as evidence that immigration creates vulnerability to foreign information operations — a security argument for tighter demographic control.",
-        "Switzerland's hesitation to recognise Palestinian statehood is defended by the right as consistent with a neutral, non-interventionist foreign policy — a posture the 10M movement aligns with its sovereignty-first worldview.",
-        "The Gaza humanitarian crisis is exploited by some Swiss diaspora communities to organise political mobilisation (Jura–Palestine collective) — a domestic political pressure the 10M movement links to the growing political weight of immigrant communities."
+        {
+          "text": "Israeli-linked influence operations on YouTube and gaming platforms in Switzerland are cited as evidence that large diaspora communities become targets of foreign information campaigns — a security argument for more selective immigration.",
+          "ids": [
+            51577555
+          ]
+        }
       ],
       "den": [
-        "Switzerland's neutrality demands a firmer stance on Gaza: as depositary of the Geneva Conventions it bears specific legal obligations that population management politics cannot override.",
-        "The strict Gaza blockade's humanitarian consequences — severe aid restriction, civilian casualties — generate refugee flows that Europe and Switzerland are obligated under international law to receive.",
-        "Middle East policy debates in Switzerland are conducted overwhelmingly by Swiss citizens regardless of origin; attributing them to 'immigrant political pressure' misunderstands domestic democratic processes."
+        {
+          "text": "As depositary of the Geneva Conventions, Switzerland has specific legal obligations that require it to take a principled humanitarian stance on Gaza — obligations that a population-cap policy cannot override.",
+          "ids": [
+            58121223
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Others": {
       "sup": [
-        "Switzerland's historical emotional ties to Israel — and the parliamentary rejection of sanctions — reflect a foreign policy made by Swiss citizens, not by immigrant lobbies — a point the 10M movement uses to argue that Swiss identity must be democratically preserved.",
-        "The Swiss parliament's rejection of concrete Israel sanctions (despite significant left-wing pressure) shows that even in a diverse Switzerland the democratic majority resists being driven by diaspora politics."
+        {
+          "text": "Parliament's rejection of concrete Israel sanctions, despite pressure from diaspora groups, shows that Swiss citizens — through their elected representatives — can defend independent foreign-policy positions against migrant-community lobbying.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's diplomatic agility — convincing Zimbabwe to abolish the death penalty, hosting the Bürgenstock peace summit — derives from its credibility as a humanitarian, rules-based actor, not from restrictive immigration politics.",
-        "African leaders' frustration with Western expectations of alignment on Ukraine illustrates that global governance requires cultural sensitivity and open engagement, not the inward-looking posture of the 10M movement."
+        {
+          "text": "Swiss diplomatic successes — convincing Zimbabwe to abolish the death penalty, hosting the Bürgenstock Ukraine peace summit — rest on the country's credibility as an open, rules-based actor, which inward-looking restriction politics would undermine.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Swiss Neutrality & Foreign Aid": {
       "sup": [
-        "A minority in the Ständeratskommission argues that UNRWA has a fundamental credibility problem — Swiss taxpayer money should not fund an organisation whose staff were implicated in the October 7 attacks.",
-        "Switzerland's reduction of UNRWA funding is consistent with the 10M movement's broader argument that Switzerland's humanitarian commitments are overextended relative to its capacity."
+        {
+          "text": "A minority in the Council of States' committee questions UNRWA's credibility and argues against funding an agency that may indirectly generate migration pressure toward Europe and Switzerland.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's 20 million CHF UNRWA contribution reflects its obligation as depositary of the Geneva Conventions and its historical role as a humanitarian leader — a role the 10M movement's inward turn would irreversibly damage.",
-        "UNRWA provides essential services to 5.9 million Palestinian refugees; defunding it would not reduce immigration pressure on Switzerland but would deepen the humanitarian crises that generate refugee flows."
+        {
+          "text": "Switzerland's contribution to UNRWA reflects its humanitarian leadership as depositary of the Geneva Conventions; cutting it would damage Switzerland's international standing without any demographic benefit.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Switzerland-Asia Relations": {
       "sup": [
-        "China's forced repatriation of North Koreans (and denial of same) illustrates that strategic partners can engage in practices fundamentally incompatible with Swiss values — a reality that requires managed, selective engagement rather than open-border globalisation.",
-        "Parliamentary pressure to secure rare-earth supply from Asia reflects Switzerland's dangerous dependence on external supply chains — a vulnerability the 10M movement links to over-reliance on globalisation."
+        {
+          "text": "Parliamentary pressure to secure rare-earth supply chains from Asia reflects concern that deep economic openness creates strategic dependencies — a logic 10M supporters extend to their argument for immigration self-determination.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's trade, investment, and scientific cooperation with China and Japan are essential to its economic model — decoupling through population restriction would sever the talent and capital flows that sustain this relationship.",
-        "Rare-earth security requires diplomatic and industrial policy, not immigration restriction — the two are unrelated governance challenges."
+        {
+          "text": "Switzerland's trade, scientific, and investment ties with China and Japan are vital to its economic model; restricting openness would drive away talent and capital that these relationships depend on.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Switzerland-US Relations": {
       "sup": [
-        "Switzerland's dependence on the US-led order — trade, security, financial system — has left it exposed to Trump's tariff and foreign-policy disruptions, validating the 10M movement's argument for strategic self-reliance.",
-        "Former diplomats warn that Trump's isolationism requires Switzerland to rethink alliances — a rethink that the 10M movement argues should include reducing Switzerland's own exposure to international population flows."
+        {
+          "text": "The Federal Council was surprised by Trump's tariff and foreign-policy disruptions; SVP interprets this strategic vulnerability as a consequence of excessive globalisation and cites it to justify self-determination in immigration as well.",
+          "ids": [
+            59924633
+          ]
+        }
       ],
       "den": [
-        "Swiss citizens' concern about the 'law of the jungle' returning under Trump — and their call for greater firmness from the Bundesrat — reflects a desire for more international engagement, not less.",
-        "Switzerland's strength in the face of US tariffs lies in its economic productivity, legal certainty, and skilled workforce — all of which depend on immigration rather than population restriction."
+        {
+          "text": "Switzerland's resilience against US tariffs depends on its economic productivity, legal certainty, and skilled workforce — all of which immigration sustains rather than undermines.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "International Relations & Geopolitics|||Switzerland-Ukraine & Eastern Europe": {
       "sup": [
-        "Critics warn that NATO membership for Ukraine remains deeply divisive and that Switzerland's Bürgenstock summit was more symbolic than substantive — supporting the 10M movement's scepticism about over-ambitious international commitments.",
-        "Ukraine-related migration (nearly 1,000 young men filing protection requests in autumn 2024, 185 in one week) illustrates how geopolitical crises generate sudden demographic shocks that population-cap advocates argue Switzerland must be prepared to resist."
+        {
+          "text": "Ukraine's NATO membership remains deeply divisive; SVP invokes this debate as an argument for a sovereign, EU-independent security and foreign policy that includes independent control over immigration.",
+          "ids": [
+            57348991
+          ]
+        }
       ],
       "den": [
-        "Switzerland's UN Security Council advocacy protecting civilians in Ukraine and the Middle East demonstrates that international engagement generates security, not vulnerability.",
-        "The Bürgenstock summit's hosting demonstrates Switzerland's unique diplomatic capacity — a soft-power asset built on its openness and credibility that the 10M movement would sacrifice."
+        {
+          "text": "The Bürgenstock peace summit demonstrated Switzerland's unique diplomatic capacity — a soft-power asset built on openness and humanitarian credibility that an isolationist population-cap policy would sacrifice.",
+          "ids": [
+            57348991
+          ]
+        }
       ]
     },
     "Others|||Others": {
       "sup": [
-        "Miscellaneous political articles reflect the breadth of Swiss discourse beyond specific 10M initiative themes, but even peripheral topics show underlying tensions about national identity and sovereignty."
+        {
+          "text": "Peripheral topics in the dataset reflect the breadth of social anxieties that the 10M Initiative mobilises — from cultural identity debates to sports nationalism.",
+          "ids": [
+            55619493
+          ]
+        }
       ],
       "den": [
-        "The diversity of topics in this category demonstrates that Swiss political life is rich and multidimensional — not reducible to the single axis of immigration restriction versus openness."
+        {
+          "text": "The diversity of topics in this category demonstrates that Swiss public discourse is multidimensional and cannot be reduced to the single axis of immigration restriction versus openness.",
+          "ids": [
+            55619493
+          ]
+        }
       ]
     }
   },
-  "overview": "This database captures 23,785 articles across 11 major topic areas published between October 2023 and March 2026 in German (de), French (fr), and Italian (it) Swiss media. All content is framed around the central debate over the 'Pas de Suisse à 10 millions!' initiative — the UDC-led political movement to limit Switzerland's population to 10 million through immigration restriction. Economy, Labor & Finance is the largest category (6,035 articles, 25%), followed by Swiss Domestic Politics & Governance (4,198, 18%) and Healthcare, Social Welfare & Education (3,003, 13%). The 2023 rightward federal election shift — UDC gaining its strongest result ever — forms the backdrop for the discourse, and the pending bilateral treaty renegotiation with the EU (whose free-movement pillar is the initiative's primary target) creates the dominant structural tension. Coverage is concentrated in German-language outlets; sentiment is predominantly neutral, with negative framing most intense in immigration and defense reporting.",
+  "overview": "This dataset captures 24,297 articles across 11 major thematic areas, published between October 2023 and March 2026 in German-, French-, and Italian-language Swiss media — including SRF, NZZ, TPS (Le Temps), RSI, and 25 other outlets. All content is interpreted through the lens of the '10M Initiative' — officially known as 'Pas de Suisse à 10 millions!' (French) or 'Keine Schweiz mit 10 Millionen!' (German) — a SVP-backed popular initiative that would constitutionally limit Switzerland's population to a maximum of 10 million people, primarily by restricting immigration. Economy, Labour & Finance is the largest category (6,136 articles, 25%), followed by Swiss Domestic Politics & Governance (4,321, 18%) and Healthcare, Social Welfare & Education (3,054, 13%). The 2023 federal elections — in which SVP achieved its strongest result since 2015 — and the ongoing Bilateral Agreements III negotiations with the EU form the overarching political backdrop. Sentiment across the corpus is predominantly neutral; negative framing concentrates in immigration and defence reporting. German-language media account for the majority of coverage.",
   "topics": {
-    "Immigration & Asylum Policy": "The most directly contested domain: 66% of Swiss citizens say migration will influence their vote, and 41% consider the situation 'very worrying', giving the 10M initiative its democratic mandate. The UDC argues the asylum system costs 4 billion CHF/year (more than agriculture), net migration exceeds 100,000/year, and the government has lost border control. Opponents expose the 10M initiative as legally incompatible with bilateral treaties, warn of Kafkaesque asylum procedures that already victimise genuine refugees, and note that asylum seekers are less than 10% of immigration — meaning the initiative targets the wrong group.",
-    "Swiss-EU Relations & Bilateral Agreements": "The bilateral treaty framework is the 10M initiative's primary casualty: the UDC's cap would automatically trigger termination of free movement, cascading into the loss of six further bilateral agreements. The new bilateral package — including an energy deal, state-aid rules, and a migration Schutzklausel — is the government's attempt to stabilise the relationship before a population-cap referendum forces the issue. The UDC argues the package amounts to unconstitutional dynamic alignment with EU law; centrists and the left argue Switzerland's economic survival depends on it.",
-    "Refugee & Migrant Integration": "Integration policy sits at the sharp end of the 10M debate: UDC frames reception conditions as 'pull factors' and calls humanitarian centres 'Wellness-Zentren', while integration advocates show refugees in Switzerland exhibit equivalent workplace trust norms to Swiss citizens and are employed at higher rates than other welfare recipients. Ukrainian employment rates (20%, vs a 40% government target) are cited by both sides — as a failure of integration infrastructure by supporters of more support, and as proof that large-scale arrivals are unmanageable by the 10M movement.",
-    "Swiss Domestic Politics & Governance": "The 2023 federal elections produced Switzerland's most right-wing parliament in modern history, with UDC surpassing its 2015 record. The 10M initiative is the central organising frame for the UDC's legislative programme, connecting fiscal austerity (cutting 5 billion CHF by 2030), direct democracy (using signatures and referenda to force population debates), and institutional accountability (demanding the Bundesrat implement earlier migration mandates). Critics note that despite election wins, the UDC consistently avoids translating its mandate into implementable policy, raising questions about whether the 10M initiative is governance or permanent campaign.",
-    "Economy, Labor & Finance": "The economic stakes of the 10M initiative are enormous: Switzerland's top economists warn that capping immigration would create a crippling skilled-labour shortage, threaten AVS solvency (immigrants are net pension contributors), and trigger bilateral-agreement termination that exposes exports to EU tariffs. Supporters counter that net migration of ~100,000/year drives housing costs (near-zero vacancy in Zurich and Geneva), suppresses wages for domestic workers, and forces infrastructure spending (highway expansion, school construction) that would not be necessary under a managed population cap.",
-    "Defense, Security & Military": "The 10M movement's security argument is twofold: unchecked borders enable criminal networks and security threats (severe violent crime up 19% in 2024, cybercrime surging), while over-reliance on international systems — US F-35 procurement, EU security integration — has eroded Swiss sovereignty. The 82% Swiss preference for European-sourced military equipment is read by restrictionists as a broader appetite for strategic autonomy. Defense experts counter that Switzerland's security depends on international cooperation, not on population restriction.",
-    "Healthcare, Social Welfare & Education": "Healthcare and education costs are central to the 10M initiative's fiscal argument: a growing, ageing, and diversifying population strains school enrolment, hospital capacity, and social services. The voter-approved 13th AVS pension adds 5 billion CHF/year — a cost the UDC argues is unsustainable alongside continued population growth. Opponents demonstrate that immigrants are net contributors to the pension system, that education challenges stem from funding choices not population size, and that healthcare capacity requires skilled foreign workers to function.",
-    "Environment, Energy & Infrastructure": "The 10M initiative was originally launched as an environmental measure: Switzerland cannot sustainably urbanise, consume water, and expand infrastructure for an unlimited population. Glacier loss (40% since 2000), housing scarcity (near-zero vacancy rates), and the rejection of a 5-billion-CHF road expansion by voters are all marshalled as evidence that the country has reached its spatial limits. Opponents argue that decarbonisation, densification, and the EU energy agreement address these challenges without the economic cost of immigration restriction.",
-    "International Relations & Geopolitics": "Switzerland's foreign policy credibility — built on humanitarian leadership, diplomatic neutrality, and institutional reliability — is directly at stake in the 10M debate. Restricting immigration would signal a retreat from international engagement that would damage Switzerland's soft power (Bürgenstock summit, UN Security Council advocacy, UNRWA funding). Trump's tariff aggression and China's human rights practices are cited by 10M supporters as proof that Switzerland needs strategic self-reliance, not deeper globalisation.",
-    "Demographic Change & Population": "Demographic data is the 10M initiative's empirical foundation: Swiss net migration of ~100,000/year, a birth rate well below replacement, and an ageing native workforce create a trajectory toward 10 million inhabitants within the current decade. Supporters argue this growth is entirely immigration-driven and therefore reversible; demographers counter that Switzerland's economic model requires immigration to sustain pensions, healthcare, and the skilled workforce, making the 10M cap a demographic and fiscal self-inflicted wound.",
-    "Others": "A residual category capturing Swiss political discourse that spans multiple domains or does not fit cleanly into the primary 10M initiative thematic areas. Even these articles reflect underlying tensions between Swiss sovereignty, social cohesion, and international openness — the fundamental axes of the population debate."
+    "Immigration & Asylum Policy": "The most direct battleground for the 10M Initiative: 66% of Swiss voters say migration will influence their vote; 41% consider the situation 'very worrying'. Federal asylum and migration spending exceeded CHF 4 billion in 2023 — more than the agriculture budget. SVP demands systematic border controls, a cap of 5,000 annual protection grants, and fast-track rejection for low-acceptance nationalities. Opponents argue the initiative is a covert attack on bilateral free movement of persons, warn of non-refoulement violations, and note that asylum seekers represent less than 10% of total immigration — meaning the initiative targets the wrong group.",
+    "Swiss-EU Relations & Bilateral Agreements": "The 10M Initiative directly targets free movement of persons — the institutional cornerstone of the Bilateral Agreements I (1999). The new Bilateral Agreements III package (energy, state aid, safeguard clause on free movement) is the Federal Council's attempt to stabilise the EU relationship before a potential popular vote. SVP calls the package unconstitutional dynamic legal alignment; The Centre party and FDP regard it as economically essential. An accepted 10M Initiative would automatically terminate all seven Bilateral Agreements I.",
+    "Refugee & Migrant Integration": "Integration policy is the operational test of the 10M Initiative: SVP calls reception centres 'wellness hotels' and claims their quality creates a pull factor; integration researchers show that refugees in Switzerland display workplace norms identical to Swiss nationals and are employed at higher rates than other welfare recipients. The 20% employment rate for Ukrainian refugees (against a 40% government target) is weaponised by both sides — as an integration failure by restrictionists, and as evidence of structural barriers (childcare, language, credential recognition) by advocates of better-funded integration programmes.",
+    "Swiss Domestic Politics & Governance": "The 2023 federal elections produced Switzerland's most right-wing parliament in decades: SVP gained 9 seats; Greens and Green Liberals lost 11. The 10M Initiative is the overarching organisational theme of SVP's legislative programme. Concrete policy links include: the 13th AHV/AVS pension (fiscal costs), e-ID digital governance, education cuts, housing shortages, and federal budget consolidation — all framed through the migration-policy lens. Critics note that SVP has not translated electoral wins into operationally implementable migration measures.",
+    "Economy, Labor & Finance": "The economic stakes of the 10M Initiative are enormous: economists warn of a crippling skilled-labour shortage and AHV/AVS pension insolvency without immigration; 10M backers counter with near-zero apartment vacancy rates in Zurich and Geneva, stagnant real wages attributed to unrestricted free movement of workers, and CHF 5 billion in annual savings cuts to compensate for immigration-related social expenditure. Trump's 39% tariffs on Swiss exports and bilateral treaty uncertainty add geopolitical urgency to both sides of the debate.",
+    "Defense, Security & Military": "Security debates connect to the 10M Initiative along two axes: (1) internal security — serious violent crime up 19%, organised drug networks — as an argument for immigration control; and (2) defence sovereignty — F-35 cost overruns and NATO alignment — as a parallel example of unwanted external dependency. 82% of Swiss citizens prefer European-sourced military equipment, a preference 10M supporters read as a broader appetite for strategic self-determination that extends to immigration policy.",
+    "Healthcare, Social Welfare & Education": "Healthcare and education are key fiscal battlegrounds for the initiative: rising health-insurance premiums, schools placed inside asylum centres (condemned by trade unions as 'inhumane'), and budget cuts to education and disability services. The opposing argument: foreign doctors and nurses are structurally indispensable to Swiss healthcare; education funding shortfalls stem from political choices, not immigration volume; and immigrants' tax and social-insurance contributions sustain the welfare systems the initiative claims to protect.",
+    "Environment, Energy & Infrastructure": "The 10M Initiative was originally launched as an environmental sustainability measure: glacier loss of 40% since 2000, land-use pressure, housing scarcity, and the November 2024 rejection of a CHF 5 billion road-expansion package are all marshalled as evidence that Switzerland has reached its spatial carrying capacity. Climate scientists and the Greens reject this framing: emissions reduction, the bilateral energy agreement with the EU, and urban densification are the correct instruments — not a population ceiling.",
+    "International Relations & Geopolitics": "Swiss foreign policy faces pressure from multiple directions: the Gaza conflict demands a reassessment of its humanitarian identity, Trump-era US unpredictability threatens its export economy, and China dependency creates supply-chain vulnerabilities. SVP uses all three as arguments for national self-determination, including in immigration. The opposing case: the Bürgenstock Ukraine peace summit and UN Security Council work demonstrate that Switzerland's international influence rests on openness and humanitarian credibility — assets an inward-looking population cap would erode.",
+    "Demographic Change & Population": "Demographic data is the empirical bedrock of the 10M Initiative: net immigration of ~100,000 per year, a birth rate well below replacement level, and a rapidly ageing native workforce. SVP argues for 'growing from within' through pro-natalist policies; demographers such as Philippe Wanner (University of Geneva) call this empirically indefensible. The AHV/AVS pension system is widely regarded as impossible to sustain without continued labour immigration from abroad.",
+    "Others": "A residual category capturing Swiss political discourse that spans multiple policy domains without fitting cleanly into the ten main themes. Even peripheral articles reflect the underlying tension between Swiss sovereignty, social cohesion, and international openness that the 10M Initiative has placed at the centre of Swiss politics."
   }
 }

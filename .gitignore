@@ -1,5 +1,5 @@
 # Ignore data folder (datasets, large files)
-#/data/
+/data/  
 #results/*
 
 # Python-related
@@ -22,7 +22,34 @@ ENV/
 
 # Claude Code internal files (worktrees, sessions)
 .claude/
+.claude
 
 # Dashboard monolithic items file (replaced by split files)
 docs/data/items.json
-dashboard_package/
+.git/objects/2e/5d3fb6af2aa1da02474b9d361a2f522569b4a9
+.git/objects/3b/2c7a399e783c848a245495fe42ad566e7171b2
+.git/objects/3b/tmp_obj_m49KYt
+.git/objects/3c/cae6f2160578ac18e3a35ad078a8278d03d0ed
+.git/objects/4b/27951d51f29e0979e5eefef264c0e3432bae9e
+.git/objects/9f/c412a60205f8c761fe2a83eb63719a5fc997fa
+.git/objects/a9/dd16a57fded5eb9b5291e0761aadd52f36b8f3
+.git/objects/b6/4985b06fb18ec9dbf8a23921a9019824e1e9f9
+.git/objects/ed/1a3cdc9e14d79903ac011bf0e79d2d8e139a29
+.git/objects/f3/035b27df3c33b015bbdc6c799eaf62dfac4fc6
+data/AI_and_edu/de.tsv
+data/AI_and_edu/de_edu.csv
+data/AI_and_edu/de_edu.tsv
+data/AI_and_edu/de_edu_cleaned.csv
+data/AI_and_edu/de_edu_filtered.csv
+data/AI_and_edu/de_edu_filtered_pre_topic_extraction.csv
+data/AI_and_edu/de_edu_for_topic.csv
+data/AI_and_edu/de_edu_small.csv
+data/AI_and_edu/education_subtopics.csv
+data/AI_and_edu/Topiclabel.csv
+data/politics/cleaned_yin_41k_0309.csv
+data/politics/french_politics.tsv
+data/politics/German_politic.tsv
+data/politics/yin_41k_0309.tsv
+data/tmp/de_edu_1.csv
+data/tmp/de_edu_bert_50.csv
+results/german_politic_utilize_20260504_224646.json
