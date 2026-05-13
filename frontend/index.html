@@ -1198,6 +1198,16 @@ function buildSentChart(cls,sf){
   if(dSentChart)dSentChart.destroy();
   dSentChart=new Chart(document.getElementById('d-sentiment'),{type:'bar',data:{labels,datasets:[{label:'Positive',data:pos,backgroundColor:'#28a74588',borderRadius:3},{label:'Neutral',data:neu,backgroundColor:'#6c757d55',borderRadius:3},{label:'Negative',data:neg,backgroundColor:'#dc354588',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
 }
+function extractPointText(p){
+  if(typeof p === 'string') return p;
+  if(typeof p === 'object' && p !== null){
+    // Try common key names
+    return p.text || p.summary || p.point || p.argument || p.content || p.description
+           || p.statement || p.claim || Object.values(p)[0] || JSON.stringify(p);
+  }
+  return String(p);
+}
+
 function makeBulletBlock(sub, points, isSup, articles){
   const blockClass = isSup ? 'sup-block' : 'den-block';
   const uid = btoa(unescape(encodeURIComponent((isSup?'sup':'den')+sub))).replace(/[^a-z0-9]/gi,'').slice(0,12);
@@ -1232,7 +1242,7 @@ function makeBulletBlock(sub, points, isSup, articles){
 
   return `<div class="sd-block ${blockClass}">
     <div class="sd-sub-label">${sub}</div>
-    <ul class="sd-list">${points.map(p=>`<li>${p}</li>`).join('')}</ul>
+    <ul class="sd-list">${points.map(p=>`<li>${extractPointText(p)}</li>`).join('')}</ul>
     ${articleHtml}
   </div>`;
 }
@@ -1249,6 +1259,9 @@ function toggleArticles(uid){
 function renderSupDen(sub){
   const supEl=document.getElementById('sup-content'), denEl=document.getElementById('den-content');
   const sd=SUMS.subtopics||{};
+  // Debug: log first entry to console so we can see the structure
+  const firstKey=Object.keys(sd)[0];
+  if(firstKey) console.log('summaries sample entry:', firstKey, sd[firstKey]);
   const cachedItems = (ITEMS_CACHE[curCls]||[]).map(it=>({
     id:it[0], date:it[1]?it[1].slice(0,10):'', outlet:it[2]||'',
     language:it[3]||'', sentiment:it[4]||'', subtopic:it[5]||'',
