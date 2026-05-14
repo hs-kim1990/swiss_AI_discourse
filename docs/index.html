@@ -103,6 +103,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pb:hover:not(.active){border-color:var(--accent)}
 .pi{font-size:11px;color:var(--text2)}
 @media(max-width:900px){.charts-row,.supden-row{grid-template-columns:1fr}}
+
+.sent-opinion{background:#e8eaf6;color:#3949ab}
+.sent-supporting{background:#d4edda;color:#155724}
+.sent-opposing{background:#f8d7da;color:#721c24}
+
 </style>
 </head>
 <body>
@@ -245,6 +250,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="charts-row" style="margin-bottom:14px">
     <div class="chart-card"><div class="sec-title">Timeline</div><canvas id="d-timeline"></canvas></div>
     <div class="chart-card"><div class="sec-title">Sentiment by Subtopic</div><canvas id="d-sentiment"></canvas></div>
+    <div class="chart-card" style="margin-top:14px">
+      <div class="sec-title">Opinion by Month
+        <span>Supporting = article has supporting arguments only &nbsp;|&nbsp;
+              Opposing = opposing arguments only &nbsp;|&nbsp;
+              Neutral = both or neither</span>
+      </div>
+      <canvas id="d-opinion"></canvas>
+    </div>
   </div>
   <div class="sec-title">Supporting &amp; Opposing Arguments <span>Select a subtopic to filter</span></div>
   <div class="sub-nav" id="sub-nav"></div>
@@ -303,7 +316,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <table class="dt"><thead><tr>
       <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
       <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
-      <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
+      <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th><th onclick="srt('opinion')">Opinion</th>
       <th>Headline</th><th>Summary</th>
     </tr></thead><tbody id="tbl-body"></tbody></table>
     </div>
@@ -322,7 +335,7 @@ const LC={de:'#e74c3c',fr:'#3498db',it:'#27ae60'};
 const SC={positive:'#28a745',neutral:'#6c757d',negative:'#dc3545'};
 let selLangs=new Set(['all']),selMed='',groupBy='classification';
 let dLangs=new Set(['all']);
-let tlChart=null,barChart=null,dTlChart=null,dSentChart=null;
+let tlChart=null,barChart=null,dTlChart=null,dSentChart=null,dOpinionChart=null;
 let curCls='Economy, Labor & Finance';
 let tblData=[],tblFiltered=[],sortKey='pubtime',sortDir=-1,curPage=1;
 const PZ=50;
@@ -475,7 +488,7 @@ async function loadDetailView(){
   buildSubNav(subs);updateDetailStats();updateDetailCharts();renderSupDen('');
   // Load items for this topic (lazy)
   const items=await getItems(curCls);
-  tblData=items.map(it=>{return{id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7]}});
+  tblData=items.map(it=>{return{id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7],opinion:(it[8]||'neutral')}});
   sortKey='pubtime';sortDir=-1;curPage=1;filterTable();
 }
 function buildSubNav(subs){
@@ -515,6 +528,7 @@ function updateDetailCharts(){
     options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{boxWidth:9,font:{size:9}}}},
       scales:{x:{ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}});
   buildSentChart(curCls,dSelSub);
+  buildOpinionChart(curCls,lf,dSelMed,dSelSub);
 }
 function aggDetailTl(cls,lf,mf,sf){
   const tl=PREPROC.timeline,months=Object.keys(tl).sort();
@@ -545,6 +559,7 @@ function buildSentChart(cls,sf){
   const neu=subs.map(([,d])=>d.n>0?+(d.u/d.n*100).toFixed(1):0);
   const neg=subs.map(([,d])=>d.n>0?+(d.g/d.n*100).toFixed(1):0);
   if(dSentChart)dSentChart.destroy();
+  if(dOpinionChart)dOpinionChart.destroy();
   dSentChart=new Chart(document.getElementById('d-sentiment'),{type:'bar',
     data:{labels,datasets:[{label:'Positive',data:pos,backgroundColor:'#28a74588',borderRadius:3},{label:'Neutral',data:neu,backgroundColor:'#6c757d55',borderRadius:3},{label:'Negative',data:neg,backgroundColor:'#dc354588',borderRadius:3}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,
@@ -588,19 +603,69 @@ function filterTable(){
   tblFiltered.sort((a,b)=>{let av=a[sortKey]||'',bv=b[sortKey]||'';return sortDir*(av<bv?-1:av>bv?1:0);});
   curPage=1;renderTable();
 }
+
+function loadTableData(){
+  tblData=(ITEMS[curCls]||[]).map(it=>{return{id:it[0],pubtime:it[1],medium_code:it[2],language:it[3],sentiment:it[4],subtopic:it[5],head:it[6],summary:it[7],opinion:(it[8]||'neutral')}});
+  sortKey='pubtime';sortDir=-1;curPage=1;filterTable();
+}
+function buildOpinionChart(cls,lf,mf,sf){
+  const tl=PREPROC.timeline,months=Object.keys(tl).sort();
+  const sup={},den={},neu={};
+  months.forEach(m=>{sup[m]=0;den[m]=0;neu[m]=0;});
+  if(sf){
+    const items=ITEMS_CACHE[cls]||[];
+    for(const it of items){
+      if(it[5]!==sf)continue;
+      if(lf&&!lf.includes(it[3]))continue;
+      if(mf&&it[2]!==mf)continue;
+      const mo=it[1].slice(0,7);
+      if(!(mo in sup))continue;
+      const op=it[8]||'neutral';
+      if(op==='supporting')sup[mo]++;
+      else if(op==='opposing')den[mo]++;
+      else neu[mo]++;
+    }
+  }else{
+    for(const month of months){
+      const md=tl[month];if(!md[cls])continue;
+      for(const [lang,ld] of Object.entries(md[cls])){
+        if(lf&&!lf.includes(lang))continue;
+        for(const [med,st] of Object.entries(ld)){
+          if(mf&&med!==mf)continue;
+          sup[month]=(sup[month]||0)+(st.op_s||0);
+          den[month]=(den[month]||0)+(st.op_d||0);
+          neu[month]=(neu[month]||0)+(st.op_n||0);
+        }
+      }
+    }
+  }
+  if(dOpinionChart)dOpinionChart.destroy();
+  dOpinionChart=new Chart(document.getElementById('d-opinion'),{type:'bar',
+    data:{labels:months,datasets:[
+      {label:'Supporting',data:months.map(m=>sup[m]||0),backgroundColor:'#28a74555',borderColor:'#28a745',borderWidth:1},
+      {label:'Neutral',   data:months.map(m=>neu[m]||0),backgroundColor:'#6c757d33',borderColor:'#6c757d',borderWidth:1},
+      {label:'Opposing',  data:months.map(m=>den[m]||0),backgroundColor:'#dc354555',borderColor:'#dc3545',borderWidth:1},
+    ]},
+    options:{responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:9}}},
+               tooltip:{mode:'index',intersect:false}},
+      scales:{x:{stacked:true,ticks:{maxRotation:45,font:{size:9},maxTicksLimit:18}},
+              y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}}}}});
+}
 function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}
   tblFiltered.sort((a,b)=>{let av=a[k]||'',bv=b[k]||'';return sortDir*(av<bv?-1:av>bv?1:0);});renderTable();}
 function renderTable(){
   const tot=tblFiltered.length,start=(curPage-1)*PZ,pg=tblFiltered.slice(start,start+PZ);
   document.getElementById('tbl-info').textContent='('+tot.toLocaleString()+' articles'+(tot<tblData.length?', filtered':'')+')';
   const sb=s=>`<span class="sent-badge sent-${s}">${s}</span>`;
+  const ob=o=>`<span class="sent-badge sent-opinion sent-${o}">${o}</span>`;
   document.getElementById('tbl-body').innerHTML=pg.map(it=>`<tr>
     <td style="font-family:monospace;color:var(--text2);font-size:10px">${it.id}</td>
     <td style="white-space:nowrap;font-size:11px">${it.pubtime.slice(0,10)}</td>
     <td style="font-weight:600;font-size:11px">${it.medium_code}</td>
     <td style="font-size:11px">${it.language}</td>
     <td style="max-width:130px;font-size:10px;color:var(--text2)">${it.subtopic}</td>
-    <td>${sb(it.sentiment||'neutral')}</td>
+    <td>${sb(it.sentiment||'neutral')} ${ob(it.opinion||'neutral')}</td>
     <td style="max-width:240px;font-weight:500;font-size:11px">${it.head}</td>
     <td style="max-width:280px;font-size:10px;color:var(--text2)">${it.summary}</td>
   </tr>`).join('');
