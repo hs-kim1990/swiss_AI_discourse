@@ -141,36 +141,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="filter-group"><label>Medium</label>
       <select class="sel" id="medium-filter" onchange="updateCharts()" style="min-width:140px">
         <option value="">All Media</option>
-        <option value="APPZ">APPZ</option>
-        <option value="BAZ">BAZ</option>
-        <option value="BILA">BILA</option>
-        <option value="BLI">BLI</option>
-        <option value="BU">BU</option>
-        <option value="FUW">FUW</option>
-        <option value="LB">LB</option>
-        <option value="LTZ">LTZ</option>
-        <option value="LTZO">LTZO</option>
-        <option value="LUZ">LUZ</option>
-        <option value="NIW">NIW</option>
-        <option value="NNHEU">NNHEU</option>
-        <option value="NNTLM">NNTLM</option>
-        <option value="NZZ">NZZ</option>
-        <option value="PME">PME</option>
-        <option value="RSI">RSI</option>
-        <option value="SRF">SRF</option>
-        <option value="SGT">SGT</option>
-        <option value="SHZ">SHZ</option>
-        <option value="TA">TA</option>
-        <option value="TAS">TAS</option>
-        <option value="TPS">TPS</option>
-        <option value="TPSO">TPSO</option>
-        <option value="TZ">TZ</option>
-        <option value="WOZ">WOZ</option>
-        <option value="ZHUL">ZHUL</option>
-        <option value="ZSZ">ZSZ</option>
-        <option value="ZUGZ">ZUGZ</option>
-        <option value="ZWA">ZWA</option>
-        <option value="ZWSO">ZWSO</option>
       </select>
     </div>
     <div class="filter-group"><label>Group By</label>
@@ -192,7 +162,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="tab-detail" class="tab-content"><div class="main">
   <div class="detail-bar">
     <label>Select Topic:</label>
-    <select class="detail-sel" id="detail-cls" onchange="loadDetailView()"><option value="Immigration & Asylum Policy">Immigration & Asylum Policy</option><option value="Swiss-EU Relations & Bilateral Agreements">Swiss-EU Relations & Bilateral Agreements</option><option value="Refugee & Migrant Integration">Refugee & Migrant Integration</option><option value="Swiss Domestic Politics & Governance">Swiss Domestic Politics & Governance</option><option value="Economy, Labor & Finance">Economy, Labor & Finance</option><option value="Defense, Security & Military">Defense, Security & Military</option><option value="Healthcare, Social Welfare & Education">Healthcare, Social Welfare & Education</option><option value="Environment, Energy & Infrastructure">Environment, Energy & Infrastructure</option><option value="International Relations & Geopolitics">International Relations & Geopolitics</option><option value="Demographic Change & Population">Demographic Change & Population</option></select>
+    <select class="detail-sel" id="detail-cls" onchange="loadDetailView()"></select>
     <span id="topic-load-status" style="font-size:11px;color:var(--text2);margin-left:8px"></span>
   </div>
   <div class="ai-summary"><p id="topic-ai"></p></div>
@@ -209,36 +179,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="filter-group"><label>Medium</label>
       <select class="sel" id="d-medium" onchange="updateDetailCharts()" style="min-width:130px">
         <option value="">All Media</option>
-        <option value="APPZ">APPZ</option>
-        <option value="BAZ">BAZ</option>
-        <option value="BILA">BILA</option>
-        <option value="BLI">BLI</option>
-        <option value="BU">BU</option>
-        <option value="FUW">FUW</option>
-        <option value="LB">LB</option>
-        <option value="LTZ">LTZ</option>
-        <option value="LTZO">LTZO</option>
-        <option value="LUZ">LUZ</option>
-        <option value="NIW">NIW</option>
-        <option value="NNHEU">NNHEU</option>
-        <option value="NNTLM">NNTLM</option>
-        <option value="NZZ">NZZ</option>
-        <option value="PME">PME</option>
-        <option value="RSI">RSI</option>
-        <option value="SRF">SRF</option>
-        <option value="SGT">SGT</option>
-        <option value="SHZ">SHZ</option>
-        <option value="TA">TA</option>
-        <option value="TAS">TAS</option>
-        <option value="TPS">TPS</option>
-        <option value="TPSO">TPSO</option>
-        <option value="TZ">TZ</option>
-        <option value="WOZ">WOZ</option>
-        <option value="ZHUL">ZHUL</option>
-        <option value="ZSZ">ZSZ</option>
-        <option value="ZUGZ">ZUGZ</option>
-        <option value="ZWA">ZWA</option>
-        <option value="ZWSO">ZWSO</option>
       </select>
     </div>
     <div class="filter-group"><label>Subtopic</label>
@@ -275,36 +215,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </select>
       <select class="tf-sel" id="tbl-medium" onchange="filterTable()">
         <option value="">All Media</option>
-        <option value="APPZ">APPZ</option>
-        <option value="BAZ">BAZ</option>
-        <option value="BILA">BILA</option>
-        <option value="BLI">BLI</option>
-        <option value="BU">BU</option>
-        <option value="FUW">FUW</option>
-        <option value="LB">LB</option>
-        <option value="LTZ">LTZ</option>
-        <option value="LTZO">LTZO</option>
-        <option value="LUZ">LUZ</option>
-        <option value="NIW">NIW</option>
-        <option value="NNHEU">NNHEU</option>
-        <option value="NNTLM">NNTLM</option>
-        <option value="NZZ">NZZ</option>
-        <option value="PME">PME</option>
-        <option value="RSI">RSI</option>
-        <option value="SRF">SRF</option>
-        <option value="SGT">SGT</option>
-        <option value="SHZ">SHZ</option>
-        <option value="TA">TA</option>
-        <option value="TAS">TAS</option>
-        <option value="TPS">TPS</option>
-        <option value="TPSO">TPSO</option>
-        <option value="TZ">TZ</option>
-        <option value="WOZ">WOZ</option>
-        <option value="ZHUL">ZHUL</option>
-        <option value="ZSZ">ZSZ</option>
-        <option value="ZUGZ">ZUGZ</option>
-        <option value="ZWA">ZWA</option>
-        <option value="ZWSO">ZWSO</option>
       </select>
       <select class="tf-sel" id="tbl-sub" onchange="filterTable()"><option value="">All Subtopics</option></select>
       <select class="tf-sel" id="tbl-sent" onchange="filterTable()">
@@ -340,6 +250,31 @@ let curCls='Economy, Labor & Finance';
 let tblData=[],tblFiltered=[],sortKey='pubtime',sortDir=-1,curPage=1;
 const PZ=50;
 
+// ── POPULATE DROPDOWNS FROM JSON DATA ─────────────────────────────────
+function populateDropdowns(){
+  // Collect all media codes from the timeline
+  const mediums=new Set();
+  for(const monthData of Object.values(PREPROC.timeline))
+    for(const clsData of Object.values(monthData))
+      for(const langData of Object.values(clsData))
+        for(const med of Object.keys(langData)) mediums.add(med);
+  const medOpts=[...mediums].sort().map(m=>`<option value="${m}">${m}</option>`).join('');
+  ['medium-filter','d-medium','tbl-medium'].forEach(id=>{
+    const sel=document.getElementById(id);
+    sel.innerHTML='<option value="">All Media</option>'+medOpts;
+  });
+
+  // Populate topics from items_index (excluding Others, sorted by total desc)
+  const topics=Object.keys(ITEMS_INDEX).filter(t=>t!=='Others').sort((a,b)=>{
+    const ta=(PREPROC.topicStats[a]||{total:0}).total;
+    const tb=(PREPROC.topicStats[b]||{total:0}).total;
+    return tb-ta;
+  });
+  const clsSel=document.getElementById('detail-cls');
+  clsSel.innerHTML=topics.map(t=>`<option value="${t}">${t}</option>`).join('');
+  curCls=topics[0]||curCls;
+}
+
 // ── INITIAL LOAD (lightweight: ~310 KB total) ──────────────────────────
 async function loadData(){
   const prog=document.getElementById('prog'), msg=document.getElementById('load-msg');
@@ -362,6 +297,7 @@ async function loadData(){
   document.getElementById('loading').style.display='none';
   document.getElementById('app').style.display='block';
   document.getElementById('ov-ai').textContent=(SUMS.overview)||'';
+  populateDropdowns();
   buildCards(); updateCharts();
 }
 

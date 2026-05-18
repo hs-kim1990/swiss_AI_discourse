@@ -264,7 +264,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   <div class="masthead-inner">
     <div class="masthead-top">
       <div class="masthead-title">Abstimmungsexplorer: <span>Exploring Discourse</span> in Swiss Media</div>
-      <div class="masthead-meta" id="masthead-meta">Loading corpus…</div>
+      <div class="masthead-meta" id="masthead-meta">24,297 topic articles · DE · FR · IT · 2023–2026</div>
     </div>
     <hr class="masthead-rule">
   </div>
@@ -292,26 +292,26 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="label">Articles analysed</div><div class="value" id="stat-total">—</div><div class="sub" id="stat-total-sub">Loading…</div></div>
+    <div class="stat-card"><div class="label">Articles analysed</div><div class="value" id="stat-total">24,297</div><div class="sub" id="stat-total-sub">2023–2026</div></div>
     <div class="stat-card"><div class="label">Languages</div><div class="value">3</div><div class="sub">DE · FR · IT</div></div>
-    <div class="stat-card"><div class="label">Peak year</div><div class="value" id="stat-peak-year">—</div><div class="sub" id="stat-peak-sub">Highest article volume</div></div>
+    <div class="stat-card"><div class="label">Peak year</div><div class="value" id="stat-peak-year">2024</div><div class="sub" id="stat-peak-sub">Highest article volume</div></div>
     <div class="stat-card"><div class="label">Data source</div><div class="value">Swissdox</div><div class="sub">via LCP / UZH</div></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
     <div class="stat-card" style="border-left:3px solid #b5122a;">
       <div class="label" style="color:#b5122a;">Deutsch (DE)</div>
-      <div class="value" id="stat-de">—</div>
+      <div class="value" id="stat-de">19,806</div>
       <div class="sub">SRF · Tages-Anzeiger · NZZ · Blick · Zentralschweiz</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a5fa8;">
       <div class="label" style="color:#1a5fa8;">Français (FR)</div>
-      <div class="value" id="stat-fr">—</div>
+      <div class="value" id="stat-fr">4,033</div>
       <div class="sub">Le Temps · Tribune de Genève · 24 Heures</div>
     </div>
     <div class="stat-card" style="border-left:3px solid #1a8a3a;">
       <div class="label" style="color:#1a8a3a;">Italiano (IT)</div>
-      <div class="value" id="stat-it">—</div>
+      <div class="value" id="stat-it">458</div>
       <div class="sub">RSI (Radiotelevisione svizzera italiana)</div>
     </div>
   </div>
@@ -321,7 +321,7 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     <canvas id="yearChart"></canvas>
   </div>
 
-  <div class="section-head">Outlets by topic article count</div>
+  <div class="section-head">Media's by the number of articles</div>
   <div class="chart-wrap" style="height:320px; margin-bottom:32px;">
     <canvas id="sourceChart"></canvas>
   </div>
@@ -636,20 +636,61 @@ function searchToggleLang(lang) {
   doSearch(true);
 }
 
+// ── In-memory search index built from docs/data/items_*.json ──────
+// Filled by loadSearchData() the first time the Search tab opens.
+let SEARCH_INDEX = [];
+
 async function loadSearchData() {
   if (searchDataLoaded) return;
-  try {
-    const res = await fetch('/api/sources');
-    const data = await res.json();
-    const sel = document.getElementById('sourceFilter');
-    data.forEach(s => {
+  if (!ITEMS_INDEX) return;
+
+  // Load every per-topic items file in parallel (uses ITEMS_CACHE).
+  const topicEntries = Object.entries(ITEMS_INDEX);
+  const loaded = await Promise.all(
+    topicEntries.map(async ([cls]) => [cls, await getItems(cls)])
+  );
+
+  // Flatten into a single searchable array. Tuple shape:
+  // [id, pubtime, medium_code, language, sentiment, subtopic, head, summary, opinion]
+  SEARCH_INDEX = [];
+  for (const [cls, items] of loaded) {
+    for (const it of items) {
+      SEARCH_INDEX.push({
+        id: it[0],
+        date: (it[1] || '').slice(0, 10),
+        year: (it[1] || '').slice(0, 4),
+        source: it[2] || '',
+        outlet: SOURCE_NAMES[it[2]] || it[2] || '',
+        color: SOURCE_COLORS[it[2]] || '#8a8880',
+        language: it[3] || '',
+        sentiment: it[4] || 'neutral',
+        subtopic: it[5] || '',
+        headline: it[6] || '',
+        summary: it[7] || '',
+        opinion: it[8] || 'neutral',
+        classification: cls,
+        // pre-lowered search blob
+        _hay: ((it[6] || '') + ' ' + (it[7] || '')).toLowerCase()
+      });
+    }
+  }
+
+  // Populate the source dropdown from the medium codes actually present.
+  const sourceCounts = {};
+  for (const a of SEARCH_INDEX) sourceCounts[a.source] = (sourceCounts[a.source] || 0) + 1;
+  const sel = document.getElementById('sourceFilter');
+  // Clear any existing options past "All outlets"
+  while (sel.options.length > 1) sel.remove(1);
+  Object.entries(sourceCounts)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([code, count]) => {
       const o = document.createElement('option');
-      o.value = s.id;
-      o.textContent = `${s.name} (${s.count})`;
+      o.value = code;
+      o.textContent = `${SOURCE_NAMES[code] || code} (${count.toLocaleString()})`;
       sel.appendChild(o);
     });
-    searchDataLoaded = true;
-  } catch(e) {}
+
+  searchDataLoaded = true;
 }
 
 function quickSearch(term) {
@@ -659,7 +700,7 @@ function quickSearch(term) {
 
 async function doSearch(resetPage) {
   if (resetPage) searchOffset = 0;
-  const q      = document.getElementById('searchInput').value.trim();
+  const q      = document.getElementById('searchInput').value.trim().toLowerCase();
   const year   = document.getElementById('yearFilter').value;
   const source = document.getElementById('sourceFilter').value;
 
@@ -669,17 +710,23 @@ async function doSearch(resetPage) {
   document.getElementById('articleList').innerHTML = '';
   document.getElementById('searchPagination').style.display = 'none';
 
-  const params = new URLSearchParams({ limit: SEARCH_LIMIT, offset: searchOffset });
-  if (q)      params.set('q', q);
-  if (year)   params.set('year', year);
-  if (source) params.set('source', source);
-  if (searchActiveLangs.size < 3) params.set('lang', [...searchActiveLangs].join(','));
-
   try {
-    const res   = await fetch('/api/articles?' + params.toString());
-    const data  = await res.json();
-    const total = data.total;
-    const articles = data.articles;
+    // Make sure the index is loaded (idempotent — returns immediately if cached).
+    await loadSearchData();
+
+    // Local filter across docs/data/items_*.json
+    const filtered = SEARCH_INDEX.filter(a => {
+      if (q && !a._hay.includes(q) && !a.classification.toLowerCase().includes(q) && !a.source.toLowerCase().includes(q)) return false;
+      if (year && a.year !== year) return false;
+      if (source && a.source !== source) return false;
+      if (searchActiveLangs.size < 3 && !searchActiveLangs.has(a.language)) return false;
+      return true;
+    });
+    // Newest first
+    filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    const total = filtered.length;
+    const articles = filtered.slice(searchOffset, searchOffset + SEARCH_LIMIT);
     const curPage  = Math.floor(searchOffset / SEARCH_LIMIT) + 1;
     const totalPages = Math.ceil(total / SEARCH_LIMIT);
 
@@ -721,7 +768,7 @@ async function doSearch(resetPage) {
       document.getElementById('snextBtn').disabled = searchOffset + SEARCH_LIMIT >= total;
     }
   } catch(e) {
-    document.getElementById('searchStatus').innerHTML = 'Error reaching API — is app.py running?';
+    document.getElementById('searchStatus').innerHTML = 'Error loading data from docs/data/ — ' + escHtml(e.message || String(e));
   }
 }
 
@@ -743,11 +790,36 @@ new Chart(document.getElementById('yearChart'), {
   options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toLocaleString()+' articles'}} },
     scales:{ x:{grid:{display:false},ticks:{font:{family:'DM Mono',size:11},color:'#8a8880'}}, y:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}} } }
 });
-new Chart(document.getElementById('sourceChart'), {
-  type:'bar', data:{ labels:['SRF','Tages-Anzeiger','RSI','NZZ','Blick','Zentralschweiz Online','Zentralschweiz','Neue Helvetische Gesellschaft','TPS Online','TPS'], datasets:[{ data:[1233,951,948,788,733,728,622,509,507,488], backgroundColor:['#c06030','#3a5a8a','#1a8a3a','#7a6ab8','#D45B5B','#8a6a2a','#5a7aaa','#9a6a3a','#4a8a7a','#6a7a4a'], borderWidth:0, borderRadius:2 }] },
-  options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()+' articles'}} },
-    scales:{ x:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}}, y:{grid:{display:false},ticks:{font:{size:12},color:'#4a4844'}} } }
-});
+let sourceChartObj = null;
+function renderSourceChartFromPreproc() {
+  if (!PREPROC || !PREPROC.timeline) return;
+  // Aggregate article counts per medium_code across all months/topics/languages.
+  const totals = {};
+  for (const monthData of Object.values(PREPROC.timeline)) {
+    for (const topicData of Object.values(monthData)) {
+      for (const langData of Object.values(topicData)) {
+        for (const [med, stats] of Object.entries(langData)) {
+          totals[med] = (totals[med] || 0) + (stats.n || 0);
+        }
+      }
+    }
+  }
+  // Sort descending and take top 10
+  const sorted = Object.entries(totals).sort((a,b) => b[1]-a[1]).slice(0, 10);
+  const labels = sorted.map(([code]) => (SOURCE_NAMES[code] || code));
+  const values = sorted.map(([,n]) => n);
+  const colors = sorted.map(([code]) => SOURCE_COLORS[code] || '#8a8880');
+
+  if (sourceChartObj) sourceChartObj.destroy();
+  sourceChartObj = new Chart(document.getElementById('sourceChart'), {
+    type:'bar',
+    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderWidth:0, borderRadius:2 }] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()+' articles'}} },
+      scales:{ x:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}},
+               y:{grid:{display:false},ticks:{font:{size:12},color:'#4a4844'}} } }
+  });
+}
 
 // ── Dashboard tab switching (removed — detail is now a top-level page) ──
 
@@ -773,6 +845,7 @@ async function loadDashData() {
     [PREPROC,SUMS,ITEMS_INDEX]=results;
     document.getElementById('ov-ai').textContent=(SUMS.overview)||'';
     populateOvTopics(); buildCards(); updateCharts();
+    renderSourceChartFromPreproc();
   } catch(e) {
     document.getElementById('ov-ai').textContent='Dashboard data unavailable: '+e.message;
   }
@@ -788,10 +861,34 @@ async function getItems(cls){
   return data;
 }
 
-function buildCards(){
-  if(!PREPROC) return;
-  const stats=PREPROC.topicStats,total=Object.values(stats).reduce((s,v)=>s+v.total,0);
-  const cont=document.getElementById('topic-cards');cont.innerHTML='';
+async function buildCards(){
+  if(!ITEMS_INDEX) return;
+  const cont=document.getElementById('topic-cards');
+  cont.innerHTML='<div style="grid-column:1/-1;color:var(--ink-light);font-family:var(--font-mono);font-size:11px;padding:24px;text-align:center;">Loading topic data from docs/data/ …</div>';
+
+  // Load each topic's items file (docs/data/items_*.json) in parallel and
+  // compute totals + subtopic counts + sentiment splits straight from the
+  // article tuples. Tuple = [id, pubtime, medium_code, language,
+  //                         sentiment, subtopic, head, summary, opinion]
+  const topicEntries = Object.entries(ITEMS_INDEX).filter(([c])=>c!=='Others');
+  const built = await Promise.all(topicEntries.map(async ([cls])=>{
+    const items = await getItems(cls);
+    const subtopics = {};
+    for(const it of items){
+      const sub = it[5] || 'Other';
+      const sent = it[4] || 'neutral';
+      if(!subtopics[sub]) subtopics[sub] = {n:0, p:0, u:0, g:0};
+      subtopics[sub].n++;
+      if(sent==='positive')      subtopics[sub].p++;
+      else if(sent==='negative') subtopics[sub].g++;
+      else                       subtopics[sub].u++;
+    }
+    return [cls, {total: items.length, subtopics}];
+  }));
+
+  const stats = Object.fromEntries(built);
+  const total = built.reduce((s,[,d])=>s+d.total, 0);
+  cont.innerHTML='';
   Object.entries(stats).filter(([c])=>c!=='Others').sort((a,b)=>b[1].total-a[1].total).forEach(([cls,data])=>{
     const pct=((data.total/total)*100).toFixed(1),color=TC[cls]||'#999';
     const subs=Object.entries(data.subtopics).sort((a,b)=>b[1].n-a[1].n);
@@ -879,20 +976,51 @@ let drillParams={};
 
 async function drillFetch(offset){
   drillOffset=offset;
-  const p=new URLSearchParams({limit:DRILL_LIMIT, offset});
-  if(drillParams.monthFrom) p.set('month_from', drillParams.monthFrom);
-  if(drillParams.monthTo)   p.set('month_to',   drillParams.monthTo);
-  if(drillParams.lang)      p.set('lang', drillParams.lang);
-  if(drillParams.cls)       p.set('classification', drillParams.cls);
-  if(drillParams.sentiment) p.set('sentiment', drillParams.sentiment);
-
   document.getElementById('chart-drill-status').textContent='Loading…';
   document.getElementById('chart-drill-list').innerHTML='';
 
   try {
-    const res=await fetch('/api/articles?'+p.toString());
-    const data=await res.json();
-    const total=data.total, articles=data.articles;
+    // ── If a topic is selected, load articles from the per-topic JSON file
+    //    in docs/data/ (e.g. items_immigration_asylum_policy.json) and
+    //    filter locally by sentiment / date range / language.
+    let total, articles;
+    if(drillParams.cls){
+      const items=await getItems(drillParams.cls);
+      // Tuple: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary, opinion]
+      const langSet=drillParams.lang?new Set(drillParams.lang.split(',')):null;
+      const filtered=items.filter(it=>{
+        if(drillParams.sentiment && (it[4]||'neutral')!==drillParams.sentiment) return false;
+        if(langSet && !langSet.has(it[3])) return false;
+        if(drillParams.monthFrom && it[1].slice(0,7)<drillParams.monthFrom) return false;
+        if(drillParams.monthTo   && it[1].slice(0,7)>drillParams.monthTo)   return false;
+        return true;
+      });
+      // newest first
+      filtered.sort((a,b)=>(b[1]||'').localeCompare(a[1]||''));
+      total=filtered.length;
+      articles=filtered.slice(offset, offset+DRILL_LIMIT).map(it=>({
+        id:it[0],
+        date:(it[1]||'').slice(0,10),
+        source:it[2],
+        outlet:SOURCE_NAMES[it[2]]||it[2],
+        color:SOURCE_COLORS[it[2]]||'#8a8880',
+        language:it[3]||'',
+        sentiment:it[4]||'neutral',
+        classification:drillParams.cls,
+        headline:it[6]||'',
+        summary:it[7]||''
+      }));
+    } else {
+      // Fallback: no topic filter selected → use the API search.
+      const p=new URLSearchParams({limit:DRILL_LIMIT, offset});
+      if(drillParams.monthFrom) p.set('month_from', drillParams.monthFrom);
+      if(drillParams.monthTo)   p.set('month_to',   drillParams.monthTo);
+      if(drillParams.lang)      p.set('lang', drillParams.lang);
+      if(drillParams.sentiment) p.set('sentiment', drillParams.sentiment);
+      const res=await fetch('/api/articles?'+p.toString());
+      const data=await res.json();
+      total=data.total; articles=data.articles;
+    }
     const curPage=Math.floor(drillOffset/DRILL_LIMIT)+1;
     const totalPages=Math.ceil(total/DRILL_LIMIT);
 
@@ -1294,21 +1422,26 @@ function toggleArticles(uid){
 function renderSupDen(sub){
   const supEl=document.getElementById('sup-content'), denEl=document.getElementById('den-content');
   const sd=SUMS.subtopics||{};
+  // Pull articles for this topic from the per-topic JSON file
+  // (docs/data/items_<topic>.json) — already cached by getItems().
+  // Tuple: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary, opinion]
   const cachedItems = (ITEMS_CACHE[curCls]||[]).map(it=>({
-    id:it[0], date:it[1]?it[1].slice(0,10):'', outlet:it[2]||'',
-    language:it[3]||'', sentiment:it[4]||'', subtopic:it[5]||'',
-    head:it[6]||'', summary:it[7]||'',
+    id:it[0], date:it[1]?it[1].slice(0,10):'', outlet: SOURCE_NAMES[it[2]] || it[2] || '',
+    language:it[3]||'', sentiment:it[4]||'neutral', subtopic:it[5]||'',
+    head:it[6]||'', summary:it[7]||'', opinion:it[8]||'neutral',
     color: SOURCE_COLORS[it[2]] || '#888',
   }));
 
-  function articlesForSub(s, sentiment){ 
-    return cachedItems.filter(a => a.subtopic===s && a.sentiment===sentiment); 
+  // For Supporting / Opposing arguments we filter by the `opinion` field
+  // (supporting / opposing / neutral) — not by sentiment polarity.
+  function articlesForSub(s, opinion){
+    return cachedItems.filter(a => a.subtopic===s && a.opinion===opinion);
   }
 
   if(sub){
     const sm=sd[curCls+'|||'+sub];
-    const supArts=articlesForSub(sub,'positive');
-    const denArts=articlesForSub(sub,'negative');
+    const supArts=articlesForSub(sub,'supporting');
+    const denArts=articlesForSub(sub,'opposing');
     if(sm){
       supEl.innerHTML=makeBulletBlock(sub,sm.sup,true,supArts);
       denEl.innerHTML=makeBulletBlock(sub,sm.den,false,denArts);
@@ -1321,8 +1454,8 @@ function renderSupDen(sub){
     for(const s of subs){
       const sm=sd[curCls+'|||'+s];
       if(sm){
-        const supArts=articlesForSub(s,'positive');
-        const denArts=articlesForSub(s,'negative');
+        const supArts=articlesForSub(s,'supporting');
+        const denArts=articlesForSub(s,'opposing');
         sh+=makeBulletBlock(s,sm.sup,true,supArts);
         dh+=makeBulletBlock(s,sm.den,false,denArts);
       }
@@ -1363,22 +1496,19 @@ async function loadOverviewStats(){
     const total = data.total_articles || 0;
 
     document.getElementById('masthead-meta').textContent =
-      `${total.toLocaleString()} topic articles · DE · FR · IT · ${data.year_min||''}–${data.year_max||''}`;
-    document.getElementById('stat-total').textContent = total.toLocaleString();
-    document.getElementById('stat-total-sub').textContent = `${data.year_min||''}–${data.year_max||''}`;
-    document.getElementById('stat-de').textContent = (byl.de||0).toLocaleString();
-    document.getElementById('stat-fr').textContent = (byl.fr||0).toLocaleString();
-    document.getElementById('stat-it').textContent = (byl.it||0).toLocaleString();
+      `24,297 topic articles · DE · FR · IT · 2023–2026`;
+    // Hard-coded — do not overwrite from API
+    document.getElementById('stat-total').textContent = '24,297';
+    document.getElementById('stat-total-sub').textContent = `${data.year_min||'2023'}–${data.year_max||'2026'}`;
+    // Hard-coded language counts — do not overwrite from API
+    document.getElementById('stat-de').textContent = '19,806';
+    document.getElementById('stat-fr').textContent = '4,033';
+    document.getElementById('stat-it').textContent = '458';
 
-    // Peak year from by_year if available, else leave as is
-    if(data.peak_year){
-      document.getElementById('stat-peak-year').textContent = data.peak_year;
-      document.getElementById('stat-peak-sub').textContent  = `${(data.peak_year_count||'').toLocaleString()} topic articles`;
-    } else {
-      document.getElementById('stat-peak-year').textContent = '2024';
-    }
+    // Hard-coded peak year — do not overwrite from API
+    document.getElementById('stat-peak-year').textContent = '2024';
   } catch(e) {
-    document.getElementById('masthead-meta').textContent = '— topic articles · DE · FR · IT';
+    document.getElementById('masthead-meta').textContent = '24,297 topic articles · DE · FR · IT · 2023–2026';
   }
 }
 

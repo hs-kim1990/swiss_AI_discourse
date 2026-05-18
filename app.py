@@ -77,10 +77,9 @@ def get_source_color(code):
 
 
 # ── Load topic mapping from preproc.json ──────────────────────────────────
-# Maps fine-grained raw classifications → broad topic names used in dashboard
-TOPIC_MAPPING = {}      # article_id (str) -> broad_topic
-SENTIMENT_MAPPING = {}  # article_id (str) -> sentiment string
-ITEMS_ARTICLES = []     # full article records from items files (have sentiment)
+TOPIC_MAPPING = {}
+SENTIMENT_MAPPING = {}
+ITEMS_ARTICLES = []
 
 def load_topic_mapping():
     global TOPIC_MAPPING, SENTIMENT_MAPPING, ITEMS_ARTICLES
@@ -117,7 +116,6 @@ def load_topic_mapping():
             continue
         with open(items_path, 'r', encoding='utf-8') as f:
             items = json.load(f)
-        # Each item: [id, pubtime, medium_code, language, sentiment, subtopic, head, summary]
         for item in items:
             if not isinstance(item, list) or len(item) < 8:
                 continue
@@ -163,10 +161,8 @@ def parse_date(pubtime):
     if not pubtime:
         return None, ''
     try:
-        dt_str = str(pubtime).strip()
-        # Normalise timezone: +01 → +01:00, handle both + and - offsets
         import re
-        dt_str = re.sub(r'([+-])(\d{2})$', r'\1\2:00', dt_str)
+        dt_str = re.sub(r'([+-])(\d{2})$', r'\1\2:00', str(pubtime).strip())
         dt = datetime.fromisoformat(dt_str)
         return dt.year, dt.strftime('%d.%m.%Y')
     except Exception:
@@ -224,11 +220,16 @@ def index():
     return send_from_directory('frontend', 'index.html')
 
 
+# ── Serve docs/data/ as /data/ for the frontend ────────────────────────────
+@app.route('/data/<path:filename>')
+def serve_data(filename):
+    return send_from_directory(DOCS_DATA_DIR, filename)
+
+
 # ── Dashboard data routes ───────────────────────────────────────────────────
 
 @app.route('/api/dashboard/preproc')
 def dashboard_preproc():
-    """Serve preproc.json from docs/data/"""
     filepath = os.path.join(DOCS_DATA_DIR, 'preproc.json')
     if not os.path.exists(filepath):
         return jsonify({'error': 'preproc.json not found'}), 404
@@ -237,7 +238,6 @@ def dashboard_preproc():
 
 @app.route('/api/dashboard/summaries')
 def dashboard_summaries():
-    """Serve summaries.json from docs/data/"""
     filepath = os.path.join(DOCS_DATA_DIR, 'summaries.json')
     if not os.path.exists(filepath):
         return jsonify({'error': 'summaries.json not found'}), 404
@@ -246,23 +246,19 @@ def dashboard_summaries():
 
 @app.route('/api/dashboard/items_index')
 def dashboard_items_index():
-    """Serve items_index.json from docs/data/, rewriting item URLs to use Flask routes"""
     filepath = os.path.join(DOCS_DATA_DIR, 'items_index.json')
     if not os.path.exists(filepath):
         return jsonify({'error': 'items_index.json not found'}), 404
     with open(filepath, 'r', encoding='utf-8') as f:
         index = json.load(f)
-    # Rewrite each value to go through Flask so relative paths work
     rewritten = {}
     for cls, url in index.items():
-        # Extract just the filename from whatever path is stored
         filename = os.path.basename(url)
         rewritten[cls] = f'/api/dashboard/items/{filename}'
     return jsonify(rewritten)
 
 @app.route('/api/dashboard/items/<filename>')
 def dashboard_items(filename):
-    """Serve individual topic items JSON files from docs/data/"""
     filepath = os.path.join(DOCS_DATA_DIR, filename)
     if not os.path.exists(filepath):
         return jsonify({'error': f'{filename} not found'}), 404
@@ -287,7 +283,6 @@ def api_articles():
 
     lang_list = [l.strip() for l in langs.split(',') if l.strip()] if langs else []
 
-    # Use ITEMS_ARTICLES when filtering by sentiment or broad topic (they have full sentiment data)
     pool = ITEMS_ARTICLES if (sentiment or classification) else ALL_ARTICLES
 
     results = []
