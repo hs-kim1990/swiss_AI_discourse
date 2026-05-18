@@ -321,11 +321,6 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     <canvas id="yearChart"></canvas>
   </div>
 
-  <div class="section-head">Media's by the number of articles</div>
-  <div class="chart-wrap" style="height:320px; margin-bottom:32px;">
-    <canvas id="sourceChart"></canvas>
-  </div>
-
   <!-- ══ DASHBOARD: Overview content ══ -->
   <div class="section-head">Schlüsselbegriffe zur 10-Millionen-Initiative — Erwähnungen im Korpus</div>
 
@@ -790,36 +785,6 @@ new Chart(document.getElementById('yearChart'), {
   options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toLocaleString()+' articles'}} },
     scales:{ x:{grid:{display:false},ticks:{font:{family:'DM Mono',size:11},color:'#8a8880'}}, y:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}} } }
 });
-let sourceChartObj = null;
-function renderSourceChartFromPreproc() {
-  if (!PREPROC || !PREPROC.timeline) return;
-  // Aggregate article counts per medium_code across all months/topics/languages.
-  const totals = {};
-  for (const monthData of Object.values(PREPROC.timeline)) {
-    for (const topicData of Object.values(monthData)) {
-      for (const langData of Object.values(topicData)) {
-        for (const [med, stats] of Object.entries(langData)) {
-          totals[med] = (totals[med] || 0) + (stats.n || 0);
-        }
-      }
-    }
-  }
-  // Sort descending and take top 10
-  const sorted = Object.entries(totals).sort((a,b) => b[1]-a[1]).slice(0, 10);
-  const labels = sorted.map(([code]) => (SOURCE_NAMES[code] || code));
-  const values = sorted.map(([,n]) => n);
-  const colors = sorted.map(([code]) => SOURCE_COLORS[code] || '#8a8880');
-
-  if (sourceChartObj) sourceChartObj.destroy();
-  sourceChartObj = new Chart(document.getElementById('sourceChart'), {
-    type:'bar',
-    data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderWidth:0, borderRadius:2 }] },
-    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()+' articles'}} },
-      scales:{ x:{grid:{color:'#e8e6e0'},ticks:{font:{family:'DM Mono',size:10},color:'#8a8880',callback:v=>v.toLocaleString()}},
-               y:{grid:{display:false},ticks:{font:{size:12},color:'#4a4844'}} } }
-  });
-}
 
 // ── Dashboard tab switching (removed — detail is now a top-level page) ──
 
@@ -845,7 +810,6 @@ async function loadDashData() {
     [PREPROC,SUMS,ITEMS_INDEX]=results;
     document.getElementById('ov-ai').textContent=(SUMS.overview)||'';
     populateOvTopics(); buildCards(); updateCharts();
-    renderSourceChartFromPreproc();
   } catch(e) {
     document.getElementById('ov-ai').textContent='Dashboard data unavailable: '+e.message;
   }
