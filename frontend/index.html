@@ -466,10 +466,10 @@ body { font-family: var(--font-body); background: var(--paper); color: var(--ink
     </div>
     <div style="overflow-x:auto">
       <table class="dt"><thead><tr>
-        <th onclick="srt('id')">ID</th><th onclick="srt('pubtime')">Date</th>
+        <th onclick="srt('pubtime')">Date</th>
         <th onclick="srt('medium_code')">Medium</th><th onclick="srt('language')">Lang</th>
         <th onclick="srt('subtopic')">Subtopic</th><th onclick="srt('sentiment')">Sentiment</th>
-        <th>Headline</th><th>Summary</th>
+        <th>Headline</th><th style="width:36px;text-align:center;" title="Click a row to view summary">+</th>
       </tr></thead><tbody id="tbl-body"></tbody></table>
     </div>
     <div class="pg" id="pg"></div>
@@ -958,6 +958,9 @@ function setGroupBy(g){
 let sentOverviewChart=null;
 let chartGranularity='6m'; // '3m' | '6m' | '1y'
 
+// ── Sentiment-boxes state (3 boxes below the timeline chart) ──────
+let _sentBKeys = [];
+
 function setGranularity(g){
   chartGranularity=g;
   document.querySelectorAll('.gran-btn').forEach(b=>{
@@ -1217,6 +1220,7 @@ function updateCharts(){
   const bPos=bKeys.map(k=>bucketed[k].p);
   const bNeu=bKeys.map(k=>bucketed[k].u);
   const bNeg=bKeys.map(k=>bucketed[k].g);
+  _sentBKeys = bKeys; // keep for openDrillPanel onClick reference
 
   if(sentOverviewChart) sentOverviewChart.destroy();
   sentOverviewChart=new Chart(document.getElementById('sentiment-overview-chart'),{
@@ -1475,9 +1479,38 @@ function filterTable(){
 function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}tblFiltered.sort((a,b)=>{let av=a[k]||'',bv=b[k]||'';return sortDir*(av<bv?-1:av>bv?1:0);});renderTable();}
 function renderTable(){
   const tot=tblFiltered.length,start=(curPage-1)*PZ,pg=tblFiltered.slice(start,start+PZ);
-  document.getElementById('tbl-info').textContent='('+tot.toLocaleString()+' articles'+(tot<tblData.length?', filtered':'')+')';
+  document.getElementById('tbl-info').textContent='('+tot.toLocaleString()+' articles'+(tot<tblData.length?', filtered':'')+' · click a row to reveal its summary)';
   const sb=s=>`<span class="sent-badge sent-${s}">${s}</span>`;
-  document.getElementById('tbl-body').innerHTML=pg.map(it=>`<tr><td style="font-family:monospace;color:var(--text2);font-size:10px">${it.id}</td><td style="white-space:nowrap;font-size:11px">${it.pubtime.slice(0,10)}</td><td style="font-weight:600;font-size:11px">${it.medium_code}</td><td style="font-size:11px">${it.language}</td><td style="max-width:130px;font-size:10px;color:var(--text2)">${it.subtopic}</td><td>${sb(it.sentiment||'neutral')}</td><td style="max-width:240px;font-weight:500;font-size:11px">${it.head}</td><td style="max-width:280px;font-size:10px;color:var(--text2)">${it.summary}</td></tr>`).join('');
+  document.getElementById('tbl-body').innerHTML=pg.map((it,i)=>{
+    const rowId='art-row-'+start+'-'+i;
+    const hasSummary = it.summary && it.summary.length>0;
+    return `<tr class="art-main" data-target="${rowId}" style="cursor:${hasSummary?'pointer':'default'}">
+      <td style="white-space:nowrap;font-size:11px">${it.pubtime.slice(0,10)}</td>
+      <td style="font-weight:600;font-size:11px">${it.medium_code}</td>
+      <td style="font-size:11px">${it.language}</td>
+      <td style="max-width:130px;font-size:10px;color:var(--text2)">${it.subtopic}</td>
+      <td>${sb(it.sentiment||'neutral')}</td>
+      <td style="max-width:240px;font-weight:500;font-size:11px">${it.head}</td>
+      <td style="text-align:center;color:var(--daccent);font-family:var(--font-mono);font-size:14px;font-weight:600;">${hasSummary?'+':''}</td>
+    </tr>
+    <tr class="art-summary" id="${rowId}" style="display:none;">
+      <td colspan="7" style="background:var(--paper-tinted);padding:14px 18px;border-bottom:2px solid var(--daccent);">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--daccent);font-weight:700;margin-bottom:6px;">Summary</div>
+        <div style="font-size:12px;line-height:1.65;color:var(--text);">${it.summary || '<em style="color:var(--text2)">No summary available.</em>'}</div>
+      </td>
+    </tr>`;
+  }).join('');
+  // Wire up row toggles
+  document.querySelectorAll('#tbl-body tr.art-main').forEach(tr=>{
+    tr.addEventListener('click', ()=>{
+      const target = document.getElementById(tr.dataset.target);
+      if(!target) return;
+      const opening = target.style.display === 'none';
+      target.style.display = opening ? 'table-row' : 'none';
+      const indicator = tr.lastElementChild;
+      if(indicator) indicator.textContent = opening ? '−' : '+';
+    });
+  });
   const tp=Math.ceil(tot/PZ),pgEl=document.getElementById('pg');
   if(tp<=1){pgEl.innerHTML='';return;}
   let ps=[1];if(curPage>3)ps.push('...');
